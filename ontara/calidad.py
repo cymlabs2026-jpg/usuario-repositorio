@@ -96,3 +96,33 @@ def evaluar(datos: pd.DataFrame, mapeo: dict[str, str],
     semaforo = max((x.nivel for x in v), key=ORDEN.get, default="verde")
     informe = Informe(semaforo, len(datos), len(validas), len(validas) > 0, [], v)
     return informe, validas
+
+
+def evaluar_ventas(datos: pd.DataFrame, mapeo: dict[str, str],
+                   plantilla: Plantilla | None = None) -> tuple[Informe, pd.DataFrame]:
+    """Semáforo para el reporte de ventas (todas las facturas emitidas, incluidas las pagadas)."""
+    plantilla = plantilla or cargar_plantilla(objeto="Venta")
+    faltan = [c for c in plantilla.requeridos if c not in mapeo]
+    if faltan or datos.empty:
+        return Informe("rojo", len(datos), 0, False, faltan, []), datos.iloc[0:0]
+    v: list[Validacion] = []
+    sin_nit = datos["nit"].isna()
+    v.append(_validacion("NIT válido", "Filas sin NIT o cédula reconocible", sin_nit, datos, True))
+    sin_fecha = datos["fecha"].isna()
+    v.append(_validacion("Fecha legible", "Fecha de la factura vacía o ilegible", sin_fecha, datos, True))
+    sin_valor = datos["valor"].isna()
+    v.append(_validacion("Valor numérico", "Valor vacío o que no es un número", sin_valor, datos, True))
+    dup = datos.duplicated(subset=["nit", "numero"], keep="first") & datos["nit"].notna()
+    v.append(_validacion("Facturas únicas", "Factura repetida para el mismo cliente (se deja la primera)",
+                         dup, datos, True))
+    negativo = datos["valor"].fillna(0) < 0
+    v.append(_validacion("Notas crédito", "Valores negativos: se restan de las ventas del cliente",
+                         negativo, datos, False, "amarillo"))
+    nombres = datos.dropna(subset=["nit"]).groupby("nit")["cliente"].nunique()
+    varios = datos["nit"].isin(nombres[nombres > 1].index)
+    v.append(_validacion("Un nombre por NIT", "El mismo NIT aparece con nombres distintos",
+                         varios, datos, False, "amarillo"))
+    excluir = sin_nit | sin_fecha | sin_valor | dup
+    validas = datos.loc[~excluir].copy()
+    semaforo = max((x.nivel for x in v), key=ORDEN.get, default="verde")
+    return Informe(semaforo, len(datos), len(validas), len(validas) > 0, [], v), validas

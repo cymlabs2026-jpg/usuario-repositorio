@@ -18,9 +18,9 @@ import pandas as pd
 from sqlalchemy import insert, select, update
 from sqlalchemy.engine import Engine
 
-from . import impacto, reglas
+from . import comercial, impacto, paquetes, reglas
 from .calidad import Informe
-from .db import acciones, ahora, cargas, clientes, decisiones, facturas, linea_base, resultados
+from .db import acciones, ahora, cargas, clientes, decisiones, facturas, linea_base, resultados, ventas
 
 ABIERTAS = ("pendiente", "aprobada", "ajustada", "ejecutada")
 TRANSICIONES = {
@@ -36,44 +36,61 @@ NECESITAN_NIVEL = {"aprobar", "ajustar", "descartar"}
 
 # --- Carga de datos -----------------------------------------------------------
 def registrar_carga(motor: Engine, validas: pd.DataFrame, informe: Informe, mapeo: dict,
-                    fecha_corte: date, archivo: str, usuario: str) -> dict:
-    """Guarda la carga, actualiza clientes, fija la línea base (si es la primera) y recalcula."""
+                    fecha_corte: date, archivo: str, usuario: str, tipo: str = "cartera") -> dict:
+    """Guarda un reporte (cartera o ventas), actualiza clientes, fija la línea base de cartera
+    (si es la primera) y recalcula los paquetes que usan ese reporte."""
     if not informe.puede_cargar:
         raise ValueError("El semáforo de calidad no permite cargar este archivo.")
+    if tipo not in ("cartera", "ventas"):
+        raise ValueError(f"Tipo de reporte desconocido: {tipo}")
     with motor.begin() as cx:
         carga_id = cx.execute(insert(cargas).values(
-            fecha_corte=fecha_corte, archivo=archivo, usuario=usuario,
+            tipo=tipo, fecha_corte=fecha_corte, archivo=archivo, usuario=usuario,
             filas_total=informe.filas_total, filas_validas=informe.filas_validas,
             semaforo=informe.semaforo, calidad=_json_seguro(informe.a_dict()), mapeo=mapeo,
         )).inserted_primary_key[0]
-        filas = [{
-            "carga_id": carga_id, "nit": r.nit, "numero": str(r.numero),
-            "fecha_emision": r.fecha_emision, "fecha_vencimiento": r.fecha_vencimiento,
-            "valor": None if pd.isna(r.valor) else float(r.valor), "saldo": float(r.saldo),
-            "vendedor": r.vendedor if isinstance(r.vendedor, str) else None,
-        } for r in validas.itertuples(index=False)]
-        if filas:
-            cx.execute(insert(facturas), filas)
+        if tipo == "cartera":
+            filas = [{
+                "carga_id": carga_id, "nit": r.nit, "numero": str(r.numero),
+                "fecha_emision": r.fecha_emision, "fecha_vencimiento": r.fecha_vencimiento,
+                "valor": None if pd.isna(r.valor) else float(r.valor), "saldo": float(r.saldo),
+                "vendedor": r.vendedor if isinstance(r.vendedor, str) else None,
+            } for r in validas.itertuples(index=False)]
+            if filas:
+                cx.execute(insert(facturas), filas)
+        else:
+            filas = [{
+                "carga_id": carga_id, "nit": r.nit, "numero": str(r.numero), "fecha": r.fecha,
+                "valor": float(r.valor), "vendedor": r.vendedor if isinstance(r.vendedor, str) else None,
+            } for r in validas.itertuples(index=False)]
+            if filas:
+                cx.execute(insert(ventas), filas)
 
         existentes = set(cx.execute(select(clientes.c.nit)).scalars())
         for nit, grupo in validas.groupby("nit"):
             nombre = Counter(grupo["cliente"].dropna()).most_common(1)
-            cupo = grupo["cupo"].dropna()
             vend = grupo["vendedor"].dropna()
             datos = {"nombre": nombre[0][0] if nombre else nit,
-                     "cupo": float(cupo.max()) if len(cupo) else None,
                      "vendedor": vend.iloc[-1] if len(vend) else None, "actualizado_en": ahora()}
+            if tipo == "cartera":                    # el cupo solo viene en el reporte de cartera
+                cupo = grupo["cupo"].dropna()
+                datos["cupo"] = float(cupo.max()) if len(cupo) else None
             if nit in existentes:
                 cx.execute(update(clientes).where(clientes.c.nit == nit).values(**datos))
             else:
                 cx.execute(insert(clientes).values(nit=nit, **datos))
 
-        primera = cx.execute(select(linea_base.c.id).limit(1)).first() is None
+        primera = tipo == "cartera" and cx.execute(select(linea_base.c.id).limit(1)).first() is None
     if primera:
         with motor.begin() as cx:
             cx.execute(insert(linea_base).values(carga_id=carga_id,
                                                  metricas=impacto.metricas_carga(motor, carga_id)))
     resumen = recalcular(motor, carga_id)
+    if tipo == "ventas":
+        # Las ventas cambian quiénes son los clientes clave: se recalcula también el último corte de cartera.
+        ult = ultima_carga(motor, "cartera")
+        if ult and any(p.clave == "cartera" for p in paquetes.activos()):
+            recalcular(motor, ult)
     return {"carga_id": carga_id, "linea_base_creada": primera, **resumen}
 
 
@@ -89,24 +106,53 @@ def _json_seguro(obj):
 
 
 # --- Motor de decisiones --------------------------------------------------------
-def _carga_anterior(motor: Engine, carga_id: int) -> int | None:
+def ultima_carga(motor: Engine, tipo: str) -> int | None:
     with motor.connect() as cx:
-        corte = cx.execute(select(cargas.c.fecha_corte).where(cargas.c.id == carga_id)).scalar_one()
+        return cx.execute(select(cargas.c.id).where(cargas.c.tipo == tipo)
+                          .order_by(cargas.c.fecha_corte.desc(), cargas.c.id.desc()).limit(1)).scalar()
+
+
+def _carga_anterior(motor: Engine, carga_id: int) -> int | None:
+    """Corte anterior del mismo tipo de reporte."""
+    with motor.connect() as cx:
+        corte, tipo = cx.execute(select(cargas.c.fecha_corte, cargas.c.tipo)
+                                 .where(cargas.c.id == carga_id)).one()
         return cx.execute(select(cargas.c.id).where(
+            cargas.c.tipo == tipo,
             (cargas.c.fecha_corte < corte) | ((cargas.c.fecha_corte == corte) & (cargas.c.id < carga_id)))
             .order_by(cargas.c.fecha_corte.desc(), cargas.c.id.desc()).limit(1)).scalar()
 
 
 def recalcular(motor: Engine, carga_id: int) -> dict:
-    """Aplica la regla activa a una carga y sincroniza la bandeja de decisiones."""
-    regla = reglas.regla_activa(motor)
+    """Aplica la regla activa de cada paquete que usa este reporte y sincroniza la bandeja."""
+    with motor.connect() as cx:
+        tipo = cx.execute(select(cargas.c.tipo).where(cargas.c.id == carga_id)).scalar_one()
+    total = {"decisiones_nuevas": 0, "decisiones_actualizadas": 0, "decisiones_cerradas": 0,
+             "resultados_medidos": 0, "regla_version": None, "paquetes": []}
+    for paq in paquetes.de_reporte(tipo):
+        regla = reglas.regla_activa(motor, paq.clave)
+        detectadas = paq.detectar(motor, carga_id, regla)
+        r = sincronizar(motor, paq, carga_id, detectadas, regla)
+        r["resultados_medidos"] = paq.medir(motor, carga_id)
+        for k in ("decisiones_nuevas", "decisiones_actualizadas", "decisiones_cerradas", "resultados_medidos"):
+            total[k] += r[k]
+        total["paquetes"].append(paq.clave)
+        if total["regla_version"] is None:
+            total["regla_version"] = regla["version"]
+    return total
+
+
+def detectar_cartera(motor: Engine, carga_id: int, regla: dict) -> list[reglas.ResultadoRegla]:
     p = regla["parametros"]
     with motor.connect() as cx:
         corte = cx.execute(select(cargas.c.fecha_corte).where(cargas.c.id == carga_id)).scalar_one()
         info = {r.nit: {"nombre": r.nombre, "cupo": r.cupo} for r in cx.execute(select(clientes))}
     fact = impacto.facturas_de_carga(motor, carga_id)
-    compras = reglas.compras_por_cliente(impacto.facturas_historicas(motor, corte), corte,
-                                         int(p["meses_valor_cliente"]))
+    # Valor del cliente: con el reporte de ventas si existe (incluye lo ya pagado); si no, con la cartera.
+    compras = comercial.compras_desde_ventas(motor, corte, int(p["meses_valor_cliente"]))
+    if compras is None:
+        compras = reglas.compras_por_cliente(impacto.facturas_historicas(motor, corte), corte,
+                                             int(p["meses_valor_cliente"]))
     anterior = _carga_anterior(motor, carga_id)
     previo = None
     if anterior:
@@ -115,17 +161,25 @@ def recalcular(motor: Engine, carga_id: int) -> dict:
             corte_ant = cx.execute(select(cargas.c.fecha_corte).where(cargas.c.id == anterior)).scalar_one()
         previo = dict(reglas.resumen_por_cliente(fa, corte_ant, p["dias_gracia"])
                       [["nit", "saldo_vencido"]].values)
-    vencido_hoy = dict(reglas.resumen_por_cliente(fact, corte, p["dias_gracia"])[["nit", "saldo_vencido"]].values)
-    detectadas = reglas.evaluar_cartera(fact, corte, p, info, previo, regla["version"], compras)
+    return reglas.evaluar_cartera(fact, corte, p, info, previo, regla["version"], compras)
 
+
+def sincronizar(motor: Engine, paq, carga_id: int, detectadas: list[reglas.ResultadoRegla],
+                regla: dict) -> dict:
+    """Crea, actualiza o cierra decisiones de un paquete según lo que detectaron sus reglas."""
+    p = regla["parametros"]
+    with motor.connect() as cx:
+        corte = cx.execute(select(cargas.c.fecha_corte).where(cargas.c.id == carga_id)).scalar_one()
     creadas = actualizadas = cerradas = 0
+    tope_control = float(p.get("control_monto_maximo") or float("inf"))
     with motor.begin() as cx:
         abiertas = {(d.nit, d.tipo): d for d in cx.execute(
             select(decisiones).where(decisiones.c.estado.in_(ABIERTAS),
-                                     decisiones.c.paquete == reglas.PAQUETE)).mappings()}
+                                     decisiones.c.paquete == paq.clave)).mappings()}
         descartadas_aqui = {(d.nit, d.tipo) for d in cx.execute(
             select(decisiones.c.nit, decisiones.c.tipo).where(
-                decisiones.c.estado == "descartada", decisiones.c.carga_actual_id == carga_id))}
+                decisiones.c.paquete == paq.clave, decisiones.c.estado == "descartada",
+                decisiones.c.carga_actual_id == carga_id))}
         vistas = set()
         for r in detectadas:
             clave = (r.nit, r.tipo)
@@ -138,54 +192,61 @@ def recalcular(motor: Engine, carga_id: int) -> dict:
                            actualizada_en=ahora())
             if clave in abiertas:
                 d = abiertas[clave]
-                if d["grupo"] == "control" and r.saldo_vencido > p["control_monto_maximo"]:
+                if d["grupo"] == "control" and r.saldo_vencido > tope_control:
                     # Seguridad: una deuda que creció por encima del tope sale del grupo de control.
                     valores["grupo"] = "fuera"
                     cx.execute(insert(acciones).values(
                         decision_id=d["id"], tipo="sistema", usuario="ontara",
-                        detalle="Sale del grupo de control: el saldo vencido superó el tope y pasa a la bandeja."))
+                        detalle="Sale del grupo de control: el monto superó el tope y pasa a la bandeja."))
                 cx.execute(update(decisiones).where(decisiones.c.id == d["id"]).values(**valores))
                 actualizadas += 1
             else:
                 cx.execute(insert(decisiones).values(
-                    paquete=reglas.PAQUETE, tipo=r.tipo, nit=r.nit, estado="pendiente",
+                    paquete=paq.clave, tipo=r.tipo, nit=r.nit, estado="pendiente",
                     carga_origen_id=carga_id, saldo_vencido_inicial=r.saldo_vencido,
-                    grupo=asignar_grupo(r, carga_id, p), **valores))
+                    grupo=asignar_grupo(r, carga_id, p, paq.tipos_control), **valores))
                 creadas += 1
         for clave, d in abiertas.items():
             if clave not in vistas:
-                actual = float(vencido_hoy.get(d["nit"], 0.0))
                 cx.execute(update(decisiones).where(decisiones.c.id == d["id"]).values(
                     estado="cerrada", carga_actual_id=carga_id, actualizada_en=ahora()))
                 cx.execute(insert(acciones).values(
                     decision_id=d["id"], tipo="sistema", usuario="ontara",
                     detalle=f"Cerrada automáticamente en el corte {corte.isoformat()}: ya no cumple la "
-                            f"condición de la regla (saldo vencido actual ${actual:,.0f}).".replace(",", ".")))
+                            f"condición de la regla."))
                 cerradas += 1
-
-    medidas = _medir_resultados(motor, carga_id, vencido_hoy)
     return {"decisiones_nuevas": creadas, "decisiones_actualizadas": actualizadas,
-            "decisiones_cerradas": cerradas, "resultados_medidos": medidas,
-            "regla_version": regla["version"]}
+            "decisiones_cerradas": cerradas}
 
 
-def asignar_grupo(r: reglas.ResultadoRegla, carga_id: int, p: dict) -> str:
-    """Grupo de control: una fracción de las decisiones de cobro elegibles no se muestra en la bandeja,
-    para comparar cuánto se recupera con y sin Ontara. La asignación es reproducible (hash, no azar)."""
+def asignar_grupo(r: reglas.ResultadoRegla, carga_id: int, p: dict,
+                  tipos_control: frozenset[str] | set[str] = frozenset({"cobrar"})) -> str:
+    """Grupo de control: una fracción de las decisiones elegibles no se muestra en la bandeja,
+    para comparar el resultado con y sin Ontara. La asignación es reproducible (hash, no azar).
+    No son elegibles los montos por encima del tope ni, si el paquete lo pide, los clientes clave."""
     pct = float(p.get("pct_grupo_control") or 0)
-    if r.tipo != "cobrar" or pct <= 0 or r.saldo_vencido > float(p["control_monto_maximo"]):
+    if r.tipo not in tipos_control or pct <= 0:
+        return "fuera"
+    if r.saldo_vencido > float(p.get("control_monto_maximo") or float("inf")):
+        return "fuera"
+    if r.evidencia.get("cliente_clave") and r.tipo != "cobrar":
         return "fuera"
     sorteo = int(hashlib.sha256(f"{r.nit}|{carga_id}".encode()).hexdigest()[:8], 16) % 100
     return "control" if sorteo < pct else "tratamiento"
 
 
-def _medir_resultados(motor: Engine, carga_id: int, vencido_hoy: dict) -> int:
+def medir_cartera(motor: Engine, carga_id: int) -> int:
     """Para cada decisión de cobro detectada en un corte anterior, mide cuánto bajó su saldo vencido."""
+    p = reglas.regla_activa(motor)["parametros"]
+    with motor.connect() as cx:
+        corte = cx.execute(select(cargas.c.fecha_corte).where(cargas.c.id == carga_id)).scalar_one()
+    vencido_hoy = dict(reglas.resumen_por_cliente(impacto.facturas_de_carga(motor, carga_id), corte,
+                                                  p["dias_gracia"])[["nit", "saldo_vencido"]].values)
     n = 0
     with motor.begin() as cx:
         objetivo = cx.execute(select(decisiones).where(
-            decisiones.c.tipo == "cobrar", decisiones.c.carga_origen_id != carga_id,
-            decisiones.c.estado != "descartada")).mappings().all()
+            decisiones.c.paquete == reglas.PAQUETE, decisiones.c.tipo == "cobrar",
+            decisiones.c.carga_origen_id != carga_id, decisiones.c.estado != "descartada")).mappings().all()
         for d in objetivo:
             ya = cx.execute(select(resultados.c.id).where(resultados.c.decision_id == d["id"],
                                                           resultados.c.carga_id == carga_id)).first()
@@ -237,15 +298,18 @@ def registrar_accion(motor: Engine, decision_id: int, tipo: str, usuario: str,
 
 # --- Consultas ------------------------------------------------------------------
 def listar(motor: Engine, estados: tuple[str, ...] | None = ABIERTAS, tipo: str | None = None,
-           limite: int = 200, incluir_control: bool = False, nivel: str | None = None) -> list[dict]:
+           limite: int = 200, incluir_control: bool = False, nivel: str | None = None,
+           paquete: str | None = None) -> list[dict]:
     """Decisiones por prioridad. Las del grupo de control no se muestran salvo que se pidan."""
-    q = (select(decisiones, clientes.c.nombre.label("cliente"))
+    q = (select(decisiones, clientes.c.nombre.label("cliente"), clientes.c.vendedor.label("vendedor"))
          .join(clientes, clientes.c.nit == decisiones.c.nit, isouter=True)
          .order_by(decisiones.c.prioridad.desc()).limit(limite))
     if not incluir_control:
         q = q.where(decisiones.c.grupo != "control")
     if nivel:
         q = q.where(decisiones.c.nivel_aprobacion == nivel)
+    if paquete:
+        q = q.where(decisiones.c.paquete == paquete)
     if estados:
         q = q.where(decisiones.c.estado.in_(estados))
     if tipo:

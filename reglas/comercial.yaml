@@ -1,0 +1,26 @@
+# Reglas del paquete de decisión "Foco comercial". Versión base;
+# cada cliente ajusta los parámetros desde la app y se guarda una versión nueva.
+paquete: comercial
+version: 1
+parametros:
+  meses_historia: 12            # meses de ventas que se analizan
+  compras_minimas: 4            # compras (días distintos) para conocer el ritmo habitual del cliente
+  ventas_minimas_12m: 5000000   # clientes que compraron menos que esto en el año no generan decisiones
+  factor_atraso: 1.5            # alerta si lleva más de 1,5 veces su intervalo habitual sin comprar
+  dias_minimos_sin_comprar: 15  # y al menos estos días sin comprar
+  caida_minima_pct: 40          # o si sus ventas de 90 días cayeron este % frente a su trimestre promedio
+  crecimiento_minimo_pct: 30    # crecimiento de 90 días frente a su promedio para recomendar visita de crecimiento
+  pct_clientes_clave: 80        # clientes clave = los que suman este % de las ventas (curva ABC)
+  pct_grupo_control: 15         # % de alertas de clientes no clave que no se muestran, para medir el efecto
+  clientes_excepcion: []        # NIT que no generan decisiones comerciales
+
+descripciones:
+  meses_historia: Meses de ventas que se analizan
+  compras_minimas: Compras mínimas para conocer el ritmo del cliente
+  ventas_minimas_12m: Ventas mínimas del año para generar decisiones (COP)
+  factor_atraso: Alertar si lleva más de N veces su intervalo habitual sin comprar
+  dias_minimos_sin_comprar: Días mínimos sin comprar para alertar
+  caida_minima_pct: Caída de ventas de 90 días que genera alerta (%)
+  crecimiento_minimo_pct: Crecimiento de 90 días para visita de crecimiento (%)
+  pct_clientes_clave: Clientes clave = los que suman este % de las ventas
+  pct_grupo_control: Grupo de control (% de alertas de clientes no clave que no se muestran)
