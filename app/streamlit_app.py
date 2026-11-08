@@ -15,7 +15,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from ontara import acceso, aprendizaje, asistente, calidad, comercial, margen, paquetes, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
+from ontara import acceso, aprendizaje, asistente, caja, calidad, comercial, margen, paquetes, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
 from ontara.db import cargas, crear_motor  # noqa: E402
 from sqlalchemy import select  # noqa: E402
 
@@ -36,13 +36,14 @@ ETIQUETAS = {"fecha": "Fecha de la factura", "producto": "Producto", "costo": "C
              "descuento": "Descuento (pesos)", "cantidad": "Cantidad", "nit": "NIT", "cliente": "Cliente", "numero": "Número de factura", "fecha_emision": "Fecha de emisión",
              "fecha_vencimiento": "Fecha de vencimiento", "saldo": "Saldo", "valor": "Valor", "vendedor": "Vendedor",
              "cupo": "Cupo de crédito", "factura": "Factura que se paga", "fecha_pago": "Fecha de pago",
-             "recibo": "Recibo de caja"}
+             "recibo": "Recibo de caja", "proveedor": "Proveedor", "categoria": "Concepto o categoría"}
 ESTADO = {"pendiente": "Pendiente", "aprobada": "Aprobada", "ajustada": "Ajustada",
           "ejecutada": "Ejecutada", "descartada": "Descartada", "cerrada": "Cerrada"}
 
 
 def pesos(x) -> str:
-    return "$" + f"{(x or 0):,.0f}".replace(",", ".")
+    x = x or 0
+    return ("-$" if x < 0 else "$") + f"{abs(x):,.0f}".replace(",", ".")
 
 
 # --- Acceso -----------------------------------------------------------------------
@@ -145,11 +146,18 @@ def pagina_cargar():
               "ventas": "Sube el reporte de ventas de los últimos 12 meses (todas las facturas, incluidas las pagadas)",
               "lineas": "Sube el reporte de ventas por producto de los últimos 6 meses (una fila por producto de cada "
                         "factura, con venta neta y costo)",
+              "pagos": "Sube el reporte de cuentas por pagar (facturas de proveedores pendientes) con las obligaciones "
+                       "programadas que quieras incluir: nómina, impuestos, cuotas de crédito y arriendo, con su fecha "
+                       "de pago",
               "recaudos": "Sube el reporte de recaudos o recibos de caja (cada pago con la factura que cruza). La "
                           "primera vez, trae 12 a 24 meses de historia; después, el periodo desde el último corte"}[tipo]
              + " que exportas de tu ERP (Siigo, World Office, SAP) o tu Excel. Ontara reconoce las columnas y "
              f"revisa la calidad antes de guardar nada. Lo usa: {usa}.")
     corte = st.date_input("Fecha de corte del reporte", value=date.today(), format="DD/MM/YYYY")
+    saldo_bancos = None
+    if tipo == "pagos":
+        saldo_bancos = st.number_input("Saldo en bancos a la fecha de corte (COP): suma de todas las cuentas",
+                                       min_value=0, value=0, step=1_000_000)
     archivo = st.file_uploader("Archivo Excel o CSV", type=["xlsx", "xls", "csv"], key=f"archivo_{tipo}")
     if not archivo:
         st.info("También puedes probar con los archivos de `datos_ejemplo/`.")
@@ -172,7 +180,7 @@ def pagina_cargar():
 
     datos = ingesta.convertir(crudo, mapeo, plantilla)
     evaluar = {"cartera": calidad.evaluar, "ventas": calidad.evaluar_ventas, "lineas": calidad.evaluar_lineas,
-               "recaudos": calidad.evaluar_recaudos}[tipo]
+               "pagos": calidad.evaluar_pagos, "recaudos": calidad.evaluar_recaudos}[tipo]
     informe, validas = evaluar(datos, mapeo, plantilla)
     st.subheader(f"2. Semáforo de calidad: {COLOR[informe.semaforo]} {informe.semaforo.capitalize()}")
     if informe.faltan_campos:
@@ -193,8 +201,12 @@ def pagina_cargar():
         st.warning("Ya hay una carga con esta fecha de corte. Si continúas se guardará otra versión del mismo corte.")
 
     st.subheader("3. Guardar y recalcular")
-    if st.button("Cargar y generar decisiones", type="primary", disabled=not informe.puede_cargar):
-        r = decisiones.registrar_carga(M, validas, informe, mapeo, corte, archivo.name, USUARIO, tipo)
+    if tipo == "pagos" and not saldo_bancos:
+        st.info("Digita el saldo en bancos a la fecha de corte: es el punto de partida de la proyección.")
+    if st.button("Cargar y generar decisiones", type="primary",
+                 disabled=not informe.puede_cargar or (tipo == "pagos" and not saldo_bancos)):
+        r = decisiones.registrar_carga(M, validas, informe, mapeo, corte, archivo.name, USUARIO, tipo,
+                                       float(saldo_bancos) if tipo == "pagos" else None)
         st.success(f"Carga #{r['carga_id']} guardada. Decisiones nuevas: {r['decisiones_nuevas']}, "
                    f"actualizadas: {r['decisiones_actualizadas']}, cerradas: {r['decisiones_cerradas']}. "
                    f"Resultados medidos: {r['resultados_medidos']}.")
@@ -229,12 +241,14 @@ def pagina_bandeja():
     cupo = sum(d["evidencia"].get("aumento_sugerido", 0) for d in lista if d["tipo"] == "ampliar_cupo")
     riesgo = sum(d["saldo_vencido_inicial"] for d in lista if d["tipo"] == "recuperar_cliente")
     utilidad = sum(d["saldo_vencido_inicial"] for d in lista if d["paquete"] == "margen")
+    deficit = max((d["saldo_vencido_inicial"] for d in lista if d["tipo"] == "caja_bajo_minimo"), default=0)
     st.caption(f"{len(lista)} decisiones · {pesos(total)} vencidos en las de cobro · "
                f"{pesos(cupo)} de cupo adicional sugerido · {pesos(riesgo)} de ventas trimestrales en riesgo "
-               f"en clientes que se están enfriando · {pesos(utilidad)} de utilidad en juego en margen")
+               f"en clientes que se están enfriando · {pesos(utilidad)} de utilidad en juego en margen"
+               + (f" · {pesos(deficit)} de caja por cubrir en la peor semana" if deficit else ""))
     for d in lista:
         ev = d["evidencia"]
-        icono = "🟢" if d["tipo"] in ("ampliar_cupo", "crecer_cliente") else "🔴" if d["prioridad"] >= 70 else \
+        icono = "🟢" if d["tipo"] in ("ampliar_cupo", "crecer_cliente", "excedente_de_caja") else "🔴" if d["prioridad"] >= 70 else \
             "🟡" if d["prioridad"] >= 40 else "⚪"
         clave = " ⭐" if ev.get("cliente_clave") else ""
         gerente = " · aprueba gerente" if d["nivel_aprobacion"] == "gerente" else ""
@@ -244,12 +258,20 @@ def pagina_bandeja():
             detalle_tipo = f"{ev['dias_sin_comprar']} días sin comprar · 90 días {-ev['caida_pct']:+.0f}%"
         elif d["tipo"] == "crecer_cliente":
             detalle_tipo = f"90 días {pesos(ev['ventas_90d'])}"
+        elif d["tipo"] == "caja_bajo_minimo":
+            detalle_tipo = (f"semanas {ev['semana_desde']} a {ev['semana_hasta']} · faltan {pesos(ev['deficit'])}"
+                            if ev["semana_desde"] != ev["semana_hasta"]
+                            else f"semana {ev['semana_desde']} · faltan {pesos(ev['deficit'])}")
+        elif d["tipo"] == "aplazar_pago_proveedor":
+            detalle_tipo = f"{pesos(ev['monto'])} a correr {ev['dias_aplazamiento']} días"
+        elif d["tipo"] == "excedente_de_caja":
+            detalle_tipo = f"{pesos(ev['excedente'])} sin uso en 13 semanas"
         elif d["paquete"] == "margen":
             detalle_tipo = (f"margen {ev['margen_pct']:.1f}% · descuento {ev['descuento_pct']:.1f}% · "
                             f"{pesos(ev['utilidad_en_juego'])} en juego")
         else:
             detalle_tipo = f"{pesos(ev['saldo_vencido'])} vencidos · {ev['dias_mora_max']} días"
-        quien_es = d["cliente"] or ev.get("producto") or ev.get("cliente") or d["nit"]
+        quien_es = d["cliente"] or ev.get("producto") or ev.get("cliente") or ev.get("nombre_mostrar") or d["nit"]
         titulo = (f"{icono} {d['prioridad']:.0f} · {quien_es}{clave} · {TIPO[d['tipo']]} · "
                   f"{detalle_tipo} · {ESTADO[d['estado']]}{gerente}")
         with st.expander(titulo):
@@ -264,6 +286,8 @@ def tarjeta(d: dict):
         tarjeta_comercial(d, ev)
     elif d["paquete"] == "margen":
         tarjeta_margen(d, ev)
+    elif d["paquete"] == "caja":
+        tarjeta_caja(d, ev)
     else:
         tarjeta_cartera(d, ev)
     acciones_y_historial(d)
@@ -313,6 +337,75 @@ def tarjeta_margen(d: dict, ev: dict):
                      hide_index=True, use_container_width=True)
     st.caption(f"{'NIT ' + d['nit'] if 'nit' in ev else 'Producto'} · Regla margen v{ev.get('regla_version')} · "
                f"reporte {ev['fecha_corte']}")
+
+
+def grafico_caja(proy: pd.DataFrame, minimo: float, alto: int = 320):
+    """Saldo proyectado semana a semana frente a la caja mínima."""
+    df = proy.copy()
+    df["Semana"] = [f"S{s} · {pd.Timestamp(i):%d/%m}" for s, i in zip(df["semana"], df["inicio"])]
+    df["Estado"] = ["Bajo el mínimo" if v < minimo else "Sobre el mínimo" for v in df["saldo_final"]]
+    fig = px.bar(df, x="Semana", y="saldo_final", color="Estado", height=alto,
+                 color_discrete_map={"Bajo el mínimo": "#c0392b", "Sobre el mínimo": "#2e86c1"},
+                 labels={"saldo_final": "Saldo en bancos al final de la semana"})
+    fig.add_hline(y=minimo, line_dash="dash", annotation_text="Caja mínima")
+    fig.update_layout(legend_title_text="", margin=dict(t=10, b=10))
+    st.plotly_chart(fig, use_container_width=True)
+
+
+def tarjeta_caja(d: dict, ev: dict):
+    sup = ev.get("supuestos") or {}
+    if d["tipo"] == "aplazar_pago_proveedor":
+        a, b, c = st.columns(3)
+        a.metric("Monto a correr", pesos(ev["monto"]))
+        b.metric("Días", ev["dias_aplazamiento"])
+        c.metric("Déficit de la racha", pesos(ev["deficit"]))
+        tabla = pd.DataFrame(ev["facturas"])[["numero", "vencimiento", "nueva_fecha", "saldo"]]
+        tabla["saldo"] = tabla["saldo"].map(pesos)
+        st.dataframe(tabla.rename(columns={"numero": "Documento", "vencimiento": "Vence", "nueva_fecha": "Propuesta",
+                                           "saldo": "Monto"}), hide_index=True, use_container_width=True)
+        st.caption(f"NIT {d['nit']} · Regla caja v{ev.get('regla_version')} · reporte {ev['fecha_corte']}")
+        return
+    a, b, c, e = st.columns(4)
+    a.metric("Saldo en bancos al corte", pesos(sup.get("saldo_bancos") or 0))
+    if d["tipo"] == "caja_bajo_minimo":
+        b.metric("Punto más bajo", pesos(ev["saldo_minimo"]))
+        c.metric("Falta para el mínimo", pesos(ev["deficit"]))
+        e.metric("Semanas para actuar", ev["semana_desde"] - 1)
+    else:
+        b.metric("Excedente sobre el mínimo", pesos(ev["excedente"]))
+        c.metric("Semana más baja", ev["semana_mas_baja"])
+        e.metric("Caja mínima", pesos(ev["caja_minima"]))
+    proy = pd.DataFrame(ev["proyeccion"])
+    if len(proy):
+        grafico_caja(proy, ev["caja_minima"], 260)
+    for cruce in ev.get("cruces", []):
+        st.info("Cruce: " + cruce)
+    if ev.get("cobrar"):
+        st.markdown("**1. Cobrar antes de la semana en rojo**")
+        t = pd.DataFrame(ev["cobrar"])
+        t["decision_cartera"] = ["#" + str(int(x)) if x == x and x is not None else "" for x in t["decision_cartera"]]
+        t["monto"] = t["monto"].map(pesos)
+        st.dataframe(t[["cliente", "monto", "decision_cartera"]].rename(columns={
+            "cliente": "Cliente", "monto": "Monto", "decision_cartera": "Decisión de Cartera"}),
+            hide_index=True, use_container_width=True)
+    if ev.get("aplazar"):
+        st.markdown("**2. Negociar con proveedores** (nunca nómina, impuestos ni créditos)")
+        t = pd.DataFrame(ev["aplazar"])
+        t["saldo"] = t["saldo"].map(pesos)
+        st.dataframe(t[["proveedor", "numero", "vencimiento", "nueva_fecha", "saldo"]].rename(columns={
+            "proveedor": "Proveedor", "numero": "Documento", "vencimiento": "Vence", "nueva_fecha": "Propuesta",
+            "saldo": "Monto"}), hide_index=True, use_container_width=True)
+    if ev.get("financiar"):
+        st.markdown(f"**3. Financiar lo que falte:** {pesos(ev['financiar'])} con crédito de tesorería o factoring.")
+    if sup:
+        st.caption(f"Supuestos: ventas de {pesos(sup['venta_semanal'])} por semana "
+                   f"({sup['crecimiento_ventas_pct']:+.0f}% en el escenario), clientes pagan {sup['plazo_clientes_dias']:.0f} "
+                   f"días + {sup['atraso_medio_dias']:.1f} de atraso promedio ({sup['clientes_con_historia_de_pago']} con "
+                   f"historia de pagos), compras = {sup['compras_pct_ventas']:.0f}% de las ventas pagadas a "
+                   f"{sup['plazo_proveedores_dias']:.0f} días · cartera del {sup['corte_cartera']}"
+                   + (f" · {pesos(sup['cartera_no_proyectada'])} de cartera incobrable fuera de la proyección"
+                      if sup.get("cartera_no_proyectada") else ""))
+    st.caption(f"Regla caja v{ev.get('regla_version')} · reporte {ev['fecha_corte']}")
 
 
 def tarjeta_cartera(d: dict, ev: dict):
@@ -424,7 +517,44 @@ def pagina_impacto():
     pestanas = st.tabs([p.nombre for p in ACTIVOS])
     for tab, paq in zip(pestanas, ACTIVOS):
         with tab:
-            {"cartera": impacto_cartera, "comercial": impacto_comercial, "margen": impacto_margen}[paq.clave]()
+            {"cartera": impacto_cartera, "comercial": impacto_comercial, "margen": impacto_margen,
+             "caja": impacto_caja}[paq.clave]()
+
+
+def impacto_caja():
+    r = caja.resumen(M)
+    if not r["ultimo_reporte"]:
+        st.info("Carga el reporte de cuentas por pagar (con el saldo en bancos) para activar Caja a 13 semanas.")
+        return
+    st.caption(f"Último reporte: {r['ultimo_reporte']:%d/%m/%Y}. Proyección de las próximas 13 semanas con la última "
+               "cartera, el ritmo de ventas y los pagos comprometidos.")
+    a, b, c = st.columns(3)
+    a.metric("Saldo en bancos", pesos(r["saldo_bancos"] or 0))
+    a.caption("Al corte del último reporte")
+    b.metric("Semanas bajo el mínimo", r["semanas_rojo_hoy"],
+             delta=f"{r['semanas_rojo_hoy'] - r['semanas_rojo_base']:+d} vs. primera proyección", delta_color="inverse")
+    c.metric("Punto más bajo", pesos(r["saldo_minimo_hoy"]))
+    grafico_caja(r["proyeccion"], r["caja_minima"])
+    x, y, z = st.columns(3)
+    x.metric("Déficit cubierto en decisiones atendidas", pesos(r["deficit_cubierto_atendidas"]))
+    y.metric("Pagos a proveedores aplazados", pesos(r["pagos_aplazados"]))
+    pre = r["precision"]
+    if pre:
+        z.metric("Precisión de la proyección", f"{100 - pre['error_pct']:.0f}%" if pre["error_pct"] is not None else "-",
+                 help=f"El reporte anterior proyectaba {pesos(pre['proyectado'])} para el {pre['fecha']:%d/%m/%Y}; "
+                      f"el saldo real fue {pesos(pre['real'])}.")
+    else:
+        z.metric("Precisión de la proyección", "Desde el 2.º reporte")
+    with st.expander("Detalle semana a semana"):
+        t = r["proyeccion"].copy()
+        for col in ["cobros_cartera", "cobros_ventas_nuevas", "pagos_proveedores", "compras_nuevas", "gastos_fijos",
+                    "saldo_final"]:
+            t[col] = t[col].map(pesos)
+        st.dataframe(t.rename(columns={
+            "semana": "Semana", "inicio": "Desde", "fin": "Hasta", "cobros_cartera": "Cobros de cartera",
+            "cobros_ventas_nuevas": "Cobros de ventas nuevas", "pagos_proveedores": "Cuentas por pagar",
+            "compras_nuevas": "Compras nuevas", "gastos_fijos": "Gastos fijos", "saldo_final": "Saldo final"}),
+            hide_index=True, use_container_width=True)
 
 
 def impacto_margen():

@@ -19,7 +19,7 @@ from typing import Any, Callable
 from sqlalchemy import insert, select
 from sqlalchemy.engine import Engine
 
-from . import comercial, config, decisiones, impacto, margen
+from . import caja, comercial, config, decisiones, impacto, margen
 from .db import clientes, consultas_ia
 
 SISTEMA = """Eres el asistente de Ontara, una herramienta de decisiones de cartera para pymes colombianas.
@@ -34,7 +34,9 @@ Reglas que no puedes romper:
   El campo "aprueba" dice si la decide el líder o el gerente. El paquete Foco comercial agrega
   recuperar_cliente (clientes que dejaron de comprar o compran menos) y crecer_cliente (clientes que crecen).
   El paquete Margen agrega revisar_margen_cliente, revisar_margen_producto y descuento_fuera_politica; en las de
-  producto el campo "cliente" es el nombre del producto.
+  producto el campo "cliente" es el nombre del producto. El paquete Caja a 13 semanas agrega caja_bajo_minimo
+  (semanas en que la caja proyectada queda bajo el mínimo, con qué cobrar, qué aplazar y cuánto financiar),
+  aplazar_pago_proveedor (el campo "cliente" es el proveedor) y excedente_de_caja.
 - Los clientes pueden aparecer con un alias como "Cliente-a1b2c3". Úsalo tal cual; el sistema lo traduce.
 - Escribe pesos como $12.345.678. Sé breve: respuestas de pocas líneas, viñetas solo si hay varios ítems.
 - Si te piden redactar un mensaje de cobro, que sea cordial, firme y con los datos exactos de la evidencia."""
@@ -43,7 +45,7 @@ HERRAMIENTAS = [
     {
         "name": "resumen_cartera",
         "description": "Indicadores de cartera del último corte frente a la línea base, pesos recuperados, "
-                       "caja liberada, decisiones por estado, historial de cortes y resultados de Foco comercial y Margen.",
+                       "caja liberada, decisiones por estado, historial de cortes y resultados de Foco comercial, Margen y Caja a 13 semanas.",
         "input_schema": {"type": "object", "properties": {}, "required": [], "additionalProperties": False},
         "strict": True,
     },
@@ -59,7 +61,8 @@ HERRAMIENTAS = [
                                                     "ampliar_cupo", "recuperar_cliente",
                                                     "crecer_cliente", "revisar_margen_cliente",
                                                     "revisar_margen_producto",
-                                                    "descuento_fuera_politica"]},
+                                                    "descuento_fuera_politica", "caja_bajo_minimo",
+                                                    "aplazar_pago_proveedor", "excedente_de_caja"]},
                 "limite": {"type": "integer", "description": "Máximo 50"},
             },
             "required": ["estado", "tipo", "limite"],
@@ -139,12 +142,20 @@ def _json(obj: Any) -> str:
 def _resumen_cartera(motor: Engine, _: dict, __: Seudonimizador) -> dict:
     hist = impacto.historial(motor)
     return {**impacto.resumen(motor), "historial_cortes": hist.tail(6).to_dict("records"),
-            "foco_comercial": comercial.resumen(motor), "margen": margen.resumen(motor)}
+            "foco_comercial": comercial.resumen(motor), "margen": margen.resumen(motor), "caja": _resumen_caja(motor)}
+
+
+def _resumen_caja(motor: Engine) -> dict:
+    r = caja.resumen(motor)
+    if r.get("proyeccion") is not None:
+        r["proyeccion"] = [{"semana": int(x.semana), "desde": x.inicio, "saldo_final": round(float(x.saldo_final))}
+                           for x in r["proyeccion"].itertuples(index=False)]
+    return r
 
 
 def _compacta(d: dict) -> dict:
     ev = d["evidencia"]
-    return {"decision_id": d["id"], "cliente": d.get("cliente") or ev.get("producto") or d["nit"], "nit": d["nit"],
+    return {"decision_id": d["id"], "cliente": d.get("cliente") or ev.get("producto") or ev.get("nombre_mostrar") or d["nit"], "nit": d["nit"],
             "tipo": d["tipo"], "estado": d["estado"], "prioridad": d["prioridad"],
             "saldo_vencido": ev.get("saldo_vencido"), "dias_mora_max": ev.get("dias_mora_max"),
             "recomendacion": d["recomendacion"], "aprueba": d.get("nivel_aprobacion"),

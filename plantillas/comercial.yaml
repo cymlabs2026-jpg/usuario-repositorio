@@ -47,6 +47,16 @@ objetos:
       fecha_pago: {tipo: fecha,  requerido: true,  sinonimos: [fecha_pago, fecha_recaudo, fecha_recibo, fecha_consignacion, fecha_abono, fecha]}
       valor:      {tipo: dinero, requerido: true,  sinonimos: [valor_pagado, valor_recaudo, valor_abono, abono, pago, valor, total]}
       recibo:     {tipo: texto,  requerido: false, sinonimos: [recibo, recibo_caja, numero_recibo, no_recibo, comprobante, rc]}
+  CuentaPorPagar:
+    descripcion: Factura de proveedor u obligación pendiente de pago (nómina, impuestos, créditos). Alimenta Caja
+    campos:
+      nit:               {tipo: nit,    requerido: true,  sinonimos: [nit, nit_proveedor, identificacion, id_proveedor, nit_tercero, cedula_nit]}
+      proveedor:         {tipo: texto,  requerido: true,  sinonimos: [proveedor, razon_social, nombre_proveedor, nombre_del_tercero, tercero, acreedor, nombre]}
+      numero:            {tipo: texto,  requerido: true,  sinonimos: [factura, numero_factura, no_factura, factura_proveedor, documento, comprobante, numero]}
+      fecha_emision:     {tipo: fecha,  requerido: false, sinonimos: [fecha, fecha_factura, fecha_emision, fecha_documento, emision]}
+      fecha_vencimiento: {tipo: fecha,  requerido: true,  sinonimos: [vencimiento, fecha_vencimiento, vence, fecha_vence, fecha_pago, fecha_de_pago]}
+      saldo:             {tipo: dinero, requerido: true,  sinonimos: [saldo, saldo_pendiente, por_pagar, pendiente, valor_pendiente, saldo_actual]}
+      categoria:         {tipo: texto,  requerido: false, sinonimos: [categoria, concepto, tipo, clase, cuenta]}
   Cliente:
     descripcion: Se deriva de las facturas y las ventas, agrupando por NIT
     relaciones:

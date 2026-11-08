@@ -26,7 +26,7 @@ cargas = Table(
     "cargas", metadata,
     Column("id", Integer, primary_key=True),
     Column("tipo", String(20), nullable=False, default="cartera",
-           server_default="cartera"),                       # cartera | ventas | lineas | recaudos (qué reporte es)
+           server_default="cartera"),                       # cartera | ventas | lineas | pagos | recaudos
     Column("creada_en", DateTime, nullable=False, default=ahora),
     Column("fecha_corte", Date, nullable=False),
     Column("archivo", String(255)),
@@ -85,6 +85,26 @@ lineas_venta = Table(
     Column("descuento", Float),                             # descuento en pesos (opcional)
     Column("cantidad", Float),
     Column("vendedor", String(120)),
+)
+
+cuentas_por_pagar = Table(
+    "cuentas_por_pagar", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("carga_id", Integer, ForeignKey("cargas.id"), nullable=False, index=True),
+    Column("nit", String(20), nullable=False, index=True),
+    Column("proveedor", String(255), nullable=False),
+    Column("numero", String(60), nullable=False),
+    Column("fecha_emision", Date),
+    Column("fecha_vencimiento", Date, nullable=False),
+    Column("saldo", Float, nullable=False),
+    Column("categoria", String(120)),
+)
+
+saldos_caja = Table(
+    "saldos_caja", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("carga_id", Integer, ForeignKey("cargas.id"), nullable=False, index=True),
+    Column("saldo_bancos", Float, nullable=False),          # saldo en bancos a la fecha de corte
 )
 
 reglas_version = Table(
@@ -199,6 +219,33 @@ textos_aprobados = Table(
     Column("editado", Boolean, nullable=False),
     Column("usuario", String(120), nullable=False),
     Column("fecha", DateTime, default=ahora),
+)
+
+proyecciones_caja = Table(
+    "proyecciones_caja", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("carga_id", Integer, ForeignKey("cargas.id"), nullable=False, index=True),
+    Column("semana", Integer, nullable=False),              # 1 a 13
+    Column("inicio", Date, nullable=False),
+    Column("fin", Date, nullable=False),
+    Column("cobros_cartera", Float, nullable=False),
+    Column("cobros_ventas_nuevas", Float, nullable=False),
+    Column("pagos_proveedores", Float, nullable=False),
+    Column("compras_nuevas", Float, nullable=False),
+    Column("gastos_fijos", Float, nullable=False),
+    Column("saldo_final", Float, nullable=False),
+)
+
+resultados_caja = Table(
+    "resultados_caja", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("decision_id", Integer, ForeignKey("decisiones.id"), nullable=False, index=True),
+    Column("carga_id", Integer, ForeignKey("cargas.id"), nullable=False),
+    Column("monto_antes", Float, nullable=False),           # déficit o pago a mover al detectarla
+    Column("monto_despues", Float, nullable=False),         # lo que queda sin resolver en este reporte
+    Column("cubierto", Float, nullable=False),
+    Column("atendida", Boolean, nullable=False),
+    Column("medido_en", DateTime, default=ahora),
 )
 
 linea_base = Table(

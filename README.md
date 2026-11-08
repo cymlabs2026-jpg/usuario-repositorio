@@ -27,6 +27,7 @@ consulta resultados ya calculados, los explica y redacta mensajes.
 | 3. Aplicación | `ontara/impacto.py` | Línea base (primera carga), impacto en pesos, días de cartera, caja liberada y comparación contra el grupo de control |
 | 2. Paquetes | `ontara/paquetes.py` | Registro de paquetes: qué reporte usa cada uno, sus tipos de decisión, cómo detecta y cómo mide. Se activan con `ONTARA_PAQUETES` |
 | 2. Margen | `ontara/margen.py` + `reglas/margen.yaml` | Margen bruto por cliente y producto, descuentos fuera de política, ventas bajo el costo y cruce con Cartera y Foco comercial |
+| 2. Caja a 13 semanas | `ontara/caja.py` + `reglas/caja.yaml` | Saldo en bancos proyectado semana a semana; semanas bajo la caja mínima con qué cobrar, qué pagos aplazar y cuánto financiar; excedentes |
 | 2. Foco comercial | `ontara/comercial.py` + `reglas/comercial.yaml` | Ritmo de compra por cliente, alertas de clientes que se enfrían o caen, visitas de crecimiento y cruce con Cartera |
 | 3. Aplicación | `ontara/acceso.py` | Login con Google o Microsoft (o clave PBKDF2), roles y bitácora de accesos |
 | 3. Aplicación | `ontara/asistente.py` | Claude con 4 herramientas de solo lectura; nombres y NIT anonimizados antes de salir (Ley 1581) |
@@ -44,17 +45,20 @@ streamlit run app/streamlit_app.py
 **Datos de prueba completos** (`datos_ejemplo/prueba/`, generados con `python datos_ejemplo/generar_prueba.py`):
 una distribuidora inventada con 40 clientes. En **Cargar datos**, en este orden:
 
-| Reporte | Archivo | Fecha de corte |
-| --- | --- | --- |
-| Cartera | `prueba_cartera_corte_2026-10-31.csv` | 31/10/2026 |
-| Ventas | `prueba_ventas_2026-10-31.csv` | 31/10/2026 |
-| Cartera | `prueba_cartera_corte_2026-11-14.csv` | 14/11/2026 |
-| Ventas | `prueba_ventas_2026-11-14.csv` | 14/11/2026 |
-| Ventas por producto | `prueba_lineas_2026-10-31.csv` | 31/10/2026 |
-| Ventas por producto | `prueba_lineas_2026-11-14.csv` | 14/11/2026 |
-| Recaudos | `prueba_recaudos_2026-11-14.csv` | 14/11/2026 |
+| Reporte | Archivo | Fecha de corte | Saldo en bancos |
+| --- | --- | --- | --- |
+| Cartera | `prueba_cartera_corte_2026-10-31.csv` | 31/10/2026 | |
+| Ventas | `prueba_ventas_2026-10-31.csv` | 31/10/2026 | |
+| Ventas por producto | `prueba_lineas_2026-10-31.csv` | 31/10/2026 | |
+| Cuentas por pagar | `prueba_pagos_2026-10-31.csv` | 31/10/2026 | 250.000.000 |
+| Cartera | `prueba_cartera_corte_2026-11-14.csv` | 14/11/2026 | |
+| Ventas | `prueba_ventas_2026-11-14.csv` | 14/11/2026 | |
+| Ventas por producto | `prueba_lineas_2026-11-14.csv` | 14/11/2026 | |
+| Recaudos | `prueba_recaudos_2026-11-14.csv` | 14/11/2026 | |
+| Cuentas por pagar | `prueba_pagos_2026-11-14.csv` | 14/11/2026 | 390.000.000 |
 
-(Los dos reportes de ventas por producto pueden cargarse en cualquier momento después de la primera cartera.)
+(Cada paquete solo necesita sus reportes: Cartera la cartera, Foco comercial las ventas, Margen las ventas por
+producto y Caja las cuentas por pagar, que proyecta mejor si ya hay cartera, ventas y margen.)
 
 Los archivos `datos_ejemplo/cartera_corte_*.csv` son el ejemplo pequeño original. Todos los datos son inventados.
 
@@ -68,7 +72,7 @@ pytest
 
 Un paquete es un reporte que lo alimenta, reglas versionadas en `reglas/<paquete>.yaml`, una función que detecta
 decisiones y otra que mide su resultado. La bandeja, la memoria de decisiones, la matriz de delegación, el grupo de
-control, el asistente y el formulario de reglas son comunes. Para agregar uno (Margen, Caja, Inventario):
+control, el asistente y el formulario de reglas son comunes. Para agregar uno (Inventario, Despacho):
 
 1. Si necesita un reporte nuevo, agregar su objeto en `plantillas/comercial.yaml`, su tabla en `ontara/db.py`
    y su semáforo en `ontara/calidad.py`.
@@ -109,6 +113,34 @@ el gerente. Margen no usa grupo de control: dejar sin renegociar a algunos clien
 comercial. El impacto se mide de dos formas: el margen de cada cliente o producto desde la decisión frente al que
 tenía, y el margen bruto de los últimos 90 días frente al del primer reporte cargado. `productos_excepcion` sirve
 para productos gancho que se venden con margen bajo a propósito.
+
+### Caja a 13 semanas
+
+Usa el reporte de **cuentas por pagar** (facturas de proveedores pendientes, con fecha de vencimiento) y el **saldo
+en bancos** a la fecha de corte, que se digita al cargarlo. Conviene incluir en el mismo reporte las obligaciones
+programadas con su fecha: nómina y prima, impuestos, cuotas de crédito y arriendo (columna de concepto o categoría).
+Lo que no venga ahí se puede poner como `gastos_fijos_mensuales`.
+
+La proyección de cada semana suma:
+
+- **Cobros de cartera**: cada factura abierta de la última cartera, en la fecha en que ese cliente suele pagar. El
+  atraso de cada cliente sale de los recaudos (fecha real de pago) o, si no hay, de los cortes de cartera (una
+  factura que desaparece entre dos cortes se pagó entre ellos). Las vencidas se esperan en 1 a 4 semanas; las de
+  mora alta, al `pct_recaudo_mora_alta`; las de más de `dias_incobrable` no se proyectan.
+- **Cobros de ventas nuevas**: el ritmo del último trimestre (con el escenario `crecimiento_ventas_pct`), cobrado
+  al plazo de la cartera más el atraso promedio.
+- **Pagos**: las cuentas por pagar en su vencimiento (las vencidas, en la semana 1), las compras nuevas
+  (`compras_pct_ventas`; en 0 usa 100 menos el margen de Margen) a su plazo, y los gastos fijos.
+
+| Decisión | Cuándo aparece | Monto en juego |
+| --- | --- | --- |
+| Caja bajo el mínimo | Una o varias semanas seguidas con el saldo bajo `caja_minima`. Trae las palancas en orden: cartera por cobrar antes de esa semana (con el número de la decisión de Cartera), pagos a proveedores que se pueden correr `dias_aplazamiento` días y lo que haya que financiar | Lo que falta para el mínimo en la peor semana |
+| Aplazar pago a proveedor | Para la racha más próxima, los pagos concretos a negociar. Nunca nómina, impuestos, créditos, arriendo ni servicios (`categorias_criticas`) ni los `proveedores_criticos` | Monto a correr |
+| Excedente de caja | Ninguna semana en rojo y, aun en la peor, la caja supera el mínimo en `excedente_minimo_cop` | El excedente: para pronto pago, deuda o para respaldar ampliaciones de cupo |
+
+Con cada reporte nuevo de cuentas por pagar se mide cuánto del déficit quedó cubierto, qué pagos se aplazaron de
+verdad (el documento sigue abierto con fecha posterior) y la precisión: el saldo real en bancos frente al que
+proyectó el reporte anterior. La caja se recalcula sola cuando llega una cartera, ventas, margen o recaudos nuevos.
 
 ## Aprendizaje (etapa 0: instrumentar)
 
@@ -159,7 +191,7 @@ mensuales de contabilidad (`ventas_mensuales_cop`) se usan esas; si no, se estim
 | --- | --- | --- |
 | `DATABASE_URL` | Base del cliente. En producción, Cloud SQL: `postgresql+psycopg://usuario:clave@/ontara?host=/cloudsql/PROYECTO:REGION:INSTANCIA` | SQLite local `ontara.db` |
 | `ONTARA_EMPRESA` | Nombre que aparece en la app | Empresa de demostración |
-| `ONTARA_PAQUETES` | Paquetes activos para el cliente, separados por coma | `cartera,comercial,margen` |
+| `ONTARA_PAQUETES` | Paquetes activos para el cliente, separados por coma | `cartera,comercial,margen,caja` |
 | `ONTARA_USUARIOS` | Usuarios autorizados y su rol en JSON (ver abajo). Roles: `gerente` (aprueba montos altos y cambia reglas) y `lider` | Sin login (modo demo) |
 | `ANTHROPIC_API_KEY` | Activa el asistente | Asistente apagado |
 | `ONTARA_MODELO` | Modelo de Claude | `claude-opus-5-5` |
