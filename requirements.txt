@@ -1,4 +1,4 @@
-streamlit>=1.40
+streamlit[auth]>=1.42  # st.login con Google o Microsoft (incluye Authlib)
 pandas>=2.2
 openpyxl>=3.1
 sqlalchemy>=2.0

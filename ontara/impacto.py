@@ -5,12 +5,13 @@ nada. Sin línea base no hay forma de demostrar el valor del piloto.
 """
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, timedelta
 
 import pandas as pd
 from sqlalchemy import func, select
 from sqlalchemy.engine import Engine
 
+from . import reglas
 from .db import acciones, cargas, decisiones, facturas, linea_base, resultados
 
 
@@ -21,13 +22,38 @@ def facturas_de_carga(motor: Engine, carga_id: int) -> pd.DataFrame:
     return pd.DataFrame([dict(f) for f in filas], columns=["id", "carga_id", *cols])
 
 
-def metricas(fact: pd.DataFrame, corte: date) -> dict:
+def facturas_historicas(motor: Engine, hasta: date) -> pd.DataFrame:
+    """Todas las facturas de los cortes hasta `hasta` (pueden repetirse entre cortes)."""
+    with motor.connect() as cx:
+        filas = cx.execute(select(facturas).join(cargas, cargas.c.id == facturas.c.carga_id)
+                           .where(cargas.c.fecha_corte <= hasta)).mappings().all()
+    cols = ["id", "carga_id", "nit", "numero", "fecha_emision", "fecha_vencimiento", "valor", "saldo", "vendedor"]
+    return pd.DataFrame([dict(f) for f in filas], columns=cols)
+
+
+def ventas_diarias_estimadas(fact: pd.DataFrame, corte: date, dias: int = 30) -> float:
+    """Ventas a crédito por día, estimadas con las facturas emitidas en los últimos `dias`.
+    Con plazos de 30 días o más, casi todas siguen abiertas en el reporte de cartera."""
+    if fact.empty:
+        return 0.0
+    rec = fact[(fact["fecha_emision"] > corte - timedelta(days=dias)) & (fact["fecha_emision"] <= corte)].copy()
+    if rec.empty:
+        return 0.0
+    rec["monto"] = rec["valor"].where(rec["valor"].notna() & (rec["valor"] > 0), rec["saldo"])
+    # Una factura puede aparecer en varios cortes: se cuenta una vez.
+    return float(rec.groupby(["nit", "numero"])["monto"].max().sum()) / dias
+
+
+def metricas(fact: pd.DataFrame, corte: date, historico: pd.DataFrame | None = None) -> dict:
     """Indicadores de cartera. 'Vencida' = pasada su fecha de vencimiento, sin días de gracia,
     para que la definición no cambie cuando el cliente ajusta sus reglas."""
     f = fact[fact["saldo"] > 0]
+    # Con el histórico de cortes se recuperan facturas recientes que ya se pagaron y salieron del reporte.
+    ventas_dia = ventas_diarias_estimadas(fact if historico is None else historico, corte)
     if f.empty:
         return {"cartera_total": 0.0, "cartera_vencida": 0.0, "pct_vencida": 0.0,
-                "mora_promedio_dias": 0.0, "clientes_con_mora": 0, "clientes": 0}
+                "mora_promedio_dias": 0.0, "clientes_con_mora": 0, "clientes": 0,
+                "ventas_diarias_estimadas": ventas_dia, "dias_cartera": 0.0}
     mora = pd.Series([(corte - v).days for v in f["fecha_vencimiento"]], index=f.index)
     venc = f[mora > 0]
     total, vencida = float(f["saldo"].sum()), float(venc["saldo"].sum())
@@ -39,13 +65,16 @@ def metricas(fact: pd.DataFrame, corte: date) -> dict:
         "mora_promedio_dias": round(ponderada, 1),
         "clientes_con_mora": int(venc["nit"].nunique()),
         "clientes": int(f["nit"].nunique()),
+        "ventas_diarias_estimadas": round(ventas_dia, 0),
+        # Días de cartera (DSO): cuántos días de ventas están por cobrar.
+        "dias_cartera": round(total / ventas_dia, 1) if ventas_dia else None,
     }
 
 
 def metricas_carga(motor: Engine, carga_id: int) -> dict:
     with motor.connect() as cx:
         corte = cx.execute(select(cargas.c.fecha_corte).where(cargas.c.id == carga_id)).scalar_one()
-    return metricas(facturas_de_carga(motor, carga_id), corte)
+    return metricas(facturas_de_carga(motor, carga_id), corte, facturas_historicas(motor, corte))
 
 
 def obtener_linea_base(motor: Engine) -> dict | None:
@@ -78,12 +107,71 @@ def resumen(motor: Engine) -> dict:
     actual = metricas_carga(motor, ultima) if ultima else None
     rec_atendidas = sum(r["pesos_recuperados"] for r in res if r["atendida"])
     rec_no = sum(r["pesos_recuperados"] for r in res if not r["atendida"])
+    base_m = None
+    if base:
+        base_m = dict(base["metricas"])
+        if "dias_cartera" not in base_m:        # línea base guardada antes de existir la métrica
+            base_m = {**metricas_carga(motor, base["carga_id"]), **base_m}
+    ventas_mes = float(reglas.regla_activa(motor)["parametros"].get("ventas_mensuales_cop") or 0)
     return {
-        "linea_base": base["metricas"] if base else None,
+        "caja": caja_liberada(base_m, actual, ventas_mes / 30.4 if ventas_mes else None),
+        "control": comparar_control(motor),
+        "linea_base": base_m,
         "actual": actual,
         "pesos_recuperados_atendidas": rec_atendidas,
         "pesos_recuperados_no_atendidas": rec_no,
         "decisiones_medidas": len(res),
         "decisiones_por_estado": estados,
         "acciones_registradas": n_acciones,
+    }
+
+
+def caja_liberada(base: dict | None, actual: dict | None, ventas_dia: float | None = None) -> dict:
+    """Caja que dejó de estar atrapada en cartera: días de cartera ganados × ventas diarias.
+
+    Si el gerente registró las ventas mensuales en las reglas, se usan para los dos cortes (más estable);
+    si no, cada corte usa su propia estimación con las facturas recientes."""
+    vacio = {"dias_base": None, "dias_hoy": None, "dias_ganados": None, "pesos": None, "fuente_ventas": None}
+    if not base or not actual:
+        return vacio
+    if ventas_dia:
+        dias_b, dias_h, v, fuente = (base["cartera_total"] / ventas_dia, actual["cartera_total"] / ventas_dia,
+                                     ventas_dia, "contabilidad")
+    else:
+        dias_b, dias_h = base.get("dias_cartera"), actual.get("dias_cartera")
+        v, fuente = actual.get("ventas_diarias_estimadas"), "estimada"
+    if not dias_b or not dias_h or not v:
+        return vacio
+    ganados = round(dias_b - dias_h, 1)
+    return {"dias_base": round(dias_b, 1), "dias_hoy": round(dias_h, 1), "dias_ganados": ganados,
+            "pesos": round(ganados * v, 0), "fuente_ventas": fuente}
+
+
+def comparar_control(motor: Engine) -> dict:
+    """Recuperación con Ontara (tratamiento) frente al grupo de control, en decisiones de cobro elegibles.
+    El efecto estimado es la recuperación adicional atribuible a la bandeja."""
+    with motor.connect() as cx:
+        sub = (select(resultados.c.decision_id, func.max(resultados.c.id).label("rid"))
+               .group_by(resultados.c.decision_id).subquery())
+        filas = cx.execute(
+            select(decisiones.c.grupo, resultados.c.saldo_vencido_antes, resultados.c.pesos_recuperados)
+            .join(sub, resultados.c.id == sub.c.rid)
+            .join(decisiones, decisiones.c.id == resultados.c.decision_id)
+            .where(decisiones.c.grupo.in_(("control", "tratamiento")))).all()
+    g = {k: {"n": 0, "inicial": 0.0, "recuperado": 0.0} for k in ("control", "tratamiento")}
+    for grupo, antes, rec in filas:
+        g[grupo]["n"] += 1
+        g[grupo]["inicial"] += antes
+        g[grupo]["recuperado"] += rec
+    tasa = {k: (v["recuperado"] / v["inicial"] if v["inicial"] else None) for k, v in g.items()}
+    efecto = None
+    if tasa["control"] is not None and tasa["tratamiento"] is not None:
+        efecto = round((tasa["tratamiento"] - tasa["control"]) * g["tratamiento"]["inicial"], 0)
+    return {
+        "n_control": g["control"]["n"], "n_tratamiento": g["tratamiento"]["n"],
+        "tasa_control_pct": None if tasa["control"] is None else round(100 * tasa["control"], 1),
+        "tasa_tratamiento_pct": None if tasa["tratamiento"] is None else round(100 * tasa["tratamiento"], 1),
+        "efecto_estimado": efecto,
+        # Con pocos casos la diferencia puede ser azar; se avisa en la app.
+        "muestra_suficiente": g["control"]["n"] >= 10 and g["tratamiento"]["n"] >= 10,
     }

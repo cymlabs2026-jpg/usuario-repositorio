@@ -13,3 +13,25 @@ parametros:
   dias_compra_reciente: 30      # "sigue comprando" = factura emitida en estos últimos días
   congelar_por_sobrecupo: true  # recomendar frenar crédito si el saldo supera el cupo
   clientes_excepcion: []        # NIT de clientes estratégicos que no generan decisiones
+
+  # --- Valor del cliente (compras acumuladas en los cortes cargados) ---
+  meses_valor_cliente: 12       # ventana para sumar las compras del cliente
+  pct_clientes_clave: 80        # clientes clave = los que suman este % de las compras (curva ABC)
+
+  # --- Ampliar cupo: crédito para crecer con buenos pagadores ---
+  ampliar_activo: true
+  ampliar_uso_minimo: 0.7       # saldo total / cupo a partir del cual el cupo empieza a frenar ventas
+  ampliar_mora_maxima_dias: 0   # mora máxima (después de los días de gracia) para considerarlo buen pagador
+  ampliar_pct_sugerido: 0.3     # aumento sugerido como fracción del cupo actual
+  ampliar_maximo_cop: 50000000  # tope del aumento sugerido por decisión
+
+  # --- Matriz de delegación ---
+  aprobacion_lider_max_cop: 20000000  # el líder decide hasta este monto; por encima aprueba el gerente
+  frenar_clave_requiere_gerente: true # frenar crédito a un cliente clave siempre lo aprueba el gerente
+
+  # --- Días de cartera y caja liberada ---
+  ventas_mensuales_cop: 0       # ventas a crédito del mes según contabilidad; 0 = estimarlas con las facturas recientes
+
+  # --- Grupo de control para medir el impacto real ---
+  pct_grupo_control: 15         # % de decisiones de cobro elegibles que no se muestran (0 = apagado)
+  control_monto_maximo: 20000000  # solo saldos vencidos por debajo de este monto pueden ir a control

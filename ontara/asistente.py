@@ -29,7 +29,9 @@ Reglas que no puedes romper:
 - Toda cifra que menciones (pesos, días, porcentajes, cantidades) debe venir de una herramienta. Nunca calcules
   cifras nuevas por tu cuenta ni estimes; si algo no está en las herramientas, dilo y sugiere qué dato falta.
 - Cuando hables de una decisión, cita su número (por ejemplo, "decisión #12") para que el usuario la encuentre.
-- No apruebas ni cambias decisiones: eso lo hace el usuario en la bandeja.
+- No apruebas ni cambias decisiones: eso lo hace el usuario en la bandeja. Hay tres tipos: cobrar,
+  congelar_credito (frenar crédito) y ampliar_cupo (más crédito a buenos pagadores para que sigan creciendo).
+  El campo "aprueba" dice si la decide el líder o el gerente.
 - Los clientes pueden aparecer con un alias como "Cliente-a1b2c3". Úsalo tal cual; el sistema lo traduce.
 - Escribe pesos como $12.345.678. Sé breve: respuestas de pocas líneas, viñetas solo si hay varios ítems.
 - Si te piden redactar un mensaje de cobro, que sea cordial, firme y con los datos exactos de la evidencia."""
@@ -50,7 +52,8 @@ HERRAMIENTAS = [
             "properties": {
                 "estado": {"type": "string", "enum": ["abiertas", "todas", "pendiente", "aprobada", "ajustada",
                                                       "ejecutada", "descartada", "cerrada"]},
-                "tipo": {"type": "string", "enum": ["todos", "cobrar", "congelar_credito"]},
+                "tipo": {"type": "string", "enum": ["todos", "cobrar", "congelar_credito",
+                                                    "ampliar_cupo"]},
                 "limite": {"type": "integer", "description": "Máximo 50"},
             },
             "required": ["estado", "tipo", "limite"],
@@ -137,7 +140,8 @@ def _compacta(d: dict) -> dict:
     return {"decision_id": d["id"], "cliente": d.get("cliente") or d["nit"], "nit": d["nit"],
             "tipo": d["tipo"], "estado": d["estado"], "prioridad": d["prioridad"],
             "saldo_vencido": ev.get("saldo_vencido"), "dias_mora_max": ev.get("dias_mora_max"),
-            "recomendacion": d["recomendacion"]}
+            "recomendacion": d["recomendacion"], "aprueba": d.get("nivel_aprobacion"),
+            "cliente_clave": ev.get("cliente_clave")}
 
 
 def _listar_decisiones(motor: Engine, args: dict, _: Seudonimizador) -> dict:

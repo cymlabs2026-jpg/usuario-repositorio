@@ -5,9 +5,6 @@ La lógica vive en el paquete `ontara`; esta capa solo muestra y captura.
 """
 from __future__ import annotations
 
-import hashlib
-import json
-import os
 import sys
 from datetime import date
 from pathlib import Path
@@ -18,7 +15,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from ontara import asistente, calidad, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
+from ontara import acceso, asistente, calidad, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
 from ontara.db import cargas, crear_motor  # noqa: E402
 from sqlalchemy import select  # noqa: E402
 
@@ -32,7 +29,8 @@ def motor():
 
 M = motor()
 COLOR = {"verde": "🟢", "amarillo": "🟡", "rojo": "🔴"}
-TIPO = {"cobrar": "Cobrar", "congelar_credito": "Frenar crédito"}
+TIPO = reglas.TIPOS
+NIVEL = {"lider": "Líder", "gerente": "Gerente"}
 ETIQUETAS = {"nit": "NIT", "cliente": "Cliente", "numero": "Número de factura", "fecha_emision": "Fecha de emisión",
              "fecha_vencimiento": "Fecha de vencimiento", "saldo": "Saldo", "valor": "Valor", "vendedor": "Vendedor",
              "cupo": "Cupo de crédito"}
@@ -45,41 +43,92 @@ def pesos(x) -> str:
 
 
 # --- Acceso -----------------------------------------------------------------------
-def usuarios() -> dict:
-    """ONTARA_USUARIOS='{"maria": {"clave_sha256": "...", "rol": "lider"}}'. Sin variable = modo demo."""
-    crudo = os.environ.get("ONTARA_USUARIOS")
-    return json.loads(crudo) if crudo else {}
+PROVEEDORES = {"google": "Google", "microsoft": "Microsoft"}
+
+
+def proveedores_oidc() -> list[str]:
+    """Proveedores configurados en .streamlit/secrets.toml, sección [auth.google] o [auth.microsoft]."""
+    try:
+        auth = st.secrets.get("auth", {})
+    except Exception:            # sin archivo de secretos
+        return []
+    return [k for k in PROVEEDORES if k in auth]
+
+
+def _entrar(usuario: str, rol: str, metodo: str):
+    st.session_state.usuario, st.session_state.rol, st.session_state.metodo = usuario, rol, metodo
+    acceso.registrar(M, usuario, "ingreso", metodo)
 
 
 def login() -> tuple[str, str]:
     if "usuario" in st.session_state:
         return st.session_state.usuario, st.session_state.rol
-    lista = usuarios()
+    lista = acceso.usuarios()
     if not lista:
-        st.session_state.usuario, st.session_state.rol = "demo", "gerente"
+        st.session_state.usuario, st.session_state.rol, st.session_state.metodo = "demo", "gerente", "demo"
         return "demo", "gerente"
+    oidc = proveedores_oidc()
+    # Volvió del proveedor de identidad: solo entra si su correo está autorizado.
+    if oidc and getattr(st.user, "is_logged_in", False):
+        correo = st.user.get("email") or ""
+        rol = acceso.rol_de(correo, lista)
+        if rol:
+            _entrar(correo.lower(), rol, "oidc")
+            st.rerun()
+        if not st.session_state.get("_denegado_registrado"):
+            acceso.registrar(M, correo, "denegado", "oidc", "Correo no autorizado en ONTARA_USUARIOS")
+            st.session_state._denegado_registrado = True
+        st.error(f"La cuenta {correo} no tiene acceso a Ontara. Pide al gerente que la autorice.")
+        if st.button("Salir"):
+            st.logout()
+        st.stop()
+
     st.title("Ontara · Cartera")
-    with st.form("login"):
-        u = st.text_input("Usuario")
-        c = st.text_input("Clave", type="password")
-        if st.form_submit_button("Entrar"):
-            datos = lista.get(u)
-            if datos and hashlib.sha256(c.encode()).hexdigest() == datos["clave_sha256"]:
-                st.session_state.usuario, st.session_state.rol = u, datos.get("rol", "lider")
-                st.rerun()
-            st.error("Usuario o clave incorrectos.")
+    for prov in oidc:
+        if st.button(f"Entrar con {PROVEEDORES[prov]}", type="primary", key=f"login_{prov}"):
+            st.login(prov)
+    hay_claves = any(u.get("clave") for u in lista.values())
+    if hay_claves:
+        if oidc:
+            st.caption("O con usuario y clave:")
+        with st.form("login"):
+            u = st.text_input("Usuario")
+            c = st.text_input("Clave", type="password")
+            if st.form_submit_button("Entrar"):
+                rol = acceso.autenticar_con_clave(u, c, lista)
+                if rol:
+                    _entrar(u.strip().lower(), rol, "clave")
+                    st.rerun()
+                acceso.registrar(M, u, "fallido", "clave")
+                st.error("Usuario o clave incorrectos.")
+    if not oidc and not hay_claves:
+        st.error("No hay forma de entrar configurada: agrega [auth] en secrets.toml o claves en ONTARA_USUARIOS.")
     st.stop()
+
+
+def salir():
+    acceso.registrar(M, USUARIO, "salida", st.session_state.get("metodo", "clave"))
+    metodo = st.session_state.get("metodo")
+    for k in ("usuario", "rol", "metodo"):
+        st.session_state.pop(k, None)
+    if metodo == "oidc":
+        st.logout()
+    st.rerun()
 
 
 USUARIO, ROL = login()
 
 with st.sidebar:
     st.markdown(f"### ◆ Ontara\n**{config.nombre_empresa()}**")
-    pagina = st.radio("Ir a", ["Bandeja de decisiones", "Cargar datos", "Impacto", "Asistente", "Reglas"],
-                      label_visibility="collapsed")
+    paginas = ["Bandeja de decisiones", "Cargar datos", "Impacto", "Asistente", "Reglas"]
+    if ROL == "gerente":
+        paginas.append("Accesos")
+    pagina = st.radio("Ir a", paginas, label_visibility="collapsed")
     st.caption(f"Sesión: {USUARIO} · {ROL}")
-    if not usuarios():
+    if not acceso.usuarios():
         st.warning("Modo demostración: sin login. Configura ONTARA_USUARIOS antes de usar datos reales.")
+    elif st.button("Salir"):
+        salir()
 
 
 # --- Cargar datos ---------------------------------------------------------------------
@@ -141,22 +190,32 @@ def pagina_cargar():
 # --- Bandeja -----------------------------------------------------------------------------
 def pagina_bandeja():
     st.header("Bandeja de decisiones")
-    c1, c2 = st.columns([2, 1])
+    c1, c2, c3 = st.columns([2, 1, 1])
     filtro = c1.segmented_control("Estado", ["Abiertas", "Pendientes", "Todas"], default="Abiertas")
-    tipo = c2.selectbox("Tipo", ["Todos", "Cobrar", "Frenar crédito"])
+    tipo = c2.selectbox("Tipo", ["Todos", *TIPO.values()])
+    quien = c3.selectbox("Quién aprueba", ["Todos", "Líder", "Gerente"],
+                         index=2 if ROL == "gerente" else 0)
     estados = {"Abiertas": decisiones.ABIERTAS, "Pendientes": ("pendiente",), "Todas": None}[filtro or "Abiertas"]
-    tipo_k = {"Todos": None, "Cobrar": "cobrar", "Frenar crédito": "congelar_credito"}[tipo]
-    lista = decisiones.listar(M, estados, tipo_k)
+    tipo_k = {v: k for k, v in TIPO.items()}.get(tipo)
+    nivel_k = {"Líder": "lider", "Gerente": "gerente"}.get(quien)
+    lista = decisiones.listar(M, estados, tipo_k, nivel=nivel_k)
     if not lista:
         st.info("No hay decisiones con este filtro. Carga un corte de cartera para empezar.")
         return
     total = sum(d["evidencia"]["saldo_vencido"] for d in lista if d["tipo"] == "cobrar")
-    st.caption(f"{len(lista)} decisiones · {pesos(total)} vencidos en las de cobro")
+    cupo = sum(d["evidencia"].get("aumento_sugerido", 0) for d in lista if d["tipo"] == "ampliar_cupo")
+    st.caption(f"{len(lista)} decisiones · {pesos(total)} vencidos en las de cobro · "
+               f"{pesos(cupo)} de cupo adicional sugerido para buenos pagadores")
     for d in lista:
         ev = d["evidencia"]
-        icono = "🔴" if d["prioridad"] >= 70 else "🟡" if d["prioridad"] >= 40 else "⚪"
-        titulo = (f"{icono} {d['prioridad']:.0f} · {d['cliente']} · {TIPO[d['tipo']]} · "
-                  f"{pesos(ev['saldo_vencido'])} vencidos · {ev['dias_mora_max']} días · {ESTADO[d['estado']]}")
+        icono = "🟢" if d["tipo"] == "ampliar_cupo" else "🔴" if d["prioridad"] >= 70 else \
+            "🟡" if d["prioridad"] >= 40 else "⚪"
+        clave = " ⭐" if ev.get("cliente_clave") else ""
+        gerente = " · aprueba gerente" if d["nivel_aprobacion"] == "gerente" else ""
+        detalle_tipo = (f"{ev.get('uso_cupo_pct', 0):.0f}% del cupo usado" if d["tipo"] == "ampliar_cupo"
+                        else f"{pesos(ev['saldo_vencido'])} vencidos · {ev['dias_mora_max']} días")
+        titulo = (f"{icono} {d['prioridad']:.0f} · {d['cliente']}{clave} · {TIPO[d['tipo']]} · "
+                  f"{detalle_tipo} · {ESTADO[d['estado']]}{gerente}")
         with st.expander(titulo):
             tarjeta(d)
 
@@ -167,9 +226,20 @@ def tarjeta(d: dict):
     st.write(d["motivo"])
     a, b, c, e = st.columns(4)
     a.metric("Saldo total", pesos(ev["saldo_total"]))
-    b.metric("Saldo vencido", pesos(ev["saldo_vencido"]))
-    c.metric("Mora máxima", f"{ev['dias_mora_max']} días")
+    if d["tipo"] == "ampliar_cupo":
+        b.metric("Uso del cupo", f"{ev['uso_cupo_pct']:.0f}%")
+        c.metric("Cupo sugerido", pesos(ev["cupo_sugerido"]), delta=pesos(ev["aumento_sugerido"]))
+    else:
+        b.metric("Saldo vencido", pesos(ev["saldo_vencido"]))
+        c.metric("Mora máxima", f"{ev['dias_mora_max']} días")
     e.metric("Cupo", pesos(ev["cupo"]) if ev.get("cupo") else "Sin dato")
+    if "compras_ventana" in ev:
+        st.caption(f"Compras de los últimos {ev['meses_valor_cliente']} meses: {pesos(ev['compras_ventana'])} "
+                   f"({ev['participacion_compras_pct']}% del total)"
+                   + (" · ⭐ cliente clave" if ev.get("cliente_clave") else ""))
+    if d["nivel_aprobacion"] == "gerente":
+        st.warning("Esta decisión la aprueba el gerente (matriz de delegación). "
+                   + ("" if ROL == "gerente" else "Puedes dejar una nota para escalarla."))
     if ev.get("facturas"):
         tabla = pd.DataFrame(ev["facturas"])
         tabla["saldo"] = tabla["saldo"].map(pesos)
@@ -187,10 +257,13 @@ def tarjeta(d: dict):
         b1, b2, b3, b4 = st.columns(4)
         acciones_ui = [(b1, "Aprobar", "aprobar"), (b2, "Ajustar", "ajustar"),
                        (b3, "Marcar ejecutada", "ejecutar"), (b4, "Descartar", "descartar")]
+        autorizado = reglas.puede_aprobar(ROL, d["nivel_aprobacion"])
+        if not autorizado:
+            acciones_ui = [(b1, "Dejar nota", "nota"), (b3, "Marcar ejecutada", "ejecutar")]
         for col, etiqueta, accion in acciones_ui:
             if d["estado"] in decisiones.TRANSICIONES[accion][0] and col.button(etiqueta, key=f"{accion}_{d['id']}"):
                 try:
-                    decisiones.registrar_accion(M, d["id"], accion, USUARIO, texto)
+                    decisiones.registrar_accion(M, d["id"], accion, USUARIO, texto, rol=ROL)
                     st.rerun()
                 except ValueError as e:
                     st.error(str(e))
@@ -229,6 +302,34 @@ def pagina_impacto():
     d.metric("Recuperado en decisiones atendidas", pesos(r["pesos_recuperados_atendidas"]))
     st.caption(f"Recuperado en decisiones no atendidas: {pesos(r['pesos_recuperados_no_atendidas'])} · "
                f"decisiones medidas: {r['decisiones_medidas']} · acciones registradas: {r['acciones_registradas']}")
+
+    st.subheader("Caja para crecer")
+    caja = r["caja"]
+    if caja["pesos"] is None:
+        st.info("Faltan datos de ventas para calcular los días de cartera. Registra las ventas mensuales en Reglas.")
+    else:
+        x, y, z = st.columns(3)
+        x.metric("Días de cartera", f"{caja['dias_hoy']:.0f}",
+                 delta=f"{-caja['dias_ganados']:+.1f} vs. línea base ({caja['dias_base']:.0f})", delta_color="inverse")
+        y.metric("Caja liberada vs. línea base", pesos(caja["pesos"]))
+        z.metric("Ventas diarias usadas", "Contabilidad" if caja["fuente_ventas"] == "contabilidad" else "Estimadas")
+        if caja["fuente_ventas"] != "contabilidad":
+            st.caption("Las ventas se estiman con las facturas emitidas en los últimos 30 días de cada corte. "
+                       "Para una cifra más estable, registra las ventas mensuales de contabilidad en Reglas.")
+
+    st.subheader("Efecto de Ontara frente al grupo de control")
+    ctl = r["control"]
+    if not ctl["n_control"] or ctl["efecto_estimado"] is None:
+        st.info("Aún no hay resultados del grupo de control. Se miden desde el segundo corte.")
+    else:
+        x, y, z = st.columns(3)
+        x.metric("Recuperación con la bandeja", f"{ctl['tasa_tratamiento_pct']}%",
+                 help=f"{ctl['n_tratamiento']} decisiones")
+        y.metric("Recuperación del grupo de control", f"{ctl['tasa_control_pct']}%",
+                 help=f"{ctl['n_control']} decisiones que no se mostraron")
+        z.metric("Recuperación adicional atribuible", pesos(ctl["efecto_estimado"]))
+        if not ctl["muestra_suficiente"]:
+            st.caption("Todavía hay pocos casos (menos de 10 por grupo): la diferencia puede ser azar.")
     hist = impacto.historial(M)
     if len(hist) > 1:
         fig = px.line(hist, x="fecha_corte", y="cartera_vencida", markers=True,
@@ -240,7 +341,9 @@ def pagina_impacto():
     st.dataframe(hist.rename(columns={"fecha_corte": "Corte", "cartera_total": "Cartera total",
                                       "cartera_vencida": "Vencida", "pct_vencida": "% vencida",
                                       "mora_promedio_dias": "Mora prom. (días)",
-                                      "clientes_con_mora": "Clientes en mora", "clientes": "Clientes"}).drop(columns=["carga_id"]),
+                                      "clientes_con_mora": "Clientes en mora", "clientes": "Clientes",
+                                      "dias_cartera": "Días de cartera"})
+                 .drop(columns=["carga_id", "ventas_diarias_estimadas"], errors="ignore"),
                  hide_index=True, use_container_width=True)
 
 
@@ -298,6 +401,35 @@ def pagina_reglas():
         from ontara.db import clientes
         with M.connect() as cx:
             directorio = {r.nit: r.nombre for r in cx.execute(select(clientes.c.nit, clientes.c.nombre))}
+        st.markdown("**Ampliar cupo a buenos pagadores**")
+        a2, b2 = st.columns(2)
+        n["ampliar_activo"] = a2.checkbox("Recomendar ampliar cupo", bool(p["ampliar_activo"]))
+        n["ampliar_uso_minimo"] = b2.number_input("Uso del cupo a partir del cual recomendar (0,7 = 70%)",
+                                                  0.1, 2.0, float(p["ampliar_uso_minimo"]), 0.05)
+        n["ampliar_mora_maxima_dias"] = a2.number_input("Mora máxima para ser buen pagador (días)", 0, 60,
+                                                        int(p["ampliar_mora_maxima_dias"]))
+        n["ampliar_pct_sugerido"] = b2.number_input("Aumento sugerido (fracción del cupo)", 0.05, 2.0,
+                                                    float(p["ampliar_pct_sugerido"]), 0.05)
+        n["ampliar_maximo_cop"] = a2.number_input("Tope del aumento (COP)", 0, value=int(p["ampliar_maximo_cop"]),
+                                                  step=1_000_000)
+        st.markdown("**Valor del cliente y delegación**")
+        a3, b3 = st.columns(2)
+        n["pct_clientes_clave"] = a3.number_input("Clientes clave = los que suman este % de las compras", 1, 100,
+                                                  int(p["pct_clientes_clave"]))
+        n["meses_valor_cliente"] = b3.number_input("Meses de compras para el valor del cliente", 1, 36,
+                                                   int(p["meses_valor_cliente"]))
+        n["aprobacion_lider_max_cop"] = a3.number_input("El líder aprueba hasta (COP)", 0,
+                                                        value=int(p["aprobacion_lider_max_cop"]), step=1_000_000)
+        n["frenar_clave_requiere_gerente"] = b3.checkbox("Frenar a un cliente clave lo aprueba el gerente",
+                                                         bool(p["frenar_clave_requiere_gerente"]))
+        st.markdown("**Medición**")
+        a4, b4 = st.columns(2)
+        n["pct_grupo_control"] = a4.number_input("Grupo de control (% de cobros elegibles que no se muestran)",
+                                                 0, 50, int(p["pct_grupo_control"]))
+        n["control_monto_maximo"] = b4.number_input("Solo van a control saldos vencidos hasta (COP)", 0,
+                                                    value=int(p["control_monto_maximo"]), step=1_000_000)
+        n["ventas_mensuales_cop"] = a4.number_input("Ventas a crédito del mes según contabilidad (0 = estimar)", 0,
+                                                    value=int(p["ventas_mensuales_cop"]), step=10_000_000)
         n["clientes_excepcion"] = st.multiselect(
             "Clientes estratégicos (no generan decisiones)", list(directorio),
             default=[c for c in p["clientes_excepcion"] if c in directorio],
@@ -316,5 +448,18 @@ def pagina_reglas():
                 st.error(str(e))
 
 
-{"Cargar datos": pagina_cargar, "Bandeja de decisiones": pagina_bandeja, "Impacto": pagina_impacto,
+# --- Accesos (solo gerente) ---------------------------------------------------------------------
+def pagina_accesos():
+    st.header("Bitácora de accesos")
+    st.caption("Quién entró, cuándo y cómo. Incluye intentos fallidos y cuentas no autorizadas.")
+    filas = acceso.bitacora(M)
+    if not filas:
+        st.info("Todavía no hay accesos registrados.")
+        return
+    st.dataframe(pd.DataFrame(filas)[["fecha", "usuario", "evento", "metodo", "detalle"]].rename(columns={
+        "fecha": "Fecha (UTC)", "usuario": "Usuario", "evento": "Evento", "metodo": "Método", "detalle": "Detalle"}),
+        hide_index=True, use_container_width=True)
+
+
+{"Cargar datos": pagina_cargar, "Accesos": pagina_accesos, "Bandeja de decisiones": pagina_bandeja, "Impacto": pagina_impacto,
  "Asistente": pagina_asistente, "Reglas": pagina_reglas}[pagina]()
