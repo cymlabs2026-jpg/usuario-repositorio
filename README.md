@@ -28,6 +28,7 @@ consulta resultados ya calculados, los explica y redacta mensajes.
 | 2. Paquetes | `ontara/paquetes.py` | Registro de paquetes: qué reporte usa cada uno, sus tipos de decisión, cómo detecta y cómo mide. Se activan con `ONTARA_PAQUETES` |
 | 2. Margen | `ontara/margen.py` + `reglas/margen.yaml` | Margen bruto por cliente y producto, descuentos fuera de política, ventas bajo el costo y cruce con Cartera y Foco comercial |
 | 2. Inventario | `ontara/inventario.py` + `reglas/inventario.yaml` | Cobertura por producto con la demanda de las ventas por producto: reponer antes del quiebre y liberar capital en inventario lento o sin movimiento; cruce con Margen y Caja |
+| 2. Despacho | `ontara/despacho.py` + `reglas/despacho.yaml` | Pedidos que pasan o están por pasar la fecha prometida y qué los frena (crédito, cupo o inventario); clientes a los que se les entrega tarde; cruce con Crédito y cobro, Inventario y Foco comercial |
 | 2. Caja a 13 semanas | `ontara/caja.py` + `reglas/caja.yaml` | Saldo en bancos proyectado semana a semana; semanas bajo la caja mínima con qué cobrar, qué pagos aplazar y cuánto financiar; excedentes |
 | 2. Foco comercial | `ontara/comercial.py` + `reglas/comercial.yaml` | Ritmo de compra por cliente, alertas de clientes que se enfrían o caen, visitas de crecimiento y cruce con Cartera |
 | 3. Aplicación | `ontara/acceso.py` | Login con Google o Microsoft (o clave PBKDF2), roles y bitácora de accesos |
@@ -54,15 +55,18 @@ seguido del reporte y la fecha de corte: `<paquete>_<reporte>_<fecha>.csv`. En *
 | Margen | Ventas por producto | `margen_ventas_por_producto_2026-10-31.csv` | 31/10/2026 | |
 | Caja a 13 semanas | Cuentas por pagar | `caja_13_semanas_cuentas_por_pagar_2026-10-31.csv` | 31/10/2026 | 250.000.000 |
 | Inventario | Inventario | `inventario_existencias_2026-10-31.csv` | 31/10/2026 | |
+| Despacho | Pedidos | `despacho_pedidos_2026-10-31.csv` | 31/10/2026 | |
 | Crédito y cobro | Cartera | `credito_y_cobro_cartera_2026-11-14.csv` | 14/11/2026 | |
 | Foco comercial | Ventas | `foco_comercial_ventas_2026-11-14.csv` | 14/11/2026 | |
 | Margen | Ventas por producto | `margen_ventas_por_producto_2026-11-14.csv` | 14/11/2026 | |
 | Aprendizaje | Recaudos | `aprendizaje_recaudos_2026-11-14.csv` | 14/11/2026 | |
 | Caja a 13 semanas | Cuentas por pagar | `caja_13_semanas_cuentas_por_pagar_2026-11-14.csv` | 14/11/2026 | 390.000.000 |
 | Inventario | Inventario | `inventario_existencias_2026-11-14.csv` | 14/11/2026 | |
+| Despacho | Pedidos | `despacho_pedidos_2026-11-14.csv` | 14/11/2026 | |
 
 (Cada paquete solo necesita sus reportes, aunque varios se apoyan en otros: Caja proyecta mejor con cartera,
-ventas y margen, e Inventario necesita las ventas por producto de Margen para saber qué rota.)
+ventas y margen, Inventario necesita las ventas por producto de Margen para saber qué rota, y Despacho cruza con la
+cartera, las ventas y el inventario para saber qué frena cada pedido.)
 
 Los archivos `datos_ejemplo/cartera_corte_*.csv` son el ejemplo pequeño original. Todos los datos son inventados.
 
@@ -76,7 +80,7 @@ pytest
 
 Un paquete es un reporte que lo alimenta, reglas versionadas en `reglas/<paquete>.yaml`, una función que detecta
 decisiones y otra que mide su resultado. La bandeja, la memoria de decisiones, la matriz de delegación, el grupo de
-control, el asistente y el formulario de reglas son comunes. Para agregar uno (por ejemplo, Despacho):
+control, el asistente y el formulario de reglas son comunes. Para agregar uno (por ejemplo, Compras):
 
 1. Si necesita un reporte nuevo, agregar su objeto en `plantillas/comercial.yaml`, su tabla en `ontara/db.py`
    y su semáforo en `ontara/calidad.py`.
@@ -162,6 +166,23 @@ Caja tiene semanas en rojo, se pide negociar el plazo de las compras y el invent
 caja. Con el siguiente reporte de existencias se mide si el producto igual se agotó y cuánto capital se liberó, y en
 Impacto se comparan capital, días de inventario, % de inventario lento y productos agotados contra el primer reporte.
 
+### Despacho
+
+Usa el reporte de **pedidos** de los últimos 3 meses: una fila por producto de cada pedido, con NIT, número de
+pedido, fecha del pedido, fecha prometida al cliente, fecha de despacho (vacía si todavía no sale), valor y, si los
+hay, producto, cantidad y ciudad. Un pedido está despachado cuando salieron todas sus líneas.
+
+| Decisión | Cuándo aparece | Monto en juego |
+| --- | --- | --- |
+| Despachar pedidos en riesgo | Pedidos pendientes cuya fecha prometida ya pasó o vence dentro de `dias_alerta` días. Una por cliente, con lo que los frena: crédito frenado (Crédito y cobro), saldo en cartera + pedido por encima del cupo (con la ampliación de cupo si ya está recomendada) o inventario que no alcanza para todos los pedidos pendientes (con la reposición de Inventario) | Valor pendiente de esos pedidos |
+| Recuperar cumplimiento | Menos de `cumplimiento_minimo_pct` % de los pedidos despachados en `dias_cumplimiento` días salieron a tiempo (mínimo `pedidos_minimos` pedidos). Si Foco comercial ya lo marca como cliente que compra menos, lo dice | Compras del cliente en 12 meses |
+
+Retener un pedido de un cliente clave lo aprueba el gerente. Con el siguiente reporte de pedidos se mide si los
+pedidos en riesgo salieron y con cuántos días de atraso, y si el cumplimiento de los clientes alertados mejoró
+después de la decisión. En Impacto se comparan el % de pedidos a tiempo (últimos 30 días), los pedidos atrasados
+sin despachar y los días de pedido a despacho contra el primer reporte. Despacho se recalcula solo cuando llega una
+cartera, ventas o existencias nuevas.
+
 ## Aprendizaje (etapa 0: instrumentar)
 
 Ontara todavía no cambia reglas ni entrena modelos por su cuenta: primero guarda lo que hará falta para
@@ -211,7 +232,7 @@ mensuales de contabilidad (`ventas_mensuales_cop`) se usan esas; si no, se estim
 | --- | --- | --- |
 | `DATABASE_URL` | Base del cliente. En producción, Cloud SQL: `postgresql+psycopg://usuario:clave@/ontara?host=/cloudsql/PROYECTO:REGION:INSTANCIA` | SQLite local `ontara.db` |
 | `ONTARA_EMPRESA` | Nombre que aparece en la app | Empresa de demostración |
-| `ONTARA_PAQUETES` | Paquetes activos para el cliente, separados por coma | `cartera,comercial,margen,caja,inventario` |
+| `ONTARA_PAQUETES` | Paquetes activos para el cliente, separados por coma | `cartera,comercial,margen,caja,inventario,despacho` |
 | `ONTARA_USUARIOS` | Usuarios autorizados y su rol en JSON (ver abajo). Roles: `gerente` (aprueba montos altos y cambia reglas) y `lider` | Sin login (modo demo) |
 | `ANTHROPIC_API_KEY` | Activa el asistente | Asistente apagado |
 | `ONTARA_MODELO` | Modelo de Claude | `claude-opus-5-5` |

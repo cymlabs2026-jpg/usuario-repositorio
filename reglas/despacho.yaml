@@ -1,0 +1,24 @@
+# Reglas del paquete de decisión "Despacho". Versión base;
+# cada cliente ajusta los parámetros desde la app y se guarda una versión nueva.
+paquete: despacho
+version: 1
+parametros:
+  dias_alerta: 1                  # pedidos pendientes que vencen su fecha prometida dentro de estos días (o ya la pasaron)
+  dias_tolerancia: 0              # días después de la fecha prometida que todavía cuentan como entrega a tiempo
+  dias_cumplimiento: 90           # ventana para medir el cumplimiento de entregas de cada cliente
+  cumplimiento_minimo_pct: 85     # por debajo de este % de pedidos a tiempo se recupera el cumplimiento
+  pedidos_minimos: 4              # pedidos despachados en la ventana para medir el cumplimiento de un cliente
+  pct_clientes_clave: 80          # clientes clave = los que suman este % de las ventas (curva ABC)
+  valor_minimo_cop: 1000000       # no se generan decisiones por montos menores
+  aprobacion_lider_max_cop: 30000000 # monto que puede decidir el líder; por encima, el gerente
+  clientes_excepcion: []          # NIT que no generan decisiones (por ejemplo, entregas que recoge el cliente)
+
+descripciones:
+  dias_alerta: Días antes de la fecha prometida para alertar un pedido pendiente
+  dias_tolerancia: Días de tolerancia para contar una entrega a tiempo
+  dias_cumplimiento: Días para medir el cumplimiento de cada cliente
+  cumplimiento_minimo_pct: Cumplimiento mínimo de entregas a tiempo (%)
+  pedidos_minimos: Pedidos mínimos para medir el cumplimiento
+  pct_clientes_clave: Clientes clave = los que suman este % de las ventas
+  valor_minimo_cop: Monto mínimo para generar una decisión (COP)
+  aprobacion_lider_max_cop: El líder decide hasta este monto (COP)

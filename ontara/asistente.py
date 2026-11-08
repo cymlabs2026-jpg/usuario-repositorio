@@ -19,7 +19,7 @@ from typing import Any, Callable
 from sqlalchemy import insert, select
 from sqlalchemy.engine import Engine
 
-from . import caja, comercial, config, decisiones, impacto, inventario, margen
+from . import caja, comercial, config, decisiones, despacho, impacto, inventario, margen
 from .db import clientes, consultas_ia
 
 SISTEMA = """Eres el asistente de Ontara, una herramienta de decisiones de cartera para pymes colombianas.
@@ -37,7 +37,9 @@ Reglas que no puedes romper:
   producto el campo "cliente" es el nombre del producto. El paquete Caja a 13 semanas agrega caja_bajo_minimo
   (semanas en que la caja proyectada queda bajo el mínimo, con qué cobrar, qué aplazar y cuánto financiar),
   aplazar_pago_proveedor (el campo "cliente" es el proveedor) y excedente_de_caja. El paquete Inventario agrega
-  reponer_producto y liberar_inventario; en ellas el campo "cliente" es el producto.
+  reponer_producto y liberar_inventario; en ellas el campo "cliente" es el producto. El paquete Despacho agrega
+  despachar_pedidos (pedidos pendientes que pasan o están por pasar la fecha prometida, con lo que los frena:
+  crédito, cupo o inventario) y recuperar_cumplimiento (clientes a los que se les entrega tarde).
 - Los clientes pueden aparecer con un alias como "Cliente-a1b2c3". Úsalo tal cual; el sistema lo traduce.
 - Escribe pesos como $12.345.678. Sé breve: respuestas de pocas líneas, viñetas solo si hay varios ítems.
 - Si te piden redactar un mensaje de cobro, que sea cordial, firme y con los datos exactos de la evidencia."""
@@ -46,7 +48,7 @@ HERRAMIENTAS = [
     {
         "name": "resumen_cartera",
         "description": "Indicadores de cartera del último corte frente a la línea base, pesos recuperados, "
-                       "caja liberada, decisiones por estado, historial de cortes y resultados de Foco comercial, Margen, Caja a 13 semanas e Inventario.",
+                       "caja liberada, decisiones por estado, historial de cortes y resultados de Foco comercial, Margen, Caja a 13 semanas, Inventario y Despacho.",
         "input_schema": {"type": "object", "properties": {}, "required": [], "additionalProperties": False},
         "strict": True,
     },
@@ -64,7 +66,8 @@ HERRAMIENTAS = [
                                                     "revisar_margen_producto",
                                                     "descuento_fuera_politica", "caja_bajo_minimo",
                                                     "aplazar_pago_proveedor", "excedente_de_caja",
-                                                    "reponer_producto", "liberar_inventario"]},
+                                                    "reponer_producto", "liberar_inventario",
+                                                    "despachar_pedidos", "recuperar_cumplimiento"]},
                 "limite": {"type": "integer", "description": "Máximo 50"},
             },
             "required": ["estado", "tipo", "limite"],
@@ -145,7 +148,7 @@ def _resumen_cartera(motor: Engine, _: dict, __: Seudonimizador) -> dict:
     hist = impacto.historial(motor)
     return {**impacto.resumen(motor), "historial_cortes": hist.tail(6).to_dict("records"),
             "foco_comercial": comercial.resumen(motor), "margen": margen.resumen(motor), "caja": _resumen_caja(motor),
-            "inventario": inventario.resumen(motor)}
+            "inventario": inventario.resumen(motor), "despacho": despacho.resumen(motor)}
 
 
 def _resumen_caja(motor: Engine) -> dict:

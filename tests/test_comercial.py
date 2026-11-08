@@ -171,7 +171,7 @@ def test_tipo_de_reporte_invalido(motor):
 
 # --- Registro de paquetes y reglas ------------------------------------------------------------
 def test_paquetes_activos(monkeypatch):
-    assert [p.clave for p in paquetes.activos()] == ["cartera", "comercial", "margen", "caja", "inventario"]
+    assert [p.clave for p in paquetes.activos()] == ["cartera", "comercial", "margen", "caja", "inventario", "despacho"]
     monkeypatch.setenv("ONTARA_PAQUETES", "cartera")
     assert [p.clave for p in paquetes.activos()] == ["cartera"]
     assert paquetes.de_reporte("ventas") == []

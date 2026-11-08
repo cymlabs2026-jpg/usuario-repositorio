@@ -258,3 +258,44 @@ def evaluar_inventario(datos: pd.DataFrame, mapeo: dict[str, str],
     validas["costo_total"] = costo[~excluir]
     semaforo = max((x.nivel for x in v), key=ORDEN.get, default="verde")
     return Informe(semaforo, len(datos), len(validas), len(validas) > 0, [], v), validas
+
+
+def evaluar_pedidos(datos: pd.DataFrame, mapeo: dict[str, str],
+                    plantilla: Plantilla | None = None) -> tuple[Informe, pd.DataFrame]:
+    """Semáforo para el reporte de pedidos (una fila por línea, con fecha prometida y de despacho)."""
+    plantilla = plantilla or cargar_plantilla(objeto="Pedido")
+    faltan = [c for c in plantilla.requeridos if c not in mapeo]
+    if faltan or datos.empty:
+        return Informe("rojo", len(datos), 0, False, faltan, []), datos.iloc[0:0]
+    for opcional in ("fecha_despacho", "producto", "cantidad", "ciudad", "vendedor"):
+        if opcional not in datos:
+            datos = datos.assign(**{opcional: None})
+    v: list[Validacion] = []
+    sin_nit = datos["nit"].isna()
+    v.append(_validacion("NIT válido", "Filas sin NIT o cédula reconocible", sin_nit, datos, True))
+    sin_pedido = datos["pedido"].isna()
+    v.append(_validacion("Número de pedido", "Fila sin número de pedido", sin_pedido, datos, True))
+    sin_fechas = datos["fecha_pedido"].isna() | datos["fecha_compromiso"].isna()
+    v.append(_validacion("Fechas legibles", "Fecha del pedido o fecha prometida vacía o ilegible", sin_fechas,
+                         datos, True))
+    sin_valor = datos["valor"].isna() | (datos["valor"].fillna(0) <= 0)
+    v.append(_validacion("Valor", "Valor vacío, en cero o negativo", sin_valor, datos, True))
+    def antes(a, b):
+        return pd.Series([bool(x and y and pd.notna(x) and pd.notna(y) and x < y)
+                          for x, y in zip(a, b)], index=datos.index)
+
+    al_reves = antes(datos["fecha_despacho"], datos["fecha_pedido"])
+    v.append(_validacion("Despacho después del pedido", "Fecha de despacho anterior a la del pedido",
+                         al_reves, datos, True))
+    prometida = (datos["fecha_compromiso"].notna() & datos["fecha_pedido"].notna()
+                 & (datos["fecha_compromiso"] < datos["fecha_pedido"]))
+    v.append(_validacion("Fecha prometida", "Fecha prometida anterior a la del pedido (se usa tal cual)",
+                         prometida, datos, False, "amarillo"))
+    dup = (datos.assign(_p=datos["producto"].fillna("")).duplicated(subset=["nit", "pedido", "_p"], keep="first")
+           & datos["nit"].notna())
+    v.append(_validacion("Líneas únicas", "Producto repetido en el mismo pedido (se deja la primera)",
+                         dup, datos, True, "amarillo"))
+    excluir = sin_nit | sin_pedido | sin_fechas | sin_valor | al_reves | dup
+    validas = datos.loc[~excluir].copy()
+    semaforo = max((x.nivel for x in v), key=ORDEN.get, default="verde")
+    return Informe(semaforo, len(datos), len(validas), len(validas) > 0, [], v), validas

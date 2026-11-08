@@ -1,6 +1,7 @@
 """Datos de prueba de una distribuidora inventada de Palmira y Cali (40 clientes) que activan todas las
 decisiones de Ontara: dos cortes de cartera, dos reportes de ventas, dos de ventas por producto, dos de cuentas
-por pagar y dos de existencias de inventario (31/10/2026 y 14/11/2026), más un reporte de recaudos con los pagos
+por pagar, dos de existencias de inventario y dos de pedidos (31/10/2026 y 14/11/2026), más un reporte de
+recaudos con los pagos
 recibidos entre los dos cortes. Cada archivo lleva el nombre del paquete que lo usa en la aplicación.
 Nombres y NIT son inventados. Uso:  python datos_ejemplo/generar_prueba.py
 """
@@ -367,6 +368,83 @@ def inventario():
         escribir(archivo, filas)
 
 
+# --- Despacho: pedidos con fecha prometida y de despacho (cada factura de venta salió de un pedido) ---------
+# Clientes a los que se les despacha tarde la mitad de los pedidos: (días de atraso mínimos, máximos)
+INCUMPLIDOS = {"Licorera del Sur": (2, 5), "Hotel Plaza Cali": (2, 4), "Textiles Ginebra": (3, 6)}
+CORRIGE_ENTREGAS = {"Licorera del Sur", "Textiles Ginebra"}   # después del 31/10 sus pedidos salen a tiempo
+LEJOS = {"Transportes Buga": "Buga", "Papelería Tuluá": "Tuluá", "Distribuciones Jamundí": "Jamundí",
+         "Industrias Plásticas Yumbo": "Yumbo", "Textiles Ginebra": "Ginebra", "Café Tostado Dagua": "Dagua"}
+# Pedidos abiertos al 31/10: cliente -> (pedido, fecha pedido, prometida, despacho real o None, [(producto, und)])
+ABIERTOS = {
+    "Supermercados La Cosecha": ("PD-9001", date(2026, 10, 30), date(2026, 11, 1), date(2026, 11, 1),
+                                 [("Arroz blanco 25 kg", 60), ("Azúcar refinada 50 kg", 40), ("Atún en lata x 48", 30)]),
+    "Distribuidora Cañaveral": ("PD-9002", date(2026, 10, 28), date(2026, 10, 30), date(2026, 11, 3),
+                                [("Azúcar refinada 50 kg", 30), ("Fríjol cargamanto 25 kg", 20)]),
+    "Constructora Río Cauca": ("PD-9003", date(2026, 10, 24), date(2026, 10, 27), None,
+                               [("Agua 600 ml x 24", 70), ("Gaseosa 1,5 L x 12", 60)]),
+    "Avícola El Gallo": ("PD-9004", date(2026, 10, 26), date(2026, 10, 28), date(2026, 11, 6),
+                         [("Sal refinada 25 kg", 25), ("Jabón de barra x 50", 10)]),
+    "Hotel Plaza Cali": ("PD-9005", date(2026, 10, 28), date(2026, 10, 30), date(2026, 11, 5),
+                         [("Leche en polvo 25 kg", 30), ("Café molido 500 g", 10)]),
+    "Licorera del Sur": ("PD-9006", date(2026, 10, 27), date(2026, 10, 29), date(2026, 11, 1),
+                         [("Gaseosa 1,5 L x 12", 18), ("Agua 600 ml x 24", 12)]),
+    "Empaques Candelaria": ("PD-9007", date(2026, 10, 29), date(2026, 10, 31), date(2026, 11, 1),
+                            [("Papel higiénico x 48", 12), ("Jabón de barra x 50", 8)]),
+    "Mercados La 14 Sur": ("PD-9008", date(2026, 10, 30), date(2026, 11, 3), date(2026, 11, 3),
+                           [("Leche en polvo 25 kg", 12), ("Pasta spaghetti x 24", 25)]),
+}
+# Pedidos nuevos que quedan abiertos al 14/11 (aún no vencen su fecha prometida)
+ABIERTOS_C2 = {"Droguería San Rafael": ("PD-9101", date(2026, 11, 13), date(2026, 11, 17),
+                                        [("Jabón de barra x 50", 20), ("Papel higiénico x 48", 15)]),
+               "Ferretería El Tornillo": ("PD-9102", date(2026, 11, 14), date(2026, 11, 18),
+                                          [("Detergente 10 kg", 25)])}
+PRECIO_UND = 180_000
+
+
+def pedidos():
+    nombres_prod = list(PRODUCTOS)
+    reportes = {C1: [], C2: []}
+    for i, (nombre, perfil, _) in enumerate(CLIENTES):
+        nit, r = nit_de(i), random.Random(1300 + i)
+        ciudad = LEJOS.get(nombre, "Palmira" if i % 3 == 0 else "Cali")
+        plazo = 3 if nombre in LEJOS else 2
+        favoritos = r.sample(nombres_prod, 5)
+
+        def lineas_pedido(num, pedido_dia, prometida, despacho, productos):
+            return [{"NIT": nit, "Cliente": nombre, "Pedido": num, "Fecha pedido": pedido_dia.strftime("%d/%m/%Y"),
+                     "Fecha entrega prometida": prometida.strftime("%d/%m/%Y"),
+                     "Fecha despacho": despacho.strftime("%d/%m/%Y") if despacho else "", "Producto": prod,
+                     "Cantidad": und, "Valor": pesos(und * PRECIO_UND), "Ciudad": ciudad, "Vendedor": VEND[i % 4]}
+                    for prod, und in productos]
+
+        k = 0
+        for num, dia, total in ventas_cliente(i, nombre, perfil):
+            atraso = 0
+            if nombre in INCUMPLIDOS and (dia <= C1 or nombre not in CORRIGE_ENTREGAS):
+                k += 1
+                atraso = r.randint(*INCUMPLIDOS[nombre]) if k % 2 == 0 or k % 5 == 0 else 0
+            pedido_dia = dia - timedelta(days=plazo + atraso)
+            prometida = pedido_dia + timedelta(days=plazo)
+            partes = r.randint(1, 3)
+            pesos_l = [r.random() + 0.3 for _ in range(partes)]
+            productos = [(prod, max(1, round(total * pesos_l[j] / sum(pesos_l) / PRECIO_UND)))
+                         for j, prod in enumerate(r.sample(favoritos, partes))]
+            for corte in (C1, C2):
+                if corte - timedelta(days=100) <= pedido_dia and dia <= corte:
+                    reportes[corte] += lineas_pedido(num.replace("FV", "PD"), pedido_dia, prometida, dia, productos)
+                elif pedido_dia <= corte < dia:          # pedido que al corte todavía no ha salido
+                    reportes[corte] += lineas_pedido(num.replace("FV", "PD"), pedido_dia, prometida, None, productos)
+        if nombre in ABIERTOS:
+            num, pedido_dia, prometida, despacho, productos = ABIERTOS[nombre]
+            reportes[C1] += lineas_pedido(num, pedido_dia, prometida, None, productos)
+            reportes[C2] += lineas_pedido(num, pedido_dia, prometida, despacho, productos)
+        if nombre in ABIERTOS_C2:
+            num, pedido_dia, prometida, productos = ABIERTOS_C2[nombre]
+            reportes[C2] += lineas_pedido(num, pedido_dia, prometida, None, productos)
+    escribir("despacho_pedidos_2026-10-31.csv", reportes[C1])
+    escribir("despacho_pedidos_2026-11-14.csv", reportes[C2])
+
+
 if __name__ == "__main__":
     cartera()
     ventas()
@@ -374,3 +452,4 @@ if __name__ == "__main__":
     recaudos()
     pagos()
     inventario()
+    pedidos()

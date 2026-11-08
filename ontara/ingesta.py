@@ -73,7 +73,7 @@ def a_nit(valor) -> str | None:
 
 
 def a_fecha(valor) -> date | None:
-    if valor is None or str(valor).strip() == "":
+    if valor is None or (isinstance(valor, float) and valor != valor) or str(valor).strip() == "":
         return None
     s = str(valor).strip()
     iso = bool(re.match(r"^\d{4}-\d{2}-\d{2}", s))

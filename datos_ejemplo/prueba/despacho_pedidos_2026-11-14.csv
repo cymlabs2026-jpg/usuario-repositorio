@@ -1,0 +1,600 @@
+NIT;Cliente;Pedido;Fecha pedido;Fecha entrega prometida;Fecha despacho;Producto;Cantidad;Valor;Ciudad;Vendedor
+953464097-2;Supermercados La Cosecha;PD-000041;10/08/2026;12/08/2026;12/08/2026;Pasta spaghetti x 24;43;$ 7.740.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000041;10/08/2026;12/08/2026;12/08/2026;Sal refinada 25 kg;113;$ 20.340.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000041;10/08/2026;12/08/2026;12/08/2026;Arroz blanco 25 kg;97;$ 17.460.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000042;19/08/2026;21/08/2026;21/08/2026;Leche en polvo 25 kg;77;$ 13.860.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000042;19/08/2026;21/08/2026;21/08/2026;Detergente 10 kg;119;$ 21.420.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000043;25/08/2026;27/08/2026;27/08/2026;Sal refinada 25 kg;151;$ 27.180.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000043;25/08/2026;27/08/2026;27/08/2026;Detergente 10 kg;110;$ 19.800.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000044;03/09/2026;05/09/2026;05/09/2026;Arroz blanco 25 kg;102;$ 18.360.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000044;03/09/2026;05/09/2026;05/09/2026;Pasta spaghetti x 24;144;$ 25.920.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000045;11/09/2026;13/09/2026;13/09/2026;Pasta spaghetti x 24;80;$ 14.400.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000045;11/09/2026;13/09/2026;13/09/2026;Arroz blanco 25 kg;128;$ 23.040.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000046;18/09/2026;20/09/2026;20/09/2026;Pasta spaghetti x 24;68;$ 12.240.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000046;18/09/2026;20/09/2026;20/09/2026;Leche en polvo 25 kg;100;$ 18.000.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000046;18/09/2026;20/09/2026;20/09/2026;Detergente 10 kg;70;$ 12.600.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000047;24/09/2026;26/09/2026;26/09/2026;Leche en polvo 25 kg;161;$ 28.980.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000047;24/09/2026;26/09/2026;26/09/2026;Pasta spaghetti x 24;64;$ 11.520.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000048;29/09/2026;01/10/2026;01/10/2026;Detergente 10 kg;182;$ 32.760.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000048;29/09/2026;01/10/2026;01/10/2026;Pasta spaghetti x 24;72;$ 12.960.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000049;07/10/2026;09/10/2026;09/10/2026;Detergente 10 kg;243;$ 43.740.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000050;12/10/2026;14/10/2026;14/10/2026;Sal refinada 25 kg;64;$ 11.520.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000050;12/10/2026;14/10/2026;14/10/2026;Pasta spaghetti x 24;100;$ 18.000.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000050;12/10/2026;14/10/2026;14/10/2026;Detergente 10 kg;87;$ 15.660.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000051;17/10/2026;19/10/2026;19/10/2026;Leche en polvo 25 kg;97;$ 17.460.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000051;17/10/2026;19/10/2026;19/10/2026;Detergente 10 kg;81;$ 14.580.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000051;17/10/2026;19/10/2026;19/10/2026;Pasta spaghetti x 24;68;$ 12.240.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000052;26/10/2026;28/10/2026;28/10/2026;Pasta spaghetti x 24;72;$ 12.960.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000052;26/10/2026;28/10/2026;28/10/2026;Detergente 10 kg;78;$ 14.040.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000052;26/10/2026;28/10/2026;28/10/2026;Arroz blanco 25 kg;48;$ 8.640.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000053;02/11/2026;04/11/2026;04/11/2026;Leche en polvo 25 kg;268;$ 48.240.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-000054;09/11/2026;11/11/2026;11/11/2026;Leche en polvo 25 kg;225;$ 40.500.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-9001;30/10/2026;01/11/2026;01/11/2026;Arroz blanco 25 kg;60;$ 10.800.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-9001;30/10/2026;01/11/2026;01/11/2026;Azúcar refinada 50 kg;40;$ 7.200.000;Palmira;Ana Gómez
+953464097-2;Supermercados La Cosecha;PD-9001;30/10/2026;01/11/2026;01/11/2026;Atún en lata x 48;30;$ 5.400.000;Palmira;Ana Gómez
+940427945-5;Distribuidora Cañaveral;PD-010041;06/08/2026;08/08/2026;08/08/2026;Sal refinada 25 kg;28;$ 5.040.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010041;06/08/2026;08/08/2026;08/08/2026;Pasta spaghetti x 24;33;$ 5.940.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010042;11/08/2026;13/08/2026;13/08/2026;Jabón de barra x 50;19;$ 3.420.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010042;11/08/2026;13/08/2026;13/08/2026;Sal refinada 25 kg;17;$ 3.060.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010042;11/08/2026;13/08/2026;13/08/2026;Aceite de girasol 3 L;13;$ 2.340.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010043;20/08/2026;22/08/2026;22/08/2026;Aceite de girasol 3 L;33;$ 5.940.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010043;20/08/2026;22/08/2026;22/08/2026;Jabón de barra x 50;25;$ 4.500.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010044;27/08/2026;29/08/2026;29/08/2026;Aceite de girasol 3 L;63;$ 11.340.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010045;04/09/2026;06/09/2026;06/09/2026;Sal refinada 25 kg;48;$ 8.640.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010046;13/09/2026;15/09/2026;15/09/2026;Pasta spaghetti x 24;16;$ 2.880.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010046;13/09/2026;15/09/2026;15/09/2026;Aceite de girasol 3 L;25;$ 4.500.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010046;13/09/2026;15/09/2026;15/09/2026;Gaseosa 1,5 L x 12;21;$ 3.780.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010047;19/09/2026;21/09/2026;21/09/2026;Jabón de barra x 50;17;$ 3.060.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010047;19/09/2026;21/09/2026;21/09/2026;Sal refinada 25 kg;41;$ 7.380.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010048;28/09/2026;30/09/2026;30/09/2026;Sal refinada 25 kg;18;$ 3.240.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010048;28/09/2026;30/09/2026;30/09/2026;Jabón de barra x 50;34;$ 6.120.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010048;28/09/2026;30/09/2026;30/09/2026;Gaseosa 1,5 L x 12;13;$ 2.340.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010049;04/10/2026;06/10/2026;06/10/2026;Sal refinada 25 kg;18;$ 3.240.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010049;04/10/2026;06/10/2026;06/10/2026;Pasta spaghetti x 24;28;$ 5.040.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010050;13/10/2026;15/10/2026;15/10/2026;Aceite de girasol 3 L;14;$ 2.520.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010050;13/10/2026;15/10/2026;15/10/2026;Sal refinada 25 kg;28;$ 5.040.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010050;13/10/2026;15/10/2026;15/10/2026;Gaseosa 1,5 L x 12;21;$ 3.780.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010051;22/10/2026;24/10/2026;24/10/2026;Gaseosa 1,5 L x 12;38;$ 6.840.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010051;22/10/2026;24/10/2026;24/10/2026;Pasta spaghetti x 24;32;$ 5.760.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010052;27/10/2026;29/10/2026;29/10/2026;Jabón de barra x 50;24;$ 4.320.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010052;27/10/2026;29/10/2026;29/10/2026;Gaseosa 1,5 L x 12;24;$ 4.320.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010052;27/10/2026;29/10/2026;29/10/2026;Sal refinada 25 kg;19;$ 3.420.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010053;02/11/2026;04/11/2026;04/11/2026;Gaseosa 1,5 L x 12;53;$ 9.540.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010054;09/11/2026;11/11/2026;11/11/2026;Sal refinada 25 kg;26;$ 4.680.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-010054;09/11/2026;11/11/2026;11/11/2026;Gaseosa 1,5 L x 12;37;$ 6.660.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-9002;28/10/2026;30/10/2026;03/11/2026;Azúcar refinada 50 kg;30;$ 5.400.000;Cali;Luis Pérez
+940427945-5;Distribuidora Cañaveral;PD-9002;28/10/2026;30/10/2026;03/11/2026;Fríjol cargamanto 25 kg;20;$ 3.600.000;Cali;Luis Pérez
+972143795-9;Panadería Pan del Valle;PD-020042;09/08/2026;11/08/2026;11/08/2026;Gaseosa 1,5 L x 12;37;$ 6.660.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020043;17/08/2026;19/08/2026;19/08/2026;Gaseosa 1,5 L x 12;37;$ 6.660.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020044;22/08/2026;24/08/2026;24/08/2026;Papel higiénico x 48;23;$ 4.140.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020044;22/08/2026;24/08/2026;24/08/2026;Harina de trigo 50 kg;9;$ 1.620.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020045;29/08/2026;31/08/2026;31/08/2026;Harina de trigo 50 kg;37;$ 6.660.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020046;03/09/2026;05/09/2026;05/09/2026;Lentejas 25 kg;37;$ 6.660.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020047;09/09/2026;11/09/2026;11/09/2026;Papel higiénico x 48;42;$ 7.560.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020048;15/09/2026;17/09/2026;17/09/2026;Lentejas 25 kg;20;$ 3.600.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020048;15/09/2026;17/09/2026;17/09/2026;Harina de trigo 50 kg;9;$ 1.620.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020048;15/09/2026;17/09/2026;17/09/2026;Atún en lata x 48;16;$ 2.880.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020049;20/09/2026;22/09/2026;22/09/2026;Papel higiénico x 48;10;$ 1.800.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020049;20/09/2026;22/09/2026;22/09/2026;Gaseosa 1,5 L x 12;27;$ 4.860.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020050;26/09/2026;28/09/2026;28/09/2026;Gaseosa 1,5 L x 12;19;$ 3.420.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020050;26/09/2026;28/09/2026;28/09/2026;Papel higiénico x 48;10;$ 1.800.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020050;26/09/2026;28/09/2026;28/09/2026;Lentejas 25 kg;13;$ 2.340.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020051;05/10/2026;07/10/2026;07/10/2026;Lentejas 25 kg;20;$ 3.600.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020051;05/10/2026;07/10/2026;07/10/2026;Harina de trigo 50 kg;18;$ 3.240.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020052;10/10/2026;12/10/2026;12/10/2026;Atún en lata x 48;12;$ 2.160.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020052;10/10/2026;12/10/2026;12/10/2026;Gaseosa 1,5 L x 12;26;$ 4.680.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020053;17/10/2026;19/10/2026;19/10/2026;Gaseosa 1,5 L x 12;12;$ 2.160.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020053;17/10/2026;19/10/2026;19/10/2026;Papel higiénico x 48;25;$ 4.500.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020054;22/10/2026;24/10/2026;24/10/2026;Harina de trigo 50 kg;19;$ 3.420.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020054;22/10/2026;24/10/2026;24/10/2026;Gaseosa 1,5 L x 12;26;$ 4.680.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020055;28/10/2026;30/10/2026;30/10/2026;Papel higiénico x 48;31;$ 5.580.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020056;02/11/2026;04/11/2026;04/11/2026;Lentejas 25 kg;9;$ 1.620.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020056;02/11/2026;04/11/2026;04/11/2026;Gaseosa 1,5 L x 12;9;$ 1.620.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020056;02/11/2026;04/11/2026;04/11/2026;Atún en lata x 48;26;$ 4.680.000;Cali;Marta Ríos
+972143795-9;Panadería Pan del Valle;PD-020057;08/11/2026;10/11/2026;10/11/2026;Atún en lata x 48;45;$ 8.100.000;Cali;Marta Ríos
+986692358-0;Ferretería El Tornillo;PD-030043;13/08/2026;15/08/2026;15/08/2026;Leche en polvo 25 kg;20;$ 3.600.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030043;13/08/2026;15/08/2026;15/08/2026;Detergente 10 kg;20;$ 3.600.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030043;13/08/2026;15/08/2026;15/08/2026;Sal refinada 25 kg;19;$ 3.420.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030044;22/08/2026;24/08/2026;24/08/2026;Galletas surtidas x 24;13;$ 2.340.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030044;22/08/2026;24/08/2026;24/08/2026;Atún en lata x 48;23;$ 4.140.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030044;22/08/2026;24/08/2026;24/08/2026;Sal refinada 25 kg;22;$ 3.960.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030045;27/08/2026;29/08/2026;29/08/2026;Galletas surtidas x 24;21;$ 3.780.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030045;27/08/2026;29/08/2026;29/08/2026;Atún en lata x 48;9;$ 1.620.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030045;27/08/2026;29/08/2026;29/08/2026;Leche en polvo 25 kg;22;$ 3.960.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030046;01/09/2026;03/09/2026;03/09/2026;Atún en lata x 48;51;$ 9.180.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030047;10/09/2026;12/09/2026;12/09/2026;Atún en lata x 48;45;$ 8.100.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030047;10/09/2026;12/09/2026;12/09/2026;Leche en polvo 25 kg;17;$ 3.060.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030048;17/09/2026;19/09/2026;19/09/2026;Sal refinada 25 kg;42;$ 7.560.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030048;17/09/2026;19/09/2026;19/09/2026;Detergente 10 kg;19;$ 3.420.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030049;25/09/2026;27/09/2026;27/09/2026;Sal refinada 25 kg;28;$ 5.040.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030049;25/09/2026;27/09/2026;27/09/2026;Galletas surtidas x 24;20;$ 3.600.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030050;04/10/2026;06/10/2026;06/10/2026;Sal refinada 25 kg;14;$ 2.520.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030050;04/10/2026;06/10/2026;06/10/2026;Galletas surtidas x 24;17;$ 3.060.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030050;04/10/2026;06/10/2026;06/10/2026;Detergente 10 kg;25;$ 4.500.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030051;12/10/2026;14/10/2026;14/10/2026;Sal refinada 25 kg;54;$ 9.720.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030052;19/10/2026;21/10/2026;21/10/2026;Galletas surtidas x 24;56;$ 10.080.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030053;28/10/2026;30/10/2026;30/10/2026;Galletas surtidas x 24;14;$ 2.520.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030053;28/10/2026;30/10/2026;30/10/2026;Leche en polvo 25 kg;34;$ 6.120.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030054;02/11/2026;04/11/2026;04/11/2026;Sal refinada 25 kg;49;$ 8.820.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030055;11/11/2026;13/11/2026;13/11/2026;Leche en polvo 25 kg;14;$ 2.520.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030055;11/11/2026;13/11/2026;13/11/2026;Sal refinada 25 kg;13;$ 2.340.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-030055;11/11/2026;13/11/2026;13/11/2026;Galletas surtidas x 24;29;$ 5.220.000;Palmira;Jorge Cuero
+986692358-0;Ferretería El Tornillo;PD-9102;14/11/2026;18/11/2026;;Detergente 10 kg;25;$ 4.500.000;Palmira;Jorge Cuero
+970717355-8;Droguería San Rafael;PD-040041;13/08/2026;15/08/2026;15/08/2026;Lentejas 25 kg;24;$ 4.320.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040041;13/08/2026;15/08/2026;15/08/2026;Detergente 10 kg;16;$ 2.880.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040041;13/08/2026;15/08/2026;15/08/2026;Arroz blanco 25 kg;24;$ 4.320.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040042;20/08/2026;22/08/2026;22/08/2026;Sal refinada 25 kg;24;$ 4.320.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040042;20/08/2026;22/08/2026;22/08/2026;Atún en lata x 48;28;$ 5.040.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040042;20/08/2026;22/08/2026;22/08/2026;Detergente 10 kg;16;$ 2.880.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040043;25/08/2026;27/08/2026;27/08/2026;Atún en lata x 48;30;$ 5.400.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040043;25/08/2026;27/08/2026;27/08/2026;Lentejas 25 kg;18;$ 3.240.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040043;25/08/2026;27/08/2026;27/08/2026;Detergente 10 kg;13;$ 2.340.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040044;31/08/2026;02/09/2026;02/09/2026;Lentejas 25 kg;69;$ 12.420.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040045;05/09/2026;07/09/2026;07/09/2026;Detergente 10 kg;47;$ 8.460.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040045;05/09/2026;07/09/2026;07/09/2026;Lentejas 25 kg;19;$ 3.420.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040046;10/09/2026;12/09/2026;12/09/2026;Detergente 10 kg;53;$ 9.540.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040047;16/09/2026;18/09/2026;18/09/2026;Arroz blanco 25 kg;34;$ 6.120.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040047;16/09/2026;18/09/2026;18/09/2026;Lentejas 25 kg;22;$ 3.960.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040048;25/09/2026;27/09/2026;27/09/2026;Arroz blanco 25 kg;37;$ 6.660.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040048;25/09/2026;27/09/2026;27/09/2026;Sal refinada 25 kg;14;$ 2.520.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040049;02/10/2026;04/10/2026;04/10/2026;Atún en lata x 48;41;$ 7.380.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040049;02/10/2026;04/10/2026;04/10/2026;Lentejas 25 kg;21;$ 3.780.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040050;09/10/2026;11/10/2026;11/10/2026;Arroz blanco 25 kg;17;$ 3.060.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040050;09/10/2026;11/10/2026;11/10/2026;Atún en lata x 48;39;$ 7.020.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040051;15/10/2026;17/10/2026;17/10/2026;Sal refinada 25 kg;53;$ 9.540.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040052;23/10/2026;25/10/2026;25/10/2026;Arroz blanco 25 kg;28;$ 5.040.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040052;23/10/2026;25/10/2026;25/10/2026;Atún en lata x 48;8;$ 1.440.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040052;23/10/2026;25/10/2026;25/10/2026;Detergente 10 kg;30;$ 5.400.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040053;01/11/2026;03/11/2026;03/11/2026;Arroz blanco 25 kg;66;$ 11.880.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040054;08/11/2026;10/11/2026;10/11/2026;Lentejas 25 kg;25;$ 4.500.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-040054;08/11/2026;10/11/2026;10/11/2026;Atún en lata x 48;37;$ 6.660.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-9101;13/11/2026;17/11/2026;;Jabón de barra x 50;20;$ 3.600.000;Cali;Ana Gómez
+970717355-8;Droguería San Rafael;PD-9101;13/11/2026;17/11/2026;;Papel higiénico x 48;15;$ 2.700.000;Cali;Ana Gómez
+973695798-4;Restaurante Sabor Caleño;PD-050041;11/08/2026;13/08/2026;13/08/2026;Papel higiénico x 48;27;$ 4.860.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050041;11/08/2026;13/08/2026;13/08/2026;Gaseosa 1,5 L x 12;7;$ 1.260.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050042;20/08/2026;22/08/2026;22/08/2026;Detergente 10 kg;37;$ 6.660.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050043;25/08/2026;27/08/2026;27/08/2026;Panela 24 und;31;$ 5.580.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050044;03/09/2026;05/09/2026;05/09/2026;Detergente 10 kg;19;$ 3.420.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050044;03/09/2026;05/09/2026;05/09/2026;Panela 24 und;10;$ 1.800.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050044;03/09/2026;05/09/2026;05/09/2026;Café molido 500 g;7;$ 1.260.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050045;11/09/2026;13/09/2026;13/09/2026;Café molido 500 g;36;$ 6.480.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050046;19/09/2026;21/09/2026;21/09/2026;Panela 24 und;16;$ 2.880.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050046;19/09/2026;21/09/2026;21/09/2026;Detergente 10 kg;8;$ 1.440.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050046;19/09/2026;21/09/2026;21/09/2026;Café molido 500 g;16;$ 2.880.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050047;24/09/2026;26/09/2026;26/09/2026;Gaseosa 1,5 L x 12;38;$ 6.840.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050048;29/09/2026;01/10/2026;01/10/2026;Café molido 500 g;45;$ 8.100.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050049;08/10/2026;10/10/2026;10/10/2026;Café molido 500 g;34;$ 6.120.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050050;17/10/2026;19/10/2026;19/10/2026;Papel higiénico x 48;13;$ 2.340.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050050;17/10/2026;19/10/2026;19/10/2026;Panela 24 und;10;$ 1.800.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050050;17/10/2026;19/10/2026;19/10/2026;Detergente 10 kg;14;$ 2.520.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050051;26/10/2026;28/10/2026;28/10/2026;Gaseosa 1,5 L x 12;10;$ 1.800.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050051;26/10/2026;28/10/2026;28/10/2026;Panela 24 und;27;$ 4.860.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050052;31/10/2026;02/11/2026;02/11/2026;Gaseosa 1,5 L x 12;40;$ 7.200.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050053;06/11/2026;08/11/2026;08/11/2026;Café molido 500 g;26;$ 4.680.000;Cali;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;PD-050053;06/11/2026;08/11/2026;08/11/2026;Papel higiénico x 48;15;$ 2.700.000;Cali;Luis Pérez
+944763531-4;Minimercado El Paisa;PD-060021;10/08/2026;12/08/2026;12/08/2026;Papel higiénico x 48;34;$ 6.120.000;Palmira;Marta Ríos
+944763531-4;Minimercado El Paisa;PD-060022;26/08/2026;28/08/2026;28/08/2026;Gaseosa 1,5 L x 12;17;$ 3.060.000;Palmira;Marta Ríos
+944763531-4;Minimercado El Paisa;PD-060022;26/08/2026;28/08/2026;28/08/2026;Café molido 500 g;13;$ 2.340.000;Palmira;Marta Ríos
+944763531-4;Minimercado El Paisa;PD-060022;26/08/2026;28/08/2026;28/08/2026;Panela 24 und;5;$ 900.000;Palmira;Marta Ríos
+944763531-4;Minimercado El Paisa;PD-060023;08/09/2026;10/09/2026;10/09/2026;Harina de trigo 50 kg;19;$ 3.420.000;Palmira;Marta Ríos
+944763531-4;Minimercado El Paisa;PD-060023;08/09/2026;10/09/2026;10/09/2026;Panela 24 und;13;$ 2.340.000;Palmira;Marta Ríos
+944763531-4;Minimercado El Paisa;PD-060024;23/09/2026;25/09/2026;25/09/2026;Gaseosa 1,5 L x 12;8;$ 1.440.000;Palmira;Marta Ríos
+944763531-4;Minimercado El Paisa;PD-060024;23/09/2026;25/09/2026;25/09/2026;Café molido 500 g;12;$ 2.160.000;Palmira;Marta Ríos
+944763531-4;Minimercado El Paisa;PD-060024;23/09/2026;25/09/2026;25/09/2026;Papel higiénico x 48;18;$ 3.240.000;Palmira;Marta Ríos
+944763531-4;Minimercado El Paisa;PD-060025;08/10/2026;10/10/2026;10/10/2026;Panela 24 und;6;$ 1.080.000;Palmira;Marta Ríos
+944763531-4;Minimercado El Paisa;PD-060025;08/10/2026;10/10/2026;10/10/2026;Harina de trigo 50 kg;18;$ 3.240.000;Palmira;Marta Ríos
+944763531-4;Minimercado El Paisa;PD-060025;08/10/2026;10/10/2026;10/10/2026;Gaseosa 1,5 L x 12;17;$ 3.060.000;Palmira;Marta Ríos
+944763531-4;Minimercado El Paisa;PD-060026;20/10/2026;22/10/2026;22/10/2026;Gaseosa 1,5 L x 12;16;$ 2.880.000;Palmira;Marta Ríos
+944763531-4;Minimercado El Paisa;PD-060026;20/10/2026;22/10/2026;22/10/2026;Panela 24 und;12;$ 2.160.000;Palmira;Marta Ríos
+944763531-4;Minimercado El Paisa;PD-060026;20/10/2026;22/10/2026;22/10/2026;Café molido 500 g;8;$ 1.440.000;Palmira;Marta Ríos
+944763531-4;Minimercado El Paisa;PD-060027;05/11/2026;07/11/2026;07/11/2026;Café molido 500 g;41;$ 7.380.000;Palmira;Marta Ríos
+924338283-9;Agrotienda La Palma;PD-070021;07/08/2026;09/08/2026;09/08/2026;Agua 600 ml x 24;9;$ 1.620.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070021;07/08/2026;09/08/2026;09/08/2026;Papel higiénico x 48;14;$ 2.520.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070021;07/08/2026;09/08/2026;09/08/2026;Café molido 500 g;6;$ 1.080.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070022;20/08/2026;22/08/2026;22/08/2026;Agua 600 ml x 24;14;$ 2.520.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070022;20/08/2026;22/08/2026;22/08/2026;Café molido 500 g;28;$ 5.040.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070023;04/09/2026;06/09/2026;06/09/2026;Detergente 10 kg;11;$ 1.980.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070023;04/09/2026;06/09/2026;06/09/2026;Agua 600 ml x 24;8;$ 1.440.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070023;04/09/2026;06/09/2026;06/09/2026;Panela 24 und;12;$ 2.160.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070024;20/09/2026;22/09/2026;22/09/2026;Agua 600 ml x 24;13;$ 2.340.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070024;20/09/2026;22/09/2026;22/09/2026;Café molido 500 g;17;$ 3.060.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070025;02/10/2026;04/10/2026;04/10/2026;Café molido 500 g;37;$ 6.660.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070026;17/10/2026;19/10/2026;19/10/2026;Café molido 500 g;30;$ 5.400.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070027;29/10/2026;31/10/2026;31/10/2026;Agua 600 ml x 24;11;$ 1.980.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070027;29/10/2026;31/10/2026;31/10/2026;Papel higiénico x 48;20;$ 3.600.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070028;12/11/2026;14/11/2026;14/11/2026;Panela 24 und;8;$ 1.440.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070028;12/11/2026;14/11/2026;14/11/2026;Café molido 500 g;26;$ 4.680.000;Cali;Jorge Cuero
+924338283-9;Agrotienda La Palma;PD-070028;12/11/2026;14/11/2026;14/11/2026;Agua 600 ml x 24;8;$ 1.440.000;Cali;Jorge Cuero
+938048866-0;Constructora Río Cauca;PD-080028;11/08/2026;13/08/2026;13/08/2026;Café molido 500 g;112;$ 20.160.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080029;22/08/2026;24/08/2026;24/08/2026;Panela 24 und;149;$ 26.820.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080030;02/09/2026;04/09/2026;04/09/2026;Detergente 10 kg;43;$ 7.740.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080030;02/09/2026;04/09/2026;04/09/2026;Pasta spaghetti x 24;48;$ 8.640.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080030;02/09/2026;04/09/2026;04/09/2026;Café molido 500 g;28;$ 5.040.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080031;10/09/2026;12/09/2026;12/09/2026;Detergente 10 kg;59;$ 10.620.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080031;10/09/2026;12/09/2026;12/09/2026;Pasta spaghetti x 24;23;$ 4.140.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080031;10/09/2026;12/09/2026;12/09/2026;Panela 24 und;21;$ 3.780.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080032;21/09/2026;23/09/2026;23/09/2026;Gaseosa 1,5 L x 12;71;$ 12.780.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080032;21/09/2026;23/09/2026;23/09/2026;Café molido 500 g;36;$ 6.480.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080032;21/09/2026;23/09/2026;23/09/2026;Pasta spaghetti x 24;24;$ 4.320.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080033;29/09/2026;01/10/2026;01/10/2026;Gaseosa 1,5 L x 12;74;$ 13.320.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080033;29/09/2026;01/10/2026;01/10/2026;Pasta spaghetti x 24;52;$ 9.360.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080034;10/10/2026;12/10/2026;12/10/2026;Pasta spaghetti x 24;106;$ 19.080.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080035;20/10/2026;22/10/2026;22/10/2026;Café molido 500 g;70;$ 12.600.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080035;20/10/2026;22/10/2026;22/10/2026;Detergente 10 kg;68;$ 12.240.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080036;29/10/2026;31/10/2026;31/10/2026;Gaseosa 1,5 L x 12;131;$ 23.580.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-080037;08/11/2026;10/11/2026;10/11/2026;Detergente 10 kg;121;$ 21.780.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-9003;24/10/2026;27/10/2026;;Agua 600 ml x 24;70;$ 12.600.000;Cali;Ana Gómez
+938048866-0;Constructora Río Cauca;PD-9003;24/10/2026;27/10/2026;;Gaseosa 1,5 L x 12;60;$ 10.800.000;Cali;Ana Gómez
+958522765-7;Hoteles Farallones;PD-090029;10/08/2026;12/08/2026;12/08/2026;Harina de trigo 50 kg;44;$ 7.920.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090029;10/08/2026;12/08/2026;12/08/2026;Jabón de barra x 50;31;$ 5.580.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090030;22/08/2026;24/08/2026;24/08/2026;Galletas surtidas x 24;19;$ 3.420.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090030;22/08/2026;24/08/2026;24/08/2026;Gaseosa 1,5 L x 12;44;$ 7.920.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090030;22/08/2026;24/08/2026;24/08/2026;Pasta spaghetti x 24;15;$ 2.700.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090031;02/09/2026;04/09/2026;04/09/2026;Jabón de barra x 50;16;$ 2.880.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090031;02/09/2026;04/09/2026;04/09/2026;Gaseosa 1,5 L x 12;45;$ 8.100.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090032;13/09/2026;15/09/2026;15/09/2026;Jabón de barra x 50;72;$ 12.960.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090033;25/09/2026;27/09/2026;27/09/2026;Galletas surtidas x 24;64;$ 11.520.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090034;06/10/2026;08/10/2026;08/10/2026;Jabón de barra x 50;69;$ 12.420.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090035;18/10/2026;20/10/2026;20/10/2026;Galletas surtidas x 24;29;$ 5.220.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090035;18/10/2026;20/10/2026;20/10/2026;Harina de trigo 50 kg;13;$ 2.340.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090035;18/10/2026;20/10/2026;20/10/2026;Gaseosa 1,5 L x 12;26;$ 4.680.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090036;27/10/2026;29/10/2026;29/10/2026;Jabón de barra x 50;37;$ 6.660.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090036;27/10/2026;29/10/2026;29/10/2026;Galletas surtidas x 24;34;$ 6.120.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090037;07/11/2026;09/11/2026;09/11/2026;Pasta spaghetti x 24;20;$ 3.600.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090037;07/11/2026;09/11/2026;09/11/2026;Harina de trigo 50 kg;23;$ 4.140.000;Palmira;Luis Pérez
+958522765-7;Hoteles Farallones;PD-090037;07/11/2026;09/11/2026;09/11/2026;Gaseosa 1,5 L x 12;20;$ 3.600.000;Palmira;Luis Pérez
+980059494-6;Tienda Doña Inés;PD-100014;10/08/2026;12/08/2026;12/08/2026;Agua 600 ml x 24;5;$ 900.000;Cali;Marta Ríos
+980059494-6;Tienda Doña Inés;PD-100014;10/08/2026;12/08/2026;12/08/2026;Arroz blanco 25 kg;12;$ 2.160.000;Cali;Marta Ríos
+980059494-6;Tienda Doña Inés;PD-100015;30/08/2026;01/09/2026;01/09/2026;Arroz blanco 25 kg;7;$ 1.260.000;Cali;Marta Ríos
+980059494-6;Tienda Doña Inés;PD-100015;30/08/2026;01/09/2026;01/09/2026;Agua 600 ml x 24;5;$ 900.000;Cali;Marta Ríos
+980059494-6;Tienda Doña Inés;PD-100015;30/08/2026;01/09/2026;01/09/2026;Atún en lata x 48;4;$ 720.000;Cali;Marta Ríos
+980059494-6;Tienda Doña Inés;PD-100016;03/11/2026;05/11/2026;05/11/2026;Lentejas 25 kg;4;$ 720.000;Cali;Marta Ríos
+980059494-6;Tienda Doña Inés;PD-100016;03/11/2026;05/11/2026;05/11/2026;Jabón de barra x 50;7;$ 1.260.000;Cali;Marta Ríos
+980059494-6;Tienda Doña Inés;PD-100016;03/11/2026;05/11/2026;05/11/2026;Arroz blanco 25 kg;5;$ 900.000;Cali;Marta Ríos
+934328958-1;Cafetería El Parque;PD-110030;15/08/2026;17/08/2026;17/08/2026;Detergente 10 kg;3;$ 540.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110030;15/08/2026;17/08/2026;17/08/2026;Aceite de girasol 3 L;4;$ 720.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110031;26/08/2026;28/08/2026;28/08/2026;Aceite de girasol 3 L;3;$ 540.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110031;26/08/2026;28/08/2026;28/08/2026;Pasta spaghetti x 24;3;$ 540.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110031;26/08/2026;28/08/2026;28/08/2026;Agua 600 ml x 24;3;$ 540.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110032;04/09/2026;06/09/2026;06/09/2026;Pasta spaghetti x 24;4;$ 720.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110032;04/09/2026;06/09/2026;06/09/2026;Agua 600 ml x 24;4;$ 720.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110033;12/09/2026;14/09/2026;14/09/2026;Pasta spaghetti x 24;7;$ 1.260.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110034;21/09/2026;23/09/2026;23/09/2026;Agua 600 ml x 24;4;$ 720.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110034;21/09/2026;23/09/2026;23/09/2026;Pasta spaghetti x 24;4;$ 720.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110035;29/09/2026;01/10/2026;01/10/2026;Agua 600 ml x 24;6;$ 1.080.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110036;09/10/2026;11/10/2026;11/10/2026;Detergente 10 kg;3;$ 540.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110036;09/10/2026;11/10/2026;11/10/2026;Panela 24 und;3;$ 540.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110037;18/10/2026;20/10/2026;20/10/2026;Agua 600 ml x 24;4;$ 720.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110037;18/10/2026;20/10/2026;20/10/2026;Detergente 10 kg;4;$ 720.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110038;29/10/2026;31/10/2026;31/10/2026;Pasta spaghetti x 24;3;$ 540.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110038;29/10/2026;31/10/2026;31/10/2026;Panela 24 und;4;$ 720.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110038;29/10/2026;31/10/2026;31/10/2026;Agua 600 ml x 24;1;$ 180.000;Cali;Jorge Cuero
+934328958-1;Cafetería El Parque;PD-110039;09/11/2026;11/11/2026;11/11/2026;Agua 600 ml x 24;7;$ 1.260.000;Cali;Jorge Cuero
+915805427-8;Papelería Tuluá;PD-120029;08/08/2026;11/08/2026;11/08/2026;Harina de trigo 50 kg;6;$ 1.080.000;Tuluá;Ana Gómez
+915805427-8;Papelería Tuluá;PD-120029;08/08/2026;11/08/2026;11/08/2026;Detergente 10 kg;2;$ 360.000;Tuluá;Ana Gómez
+915805427-8;Papelería Tuluá;PD-120030;16/08/2026;19/08/2026;19/08/2026;Harina de trigo 50 kg;4;$ 720.000;Tuluá;Ana Gómez
+915805427-8;Papelería Tuluá;PD-120030;16/08/2026;19/08/2026;19/08/2026;Atún en lata x 48;2;$ 360.000;Tuluá;Ana Gómez
+915805427-8;Papelería Tuluá;PD-120031;28/08/2026;31/08/2026;31/08/2026;Harina de trigo 50 kg;8;$ 1.440.000;Tuluá;Ana Gómez
+915805427-8;Papelería Tuluá;PD-120032;05/09/2026;08/09/2026;08/09/2026;Atún en lata x 48;8;$ 1.440.000;Tuluá;Ana Gómez
+915805427-8;Papelería Tuluá;PD-120033;17/09/2026;20/09/2026;20/09/2026;Detergente 10 kg;4;$ 720.000;Tuluá;Ana Gómez
+915805427-8;Papelería Tuluá;PD-120033;17/09/2026;20/09/2026;20/09/2026;Harina de trigo 50 kg;4;$ 720.000;Tuluá;Ana Gómez
+915805427-8;Papelería Tuluá;PD-120034;27/09/2026;30/09/2026;30/09/2026;Galletas surtidas x 24;5;$ 900.000;Tuluá;Ana Gómez
+915805427-8;Papelería Tuluá;PD-120034;27/09/2026;30/09/2026;30/09/2026;Detergente 10 kg;3;$ 540.000;Tuluá;Ana Gómez
+915805427-8;Papelería Tuluá;PD-120035;06/10/2026;09/10/2026;09/10/2026;Galletas surtidas x 24;8;$ 1.440.000;Tuluá;Ana Gómez
+915805427-8;Papelería Tuluá;PD-120036;16/10/2026;19/10/2026;19/10/2026;Atún en lata x 48;3;$ 540.000;Tuluá;Ana Gómez
+915805427-8;Papelería Tuluá;PD-120036;16/10/2026;19/10/2026;19/10/2026;Agua 600 ml x 24;4;$ 720.000;Tuluá;Ana Gómez
+915805427-8;Papelería Tuluá;PD-120037;28/10/2026;31/10/2026;31/10/2026;Harina de trigo 50 kg;3;$ 540.000;Tuluá;Ana Gómez
+915805427-8;Papelería Tuluá;PD-120037;28/10/2026;31/10/2026;31/10/2026;Detergente 10 kg;5;$ 900.000;Tuluá;Ana Gómez
+915805427-8;Papelería Tuluá;PD-120038;07/11/2026;10/11/2026;10/11/2026;Atún en lata x 48;8;$ 1.440.000;Tuluá;Ana Gómez
+930294429-4;Lácteos La Vaquita;PD-130028;10/08/2026;12/08/2026;12/08/2026;Fríjol cargamanto 25 kg;8;$ 1.440.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130029;21/08/2026;23/08/2026;23/08/2026;Sal refinada 25 kg;3;$ 540.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130029;21/08/2026;23/08/2026;23/08/2026;Panela 24 und;4;$ 720.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130029;21/08/2026;23/08/2026;23/08/2026;Galletas surtidas x 24;1;$ 180.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130030;29/08/2026;31/08/2026;31/08/2026;Fríjol cargamanto 25 kg;3;$ 540.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130030;29/08/2026;31/08/2026;31/08/2026;Galletas surtidas x 24;2;$ 360.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130030;29/08/2026;31/08/2026;31/08/2026;Jabón de barra x 50;4;$ 720.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130031;10/09/2026;12/09/2026;12/09/2026;Fríjol cargamanto 25 kg;8;$ 1.440.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130032;22/09/2026;24/09/2026;24/09/2026;Jabón de barra x 50;3;$ 540.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130032;22/09/2026;24/09/2026;24/09/2026;Sal refinada 25 kg;4;$ 720.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130033;03/10/2026;05/10/2026;05/10/2026;Sal refinada 25 kg;4;$ 720.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130033;03/10/2026;05/10/2026;05/10/2026;Galletas surtidas x 24;3;$ 540.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130034;12/10/2026;14/10/2026;14/10/2026;Jabón de barra x 50;5;$ 900.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130034;12/10/2026;14/10/2026;14/10/2026;Panela 24 und;4;$ 720.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130035;24/10/2026;26/10/2026;26/10/2026;Fríjol cargamanto 25 kg;4;$ 720.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130035;24/10/2026;26/10/2026;26/10/2026;Panela 24 und;4;$ 720.000;Cali;Luis Pérez
+930294429-4;Lácteos La Vaquita;PD-130036;04/11/2026;06/11/2026;06/11/2026;Jabón de barra x 50;7;$ 1.260.000;Cali;Luis Pérez
+932139144-6;Frutería El Mango;PD-140022;17/08/2026;19/08/2026;19/08/2026;Jabón de barra x 50;5;$ 900.000;Cali;Marta Ríos
+932139144-6;Frutería El Mango;PD-140022;17/08/2026;19/08/2026;19/08/2026;Atún en lata x 48;4;$ 720.000;Cali;Marta Ríos
+928839953-3;Peluquería Estilo;PD-150030;12/08/2026;14/08/2026;14/08/2026;Detergente 10 kg;3;$ 540.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150030;12/08/2026;14/08/2026;14/08/2026;Atún en lata x 48;3;$ 540.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150030;12/08/2026;14/08/2026;14/08/2026;Sal refinada 25 kg;1;$ 180.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150031;22/08/2026;24/08/2026;24/08/2026;Detergente 10 kg;2;$ 360.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150031;22/08/2026;24/08/2026;24/08/2026;Sal refinada 25 kg;4;$ 720.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150031;22/08/2026;24/08/2026;24/08/2026;Atún en lata x 48;2;$ 360.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150032;03/09/2026;05/09/2026;05/09/2026;Pasta spaghetti x 24;4;$ 720.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150032;03/09/2026;05/09/2026;05/09/2026;Sal refinada 25 kg;2;$ 360.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150032;03/09/2026;05/09/2026;05/09/2026;Detergente 10 kg;2;$ 360.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150033;15/09/2026;17/09/2026;17/09/2026;Galletas surtidas x 24;7;$ 1.260.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150034;26/09/2026;28/09/2026;28/09/2026;Atún en lata x 48;3;$ 540.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150034;26/09/2026;28/09/2026;28/09/2026;Detergente 10 kg;4;$ 720.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150035;06/10/2026;08/10/2026;08/10/2026;Atún en lata x 48;4;$ 720.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150035;06/10/2026;08/10/2026;08/10/2026;Detergente 10 kg;1;$ 180.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150035;06/10/2026;08/10/2026;08/10/2026;Sal refinada 25 kg;2;$ 360.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150036;16/10/2026;18/10/2026;18/10/2026;Sal refinada 25 kg;3;$ 540.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150036;16/10/2026;18/10/2026;18/10/2026;Pasta spaghetti x 24;2;$ 360.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150036;16/10/2026;18/10/2026;18/10/2026;Detergente 10 kg;3;$ 540.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150037;27/10/2026;29/10/2026;29/10/2026;Pasta spaghetti x 24;6;$ 1.080.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150038;06/11/2026;08/11/2026;08/11/2026;Galletas surtidas x 24;3;$ 540.000;Palmira;Jorge Cuero
+928839953-3;Peluquería Estilo;PD-150038;06/11/2026;08/11/2026;08/11/2026;Pasta spaghetti x 24;3;$ 540.000;Palmira;Jorge Cuero
+948911953-1;Taller El Rin;PD-160014;06/08/2026;08/08/2026;08/08/2026;Harina de trigo 50 kg;18;$ 3.240.000;Cali;Ana Gómez
+948911953-1;Taller El Rin;PD-160015;28/08/2026;30/08/2026;30/08/2026;Harina de trigo 50 kg;7;$ 1.260.000;Cali;Ana Gómez
+948911953-1;Taller El Rin;PD-160015;28/08/2026;30/08/2026;30/08/2026;Aceite de girasol 3 L;6;$ 1.080.000;Cali;Ana Gómez
+948911953-1;Taller El Rin;PD-160016;01/11/2026;03/11/2026;03/11/2026;Aceite de girasol 3 L;14;$ 2.520.000;Cali;Ana Gómez
+961386688-9;Granero San José;PD-170021;12/08/2026;14/08/2026;14/08/2026;Harina de trigo 50 kg;4;$ 720.000;Cali;Luis Pérez
+961386688-9;Granero San José;PD-170021;12/08/2026;14/08/2026;14/08/2026;Pasta spaghetti x 24;4;$ 720.000;Cali;Luis Pérez
+961386688-9;Granero San José;PD-170021;12/08/2026;14/08/2026;14/08/2026;Azúcar refinada 50 kg;1;$ 180.000;Cali;Luis Pérez
+961386688-9;Granero San José;PD-170022;25/08/2026;27/08/2026;27/08/2026;Azúcar refinada 50 kg;4;$ 720.000;Cali;Luis Pérez
+961386688-9;Granero San José;PD-170022;25/08/2026;27/08/2026;27/08/2026;Harina de trigo 50 kg;3;$ 540.000;Cali;Luis Pérez
+961386688-9;Granero San José;PD-170022;25/08/2026;27/08/2026;27/08/2026;Pasta spaghetti x 24;3;$ 540.000;Cali;Luis Pérez
+960595023-0;Carnicería La Res;PD-180020;07/08/2026;09/08/2026;09/08/2026;Pasta spaghetti x 24;7;$ 1.260.000;Palmira;Marta Ríos
+960595023-0;Carnicería La Res;PD-180020;07/08/2026;09/08/2026;09/08/2026;Papel higiénico x 48;3;$ 540.000;Palmira;Marta Ríos
+960595023-0;Carnicería La Res;PD-180021;19/08/2026;21/08/2026;21/08/2026;Atún en lata x 48;4;$ 720.000;Palmira;Marta Ríos
+960595023-0;Carnicería La Res;PD-180021;19/08/2026;21/08/2026;21/08/2026;Pasta spaghetti x 24;4;$ 720.000;Palmira;Marta Ríos
+960595023-0;Carnicería La Res;PD-180021;19/08/2026;21/08/2026;21/08/2026;Leche en polvo 25 kg;3;$ 540.000;Palmira;Marta Ríos
+960595023-0;Carnicería La Res;PD-180022;02/09/2026;04/09/2026;04/09/2026;Leche en polvo 25 kg;8;$ 1.440.000;Palmira;Marta Ríos
+960595023-0;Carnicería La Res;PD-180023;15/09/2026;17/09/2026;17/09/2026;Pasta spaghetti x 24;12;$ 2.160.000;Palmira;Marta Ríos
+960595023-0;Carnicería La Res;PD-180024;30/09/2026;02/10/2026;02/10/2026;Papel higiénico x 48;12;$ 2.160.000;Palmira;Marta Ríos
+960595023-0;Carnicería La Res;PD-180025;13/10/2026;15/10/2026;15/10/2026;Pasta spaghetti x 24;4;$ 720.000;Palmira;Marta Ríos
+960595023-0;Carnicería La Res;PD-180025;13/10/2026;15/10/2026;15/10/2026;Leche en polvo 25 kg;2;$ 360.000;Palmira;Marta Ríos
+960595023-0;Carnicería La Res;PD-180025;13/10/2026;15/10/2026;15/10/2026;Atún en lata x 48;5;$ 900.000;Palmira;Marta Ríos
+960595023-0;Carnicería La Res;PD-180026;27/10/2026;29/10/2026;29/10/2026;Atún en lata x 48;4;$ 720.000;Palmira;Marta Ríos
+960595023-0;Carnicería La Res;PD-180026;27/10/2026;29/10/2026;29/10/2026;Galletas surtidas x 24;7;$ 1.260.000;Palmira;Marta Ríos
+960595023-0;Carnicería La Res;PD-180027;12/11/2026;14/11/2026;14/11/2026;Pasta spaghetti x 24;3;$ 540.000;Palmira;Marta Ríos
+960595023-0;Carnicería La Res;PD-180027;12/11/2026;14/11/2026;14/11/2026;Galletas surtidas x 24;5;$ 900.000;Palmira;Marta Ríos
+960595023-0;Carnicería La Res;PD-180027;12/11/2026;14/11/2026;14/11/2026;Leche en polvo 25 kg;2;$ 360.000;Palmira;Marta Ríos
+937212997-3;Miscelánea Palmira;PD-190014;12/08/2026;14/08/2026;14/08/2026;Pasta spaghetti x 24;6;$ 1.080.000;Cali;Jorge Cuero
+937212997-3;Miscelánea Palmira;PD-190014;12/08/2026;14/08/2026;14/08/2026;Aceite de girasol 3 L;2;$ 360.000;Cali;Jorge Cuero
+937212997-3;Miscelánea Palmira;PD-190014;12/08/2026;14/08/2026;14/08/2026;Leche en polvo 25 kg;6;$ 1.080.000;Cali;Jorge Cuero
+937212997-3;Miscelánea Palmira;PD-190015;02/09/2026;04/09/2026;04/09/2026;Gaseosa 1,5 L x 12;5;$ 900.000;Cali;Jorge Cuero
+937212997-3;Miscelánea Palmira;PD-190015;02/09/2026;04/09/2026;04/09/2026;Aceite de girasol 3 L;7;$ 1.260.000;Cali;Jorge Cuero
+937212997-3;Miscelánea Palmira;PD-190016;24/09/2026;26/09/2026;26/09/2026;Pasta spaghetti x 24;7;$ 1.260.000;Cali;Jorge Cuero
+937212997-3;Miscelánea Palmira;PD-190016;24/09/2026;26/09/2026;26/09/2026;Aceite de girasol 3 L;6;$ 1.080.000;Cali;Jorge Cuero
+937212997-3;Miscelánea Palmira;PD-190017;15/10/2026;17/10/2026;17/10/2026;Aceite de girasol 3 L;2;$ 360.000;Cali;Jorge Cuero
+937212997-3;Miscelánea Palmira;PD-190017;15/10/2026;17/10/2026;17/10/2026;Gaseosa 1,5 L x 12;7;$ 1.260.000;Cali;Jorge Cuero
+937212997-3;Miscelánea Palmira;PD-190017;15/10/2026;17/10/2026;17/10/2026;Leche en polvo 25 kg;6;$ 1.080.000;Cali;Jorge Cuero
+937212997-3;Miscelánea Palmira;PD-190018;04/11/2026;06/11/2026;06/11/2026;Pasta spaghetti x 24;7;$ 1.260.000;Cali;Jorge Cuero
+937212997-3;Miscelánea Palmira;PD-190018;04/11/2026;06/11/2026;06/11/2026;Detergente 10 kg;4;$ 720.000;Cali;Jorge Cuero
+937212997-3;Miscelánea Palmira;PD-190018;04/11/2026;06/11/2026;06/11/2026;Aceite de girasol 3 L;4;$ 720.000;Cali;Jorge Cuero
+997039823-7;Comercializadora Pacífico;PD-200030;09/08/2026;11/08/2026;11/08/2026;Detergente 10 kg;28;$ 5.040.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200031;21/08/2026;23/08/2026;23/08/2026;Agua 600 ml x 24;28;$ 5.040.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200032;31/08/2026;02/09/2026;02/09/2026;Galletas surtidas x 24;11;$ 1.980.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200032;31/08/2026;02/09/2026;02/09/2026;Agua 600 ml x 24;9;$ 1.620.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200032;31/08/2026;02/09/2026;02/09/2026;Detergente 10 kg;20;$ 3.600.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200033;12/09/2026;14/09/2026;14/09/2026;Sal refinada 25 kg;30;$ 5.400.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200034;23/09/2026;25/09/2026;25/09/2026;Agua 600 ml x 24;10;$ 1.800.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200034;23/09/2026;25/09/2026;25/09/2026;Detergente 10 kg;17;$ 3.060.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200034;23/09/2026;25/09/2026;25/09/2026;Panela 24 und;12;$ 2.160.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200035;02/10/2026;04/10/2026;04/10/2026;Sal refinada 25 kg;28;$ 5.040.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200036;12/10/2026;14/10/2026;14/10/2026;Agua 600 ml x 24;11;$ 1.980.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200036;12/10/2026;14/10/2026;14/10/2026;Sal refinada 25 kg;20;$ 3.600.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200037;21/10/2026;23/10/2026;23/10/2026;Galletas surtidas x 24;20;$ 3.600.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200037;21/10/2026;23/10/2026;23/10/2026;Agua 600 ml x 24;13;$ 2.340.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200038;01/11/2026;03/11/2026;03/11/2026;Sal refinada 25 kg;15;$ 2.700.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200038;01/11/2026;03/11/2026;03/11/2026;Agua 600 ml x 24;23;$ 4.140.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200039;12/11/2026;14/11/2026;14/11/2026;Sal refinada 25 kg;12;$ 2.160.000;Cali;Ana Gómez
+997039823-7;Comercializadora Pacífico;PD-200039;12/11/2026;14/11/2026;14/11/2026;Galletas surtidas x 24;18;$ 3.240.000;Cali;Ana Gómez
+925160854-2;Avícola El Gallo;PD-210029;11/08/2026;13/08/2026;13/08/2026;Harina de trigo 50 kg;18;$ 3.240.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210029;11/08/2026;13/08/2026;13/08/2026;Lentejas 25 kg;15;$ 2.700.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210030;21/08/2026;23/08/2026;23/08/2026;Lentejas 25 kg;9;$ 1.620.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210030;21/08/2026;23/08/2026;23/08/2026;Papel higiénico x 48;8;$ 1.440.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210030;21/08/2026;23/08/2026;23/08/2026;Pasta spaghetti x 24;13;$ 2.340.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210031;02/09/2026;04/09/2026;04/09/2026;Papel higiénico x 48;34;$ 6.120.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210032;14/09/2026;16/09/2026;16/09/2026;Galletas surtidas x 24;34;$ 6.120.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210033;24/09/2026;26/09/2026;26/09/2026;Lentejas 25 kg;34;$ 6.120.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210034;03/10/2026;05/10/2026;05/10/2026;Galletas surtidas x 24;27;$ 4.860.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210035;15/10/2026;17/10/2026;17/10/2026;Pasta spaghetti x 24;12;$ 2.160.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210035;15/10/2026;17/10/2026;17/10/2026;Galletas surtidas x 24;18;$ 3.240.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210036;27/10/2026;29/10/2026;29/10/2026;Papel higiénico x 48;12;$ 2.160.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210036;27/10/2026;29/10/2026;29/10/2026;Pasta spaghetti x 24;4;$ 720.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210036;27/10/2026;29/10/2026;29/10/2026;Galletas surtidas x 24;15;$ 2.700.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210037;07/11/2026;09/11/2026;09/11/2026;Harina de trigo 50 kg;7;$ 1.260.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210037;07/11/2026;09/11/2026;09/11/2026;Pasta spaghetti x 24;9;$ 1.620.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-210037;07/11/2026;09/11/2026;09/11/2026;Galletas surtidas x 24;13;$ 2.340.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-9004;26/10/2026;28/10/2026;06/11/2026;Sal refinada 25 kg;25;$ 4.500.000;Palmira;Luis Pérez
+925160854-2;Avícola El Gallo;PD-9004;26/10/2026;28/10/2026;06/11/2026;Jabón de barra x 50;10;$ 1.800.000;Palmira;Luis Pérez
+983567294-1;Colegio Los Andes;PD-220027;07/08/2026;09/08/2026;09/08/2026;Leche en polvo 25 kg;19;$ 3.420.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220028;19/08/2026;21/08/2026;21/08/2026;Leche en polvo 25 kg;17;$ 3.060.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220029;27/08/2026;29/08/2026;29/08/2026;Jabón de barra x 50;9;$ 1.620.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220029;27/08/2026;29/08/2026;29/08/2026;Azúcar refinada 50 kg;10;$ 1.800.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220030;08/09/2026;10/09/2026;10/09/2026;Leche en polvo 25 kg;19;$ 3.420.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220031;19/09/2026;21/09/2026;21/09/2026;Azúcar refinada 50 kg;10;$ 1.800.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220031;19/09/2026;21/09/2026;21/09/2026;Café molido 500 g;4;$ 720.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220032;01/10/2026;03/10/2026;03/10/2026;Café molido 500 g;10;$ 1.800.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220032;01/10/2026;03/10/2026;03/10/2026;Leche en polvo 25 kg;8;$ 1.440.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220033;13/10/2026;15/10/2026;15/10/2026;Jabón de barra x 50;8;$ 1.440.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220033;13/10/2026;15/10/2026;15/10/2026;Azúcar refinada 50 kg;6;$ 1.080.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220034;22/10/2026;24/10/2026;24/10/2026;Azúcar refinada 50 kg;7;$ 1.260.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220034;22/10/2026;24/10/2026;24/10/2026;Café molido 500 g;2;$ 360.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220034;22/10/2026;24/10/2026;24/10/2026;Leche en polvo 25 kg;5;$ 900.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220035;01/11/2026;03/11/2026;03/11/2026;Pasta spaghetti x 24;6;$ 1.080.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220035;01/11/2026;03/11/2026;03/11/2026;Leche en polvo 25 kg;9;$ 1.620.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220036;09/11/2026;11/11/2026;11/11/2026;Azúcar refinada 50 kg;8;$ 1.440.000;Cali;Marta Ríos
+983567294-1;Colegio Los Andes;PD-220036;09/11/2026;11/11/2026;11/11/2026;Jabón de barra x 50;8;$ 1.440.000;Cali;Marta Ríos
+982354302-4;Clínica Veterinaria Huellas;PD-230013;06/08/2026;08/08/2026;08/08/2026;Fríjol cargamanto 25 kg;24;$ 4.320.000;Cali;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;PD-230013;06/08/2026;08/08/2026;08/08/2026;Papel higiénico x 48;40;$ 7.200.000;Cali;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;PD-230014;26/08/2026;28/08/2026;28/08/2026;Fríjol cargamanto 25 kg;61;$ 10.980.000;Cali;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;PD-230015;17/09/2026;19/09/2026;19/09/2026;Gaseosa 1,5 L x 12;30;$ 5.400.000;Cali;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;PD-230015;17/09/2026;19/09/2026;19/09/2026;Arroz blanco 25 kg;12;$ 2.160.000;Cali;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;PD-230015;17/09/2026;19/09/2026;19/09/2026;Sal refinada 25 kg;30;$ 5.400.000;Cali;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;PD-230016;10/10/2026;12/10/2026;12/10/2026;Gaseosa 1,5 L x 12;19;$ 3.420.000;Cali;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;PD-230016;10/10/2026;12/10/2026;12/10/2026;Papel higiénico x 48;18;$ 3.240.000;Cali;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;PD-230016;10/10/2026;12/10/2026;12/10/2026;Sal refinada 25 kg;19;$ 3.420.000;Cali;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;PD-230017;02/11/2026;04/11/2026;04/11/2026;Arroz blanco 25 kg;72;$ 12.960.000;Cali;Jorge Cuero
+911647958-7;Mercados La 14 Sur;PD-240030;12/08/2026;14/08/2026;14/08/2026;Detergente 10 kg;18;$ 3.240.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240030;12/08/2026;14/08/2026;14/08/2026;Gaseosa 1,5 L x 12;19;$ 3.420.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240031;20/08/2026;22/08/2026;22/08/2026;Jabón de barra x 50;5;$ 900.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240031;20/08/2026;22/08/2026;22/08/2026;Agua 600 ml x 24;15;$ 2.700.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240031;20/08/2026;22/08/2026;22/08/2026;Detergente 10 kg;11;$ 1.980.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240032;29/08/2026;31/08/2026;31/08/2026;Jabón de barra x 50;31;$ 5.580.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240033;08/09/2026;10/09/2026;10/09/2026;Gaseosa 1,5 L x 12;29;$ 5.220.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240034;16/09/2026;18/09/2026;18/09/2026;Gaseosa 1,5 L x 12;28;$ 5.040.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240035;26/09/2026;28/09/2026;28/09/2026;Gaseosa 1,5 L x 12;38;$ 6.840.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240036;07/10/2026;09/10/2026;09/10/2026;Gaseosa 1,5 L x 12;31;$ 5.580.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240037;19/10/2026;21/10/2026;21/10/2026;Papel higiénico x 48;13;$ 2.340.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240037;19/10/2026;21/10/2026;21/10/2026;Agua 600 ml x 24;7;$ 1.260.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240037;19/10/2026;21/10/2026;21/10/2026;Jabón de barra x 50;14;$ 2.520.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240038;27/10/2026;29/10/2026;29/10/2026;Jabón de barra x 50;6;$ 1.080.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240038;27/10/2026;29/10/2026;29/10/2026;Gaseosa 1,5 L x 12;16;$ 2.880.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240038;27/10/2026;29/10/2026;29/10/2026;Papel higiénico x 48;12;$ 2.160.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240039;05/11/2026;07/11/2026;07/11/2026;Papel higiénico x 48;6;$ 1.080.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240039;05/11/2026;07/11/2026;07/11/2026;Agua 600 ml x 24;11;$ 1.980.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-240039;05/11/2026;07/11/2026;07/11/2026;Detergente 10 kg;12;$ 2.160.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-9008;30/10/2026;03/11/2026;03/11/2026;Leche en polvo 25 kg;12;$ 2.160.000;Palmira;Ana Gómez
+911647958-7;Mercados La 14 Sur;PD-9008;30/10/2026;03/11/2026;03/11/2026;Pasta spaghetti x 24;25;$ 4.500.000;Palmira;Ana Gómez
+920391375-3;Transportes Buga;PD-250014;09/08/2026;12/08/2026;12/08/2026;Fríjol cargamanto 25 kg;66;$ 11.880.000;Buga;Luis Pérez
+920391375-3;Transportes Buga;PD-250015;28/08/2026;31/08/2026;31/08/2026;Atún en lata x 48;52;$ 9.360.000;Buga;Luis Pérez
+920391375-3;Transportes Buga;PD-250015;28/08/2026;31/08/2026;31/08/2026;Lentejas 25 kg;18;$ 3.240.000;Buga;Luis Pérez
+986548185-2;Industrias Plásticas Yumbo;PD-260030;09/08/2026;12/08/2026;12/08/2026;Gaseosa 1,5 L x 12;38;$ 6.840.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260031;20/08/2026;23/08/2026;23/08/2026;Pasta spaghetti x 24;13;$ 2.340.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260031;20/08/2026;23/08/2026;23/08/2026;Harina de trigo 50 kg;14;$ 2.520.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260032;01/09/2026;04/09/2026;04/09/2026;Arroz blanco 25 kg;27;$ 4.860.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260033;12/09/2026;15/09/2026;15/09/2026;Arroz blanco 25 kg;26;$ 4.680.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260034;24/09/2026;27/09/2026;27/09/2026;Harina de trigo 50 kg;10;$ 1.800.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260034;24/09/2026;27/09/2026;27/09/2026;Azúcar refinada 50 kg;16;$ 2.880.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260034;24/09/2026;27/09/2026;27/09/2026;Gaseosa 1,5 L x 12;13;$ 2.340.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260035;02/10/2026;05/10/2026;05/10/2026;Gaseosa 1,5 L x 12;32;$ 5.760.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260036;10/10/2026;13/10/2026;13/10/2026;Azúcar refinada 50 kg;10;$ 1.800.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260036;10/10/2026;13/10/2026;13/10/2026;Gaseosa 1,5 L x 12;12;$ 2.160.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260036;10/10/2026;13/10/2026;13/10/2026;Pasta spaghetti x 24;11;$ 1.980.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260037;19/10/2026;22/10/2026;22/10/2026;Harina de trigo 50 kg;15;$ 2.700.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260037;19/10/2026;22/10/2026;22/10/2026;Pasta spaghetti x 24;17;$ 3.060.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260038;30/10/2026;02/11/2026;02/11/2026;Pasta spaghetti x 24;11;$ 1.980.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260038;30/10/2026;02/11/2026;02/11/2026;Arroz blanco 25 kg;8;$ 1.440.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260038;30/10/2026;02/11/2026;02/11/2026;Azúcar refinada 50 kg;12;$ 2.160.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260039;09/11/2026;12/11/2026;12/11/2026;Harina de trigo 50 kg;14;$ 2.520.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260039;09/11/2026;12/11/2026;12/11/2026;Gaseosa 1,5 L x 12;15;$ 2.700.000;Yumbo;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;PD-260039;09/11/2026;12/11/2026;12/11/2026;Pasta spaghetti x 24;9;$ 1.620.000;Yumbo;Marta Ríos
+980992505-5;Distribuciones Jamundí;PD-270021;11/08/2026;14/08/2026;14/08/2026;Agua 600 ml x 24;17;$ 3.060.000;Jamundí;Jorge Cuero
+980992505-5;Distribuciones Jamundí;PD-270021;11/08/2026;14/08/2026;14/08/2026;Pasta spaghetti x 24;8;$ 1.440.000;Jamundí;Jorge Cuero
+980992505-5;Distribuciones Jamundí;PD-270021;11/08/2026;14/08/2026;14/08/2026;Lentejas 25 kg;12;$ 2.160.000;Jamundí;Jorge Cuero
+980992505-5;Distribuciones Jamundí;PD-270022;25/08/2026;28/08/2026;28/08/2026;Pasta spaghetti x 24;18;$ 3.240.000;Jamundí;Jorge Cuero
+980992505-5;Distribuciones Jamundí;PD-270022;25/08/2026;28/08/2026;28/08/2026;Leche en polvo 25 kg;35;$ 6.300.000;Jamundí;Jorge Cuero
+980992505-5;Distribuciones Jamundí;PD-270023;06/09/2026;09/09/2026;09/09/2026;Lentejas 25 kg;46;$ 8.280.000;Jamundí;Jorge Cuero
+980992505-5;Distribuciones Jamundí;PD-270024;18/09/2026;21/09/2026;21/09/2026;Leche en polvo 25 kg;45;$ 8.100.000;Jamundí;Jorge Cuero
+980992505-5;Distribuciones Jamundí;PD-270025;30/09/2026;03/10/2026;03/10/2026;Pasta spaghetti x 24;41;$ 7.380.000;Jamundí;Jorge Cuero
+980992505-5;Distribuciones Jamundí;PD-270026;13/10/2026;16/10/2026;16/10/2026;Leche en polvo 25 kg;18;$ 3.240.000;Jamundí;Jorge Cuero
+980992505-5;Distribuciones Jamundí;PD-270026;13/10/2026;16/10/2026;16/10/2026;Pasta spaghetti x 24;9;$ 1.620.000;Jamundí;Jorge Cuero
+980992505-5;Distribuciones Jamundí;PD-270026;13/10/2026;16/10/2026;16/10/2026;Lentejas 25 kg;16;$ 2.880.000;Jamundí;Jorge Cuero
+980992505-5;Distribuciones Jamundí;PD-270027;27/10/2026;30/10/2026;30/10/2026;Sal refinada 25 kg;22;$ 3.960.000;Jamundí;Jorge Cuero
+980992505-5;Distribuciones Jamundí;PD-270027;27/10/2026;30/10/2026;30/10/2026;Agua 600 ml x 24;26;$ 4.680.000;Jamundí;Jorge Cuero
+980992505-5;Distribuciones Jamundí;PD-270028;08/11/2026;11/11/2026;11/11/2026;Pasta spaghetti x 24;25;$ 4.500.000;Jamundí;Jorge Cuero
+980992505-5;Distribuciones Jamundí;PD-270028;08/11/2026;11/11/2026;11/11/2026;Lentejas 25 kg;16;$ 2.880.000;Jamundí;Jorge Cuero
+983644543-5;Almacén El Ahorro;PD-280029;10/08/2026;12/08/2026;12/08/2026;Lentejas 25 kg;15;$ 2.700.000;Cali;Ana Gómez
+983644543-5;Almacén El Ahorro;PD-280030;20/08/2026;22/08/2026;22/08/2026;Papel higiénico x 48;8;$ 1.440.000;Cali;Ana Gómez
+983644543-5;Almacén El Ahorro;PD-280030;20/08/2026;22/08/2026;22/08/2026;Café molido 500 g;7;$ 1.260.000;Cali;Ana Gómez
+983644543-5;Almacén El Ahorro;PD-280031;30/08/2026;01/09/2026;01/09/2026;Lentejas 25 kg;14;$ 2.520.000;Cali;Ana Gómez
+983644543-5;Almacén El Ahorro;PD-280032;08/09/2026;10/09/2026;10/09/2026;Papel higiénico x 48;8;$ 1.440.000;Cali;Ana Gómez
+983644543-5;Almacén El Ahorro;PD-280032;08/09/2026;10/09/2026;10/09/2026;Lentejas 25 kg;7;$ 1.260.000;Cali;Ana Gómez
+983644543-5;Almacén El Ahorro;PD-280032;08/09/2026;10/09/2026;10/09/2026;Agua 600 ml x 24;3;$ 540.000;Cali;Ana Gómez
+983644543-5;Almacén El Ahorro;PD-280033;01/11/2026;03/11/2026;03/11/2026;Papel higiénico x 48;6;$ 1.080.000;Cali;Ana Gómez
+983644543-5;Almacén El Ahorro;PD-280033;01/11/2026;03/11/2026;03/11/2026;Café molido 500 g;6;$ 1.080.000;Cali;Ana Gómez
+983644543-5;Almacén El Ahorro;PD-280033;01/11/2026;03/11/2026;03/11/2026;Lentejas 25 kg;7;$ 1.260.000;Cali;Ana Gómez
+983644543-5;Almacén El Ahorro;PD-280034;10/11/2026;12/11/2026;12/11/2026;Agua 600 ml x 24;4;$ 720.000;Cali;Ana Gómez
+983644543-5;Almacén El Ahorro;PD-280034;10/11/2026;12/11/2026;12/11/2026;Lentejas 25 kg;11;$ 1.980.000;Cali;Ana Gómez
+954117437-0;Hotel Plaza Cali;PD-290015;17/08/2026;19/08/2026;22/08/2026;Leche en polvo 25 kg;15;$ 2.700.000;Cali;Luis Pérez
+954117437-0;Hotel Plaza Cali;PD-290015;17/08/2026;19/08/2026;22/08/2026;Panela 24 und;26;$ 4.680.000;Cali;Luis Pérez
+954117437-0;Hotel Plaza Cali;PD-290016;07/09/2026;09/09/2026;11/09/2026;Gaseosa 1,5 L x 12;29;$ 5.220.000;Cali;Luis Pérez
+954117437-0;Hotel Plaza Cali;PD-290017;29/09/2026;01/10/2026;01/10/2026;Detergente 10 kg;14;$ 2.520.000;Cali;Luis Pérez
+954117437-0;Hotel Plaza Cali;PD-290017;29/09/2026;01/10/2026;01/10/2026;Leche en polvo 25 kg;26;$ 4.680.000;Cali;Luis Pérez
+954117437-0;Hotel Plaza Cali;PD-290018;16/10/2026;18/10/2026;20/10/2026;Gaseosa 1,5 L x 12;40;$ 7.200.000;Cali;Luis Pérez
+954117437-0;Hotel Plaza Cali;PD-290019;10/11/2026;12/11/2026;12/11/2026;Panela 24 und;19;$ 3.420.000;Cali;Luis Pérez
+954117437-0;Hotel Plaza Cali;PD-290019;10/11/2026;12/11/2026;12/11/2026;Detergente 10 kg;17;$ 3.060.000;Cali;Luis Pérez
+954117437-0;Hotel Plaza Cali;PD-9005;28/10/2026;30/10/2026;05/11/2026;Leche en polvo 25 kg;30;$ 5.400.000;Cali;Luis Pérez
+954117437-0;Hotel Plaza Cali;PD-9005;28/10/2026;30/10/2026;05/11/2026;Café molido 500 g;10;$ 1.800.000;Cali;Luis Pérez
+991571729-1;Licorera del Sur;PD-300021;14/08/2026;16/08/2026;16/08/2026;Sal refinada 25 kg;9;$ 1.620.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300021;14/08/2026;16/08/2026;16/08/2026;Agua 600 ml x 24;11;$ 1.980.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300022;25/08/2026;27/08/2026;29/08/2026;Agua 600 ml x 24;9;$ 1.620.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300022;25/08/2026;27/08/2026;29/08/2026;Lentejas 25 kg;7;$ 1.260.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300022;25/08/2026;27/08/2026;29/08/2026;Aceite de girasol 3 L;10;$ 1.800.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300023;11/09/2026;13/09/2026;13/09/2026;Lentejas 25 kg;6;$ 1.080.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300023;11/09/2026;13/09/2026;13/09/2026;Agua 600 ml x 24;9;$ 1.620.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300023;11/09/2026;13/09/2026;13/09/2026;Café molido 500 g;11;$ 1.980.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300024;22/09/2026;24/09/2026;27/09/2026;Lentejas 25 kg;8;$ 1.440.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300024;22/09/2026;24/09/2026;27/09/2026;Sal refinada 25 kg;13;$ 2.340.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300025;08/10/2026;10/10/2026;13/10/2026;Agua 600 ml x 24;7;$ 1.260.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300025;08/10/2026;10/10/2026;13/10/2026;Aceite de girasol 3 L;7;$ 1.260.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300025;08/10/2026;10/10/2026;13/10/2026;Café molido 500 g;11;$ 1.980.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300026;21/10/2026;23/10/2026;27/10/2026;Aceite de girasol 3 L;24;$ 4.320.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300027;06/11/2026;08/11/2026;08/11/2026;Sal refinada 25 kg;4;$ 720.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300027;06/11/2026;08/11/2026;08/11/2026;Café molido 500 g;8;$ 1.440.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-300027;06/11/2026;08/11/2026;08/11/2026;Agua 600 ml x 24;7;$ 1.260.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-9006;27/10/2026;29/10/2026;01/11/2026;Gaseosa 1,5 L x 12;18;$ 3.240.000;Palmira;Marta Ríos
+991571729-1;Licorera del Sur;PD-9006;27/10/2026;29/10/2026;01/11/2026;Agua 600 ml x 24;12;$ 2.160.000;Palmira;Marta Ríos
+995828706-6;Empaques Candelaria;PD-310014;15/08/2026;17/08/2026;17/08/2026;Harina de trigo 50 kg;40;$ 7.200.000;Cali;Jorge Cuero
+995828706-6;Empaques Candelaria;PD-310015;05/09/2026;07/09/2026;07/09/2026;Agua 600 ml x 24;28;$ 5.040.000;Cali;Jorge Cuero
+995828706-6;Empaques Candelaria;PD-310016;26/09/2026;28/09/2026;28/09/2026;Gaseosa 1,5 L x 12;26;$ 4.680.000;Cali;Jorge Cuero
+995828706-6;Empaques Candelaria;PD-310016;26/09/2026;28/09/2026;28/09/2026;Agua 600 ml x 24;10;$ 1.800.000;Cali;Jorge Cuero
+995828706-6;Empaques Candelaria;PD-310017;17/10/2026;19/10/2026;19/10/2026;Detergente 10 kg;18;$ 3.240.000;Cali;Jorge Cuero
+995828706-6;Empaques Candelaria;PD-310017;17/10/2026;19/10/2026;19/10/2026;Gaseosa 1,5 L x 12;13;$ 2.340.000;Cali;Jorge Cuero
+995828706-6;Empaques Candelaria;PD-310018;06/11/2026;08/11/2026;08/11/2026;Agua 600 ml x 24;26;$ 4.680.000;Cali;Jorge Cuero
+995828706-6;Empaques Candelaria;PD-310018;06/11/2026;08/11/2026;08/11/2026;Gaseosa 1,5 L x 12;15;$ 2.700.000;Cali;Jorge Cuero
+995828706-6;Empaques Candelaria;PD-9007;29/10/2026;31/10/2026;01/11/2026;Papel higiénico x 48;12;$ 2.160.000;Cali;Jorge Cuero
+995828706-6;Empaques Candelaria;PD-9007;29/10/2026;31/10/2026;01/11/2026;Jabón de barra x 50;8;$ 1.440.000;Cali;Jorge Cuero
+938165757-4;Muebles El Roble;PD-320029;08/08/2026;10/08/2026;10/08/2026;Café molido 500 g;19;$ 3.420.000;Cali;Ana Gómez
+938165757-4;Muebles El Roble;PD-320030;17/08/2026;19/08/2026;19/08/2026;Café molido 500 g;8;$ 1.440.000;Cali;Ana Gómez
+938165757-4;Muebles El Roble;PD-320030;17/08/2026;19/08/2026;19/08/2026;Fríjol cargamanto 25 kg;7;$ 1.260.000;Cali;Ana Gómez
+938165757-4;Muebles El Roble;PD-320030;17/08/2026;19/08/2026;19/08/2026;Detergente 10 kg;3;$ 540.000;Cali;Ana Gómez
+938165757-4;Muebles El Roble;PD-320031;27/08/2026;29/08/2026;29/08/2026;Fríjol cargamanto 25 kg;5;$ 900.000;Cali;Ana Gómez
+938165757-4;Muebles El Roble;PD-320031;27/08/2026;29/08/2026;29/08/2026;Café molido 500 g;5;$ 900.000;Cali;Ana Gómez
+938165757-4;Muebles El Roble;PD-320031;27/08/2026;29/08/2026;29/08/2026;Aceite de girasol 3 L;4;$ 720.000;Cali;Ana Gómez
+938165757-4;Muebles El Roble;PD-320032;31/10/2026;02/11/2026;02/11/2026;Harina de trigo 50 kg;8;$ 1.440.000;Cali;Ana Gómez
+938165757-4;Muebles El Roble;PD-320032;31/10/2026;02/11/2026;02/11/2026;Fríjol cargamanto 25 kg;8;$ 1.440.000;Cali;Ana Gómez
+938165757-4;Muebles El Roble;PD-320033;10/11/2026;12/11/2026;12/11/2026;Café molido 500 g;9;$ 1.620.000;Cali;Ana Gómez
+938165757-4;Muebles El Roble;PD-320033;10/11/2026;12/11/2026;12/11/2026;Fríjol cargamanto 25 kg;7;$ 1.260.000;Cali;Ana Gómez
+971553150-9;Óptica Visión;PD-330022;16/08/2026;18/08/2026;18/08/2026;Azúcar refinada 50 kg;9;$ 1.620.000;Palmira;Luis Pérez
+971553150-9;Óptica Visión;PD-330022;16/08/2026;18/08/2026;18/08/2026;Harina de trigo 50 kg;11;$ 1.980.000;Palmira;Luis Pérez
+971553150-9;Óptica Visión;PD-330023;31/08/2026;02/09/2026;02/09/2026;Harina de trigo 50 kg;11;$ 1.980.000;Palmira;Luis Pérez
+971553150-9;Óptica Visión;PD-330023;31/08/2026;02/09/2026;02/09/2026;Azúcar refinada 50 kg;8;$ 1.440.000;Palmira;Luis Pérez
+961139731-5;Gimnasio Fuerza;PD-340020;07/08/2026;09/08/2026;09/08/2026;Detergente 10 kg;10;$ 1.800.000;Cali;Marta Ríos
+961139731-5;Gimnasio Fuerza;PD-340020;07/08/2026;09/08/2026;09/08/2026;Lentejas 25 kg;3;$ 540.000;Cali;Marta Ríos
+961139731-5;Gimnasio Fuerza;PD-340020;07/08/2026;09/08/2026;09/08/2026;Azúcar refinada 50 kg;7;$ 1.260.000;Cali;Marta Ríos
+961139731-5;Gimnasio Fuerza;PD-340021;22/08/2026;24/08/2026;24/08/2026;Arroz blanco 25 kg;27;$ 4.860.000;Cali;Marta Ríos
+961139731-5;Gimnasio Fuerza;PD-340022;05/09/2026;07/09/2026;07/09/2026;Detergente 10 kg;7;$ 1.260.000;Cali;Marta Ríos
+961139731-5;Gimnasio Fuerza;PD-340022;05/09/2026;07/09/2026;07/09/2026;Papel higiénico x 48;16;$ 2.880.000;Cali;Marta Ríos
+961139731-5;Gimnasio Fuerza;PD-340023;04/11/2026;06/11/2026;06/11/2026;Arroz blanco 25 kg;20;$ 3.600.000;Cali;Marta Ríos
+995822412-1;Floristería Orquídea;PD-350028;07/08/2026;09/08/2026;09/08/2026;Azúcar refinada 50 kg;8;$ 1.440.000;Cali;Jorge Cuero
+995822412-1;Floristería Orquídea;PD-350028;07/08/2026;09/08/2026;09/08/2026;Gaseosa 1,5 L x 12;9;$ 1.620.000;Cali;Jorge Cuero
+995822412-1;Floristería Orquídea;PD-350029;16/08/2026;18/08/2026;18/08/2026;Gaseosa 1,5 L x 12;3;$ 540.000;Cali;Jorge Cuero
+995822412-1;Floristería Orquídea;PD-350029;16/08/2026;18/08/2026;18/08/2026;Azúcar refinada 50 kg;7;$ 1.260.000;Cali;Jorge Cuero
+995822412-1;Floristería Orquídea;PD-350029;16/08/2026;18/08/2026;18/08/2026;Panela 24 und;8;$ 1.440.000;Cali;Jorge Cuero
+995822412-1;Floristería Orquídea;PD-350030;28/08/2026;30/08/2026;30/08/2026;Detergente 10 kg;14;$ 2.520.000;Cali;Jorge Cuero
+995822412-1;Floristería Orquídea;PD-350031;05/09/2026;07/09/2026;07/09/2026;Panela 24 und;8;$ 1.440.000;Cali;Jorge Cuero
+995822412-1;Floristería Orquídea;PD-350031;05/09/2026;07/09/2026;07/09/2026;Agua 600 ml x 24;11;$ 1.980.000;Cali;Jorge Cuero
+915174340-4;Repuestos Autovalle;PD-360015;27/08/2026;29/08/2026;29/08/2026;Atún en lata x 48;12;$ 2.160.000;Palmira;Ana Gómez
+915174340-4;Repuestos Autovalle;PD-360015;27/08/2026;29/08/2026;29/08/2026;Papel higiénico x 48;17;$ 3.060.000;Palmira;Ana Gómez
+964832757-8;Pinturas Color Vivo;PD-370014;09/08/2026;11/08/2026;11/08/2026;Detergente 10 kg;7;$ 1.260.000;Cali;Luis Pérez
+964832757-8;Pinturas Color Vivo;PD-370014;09/08/2026;11/08/2026;11/08/2026;Jabón de barra x 50;9;$ 1.620.000;Cali;Luis Pérez
+964832757-8;Pinturas Color Vivo;PD-370014;09/08/2026;11/08/2026;11/08/2026;Galletas surtidas x 24;3;$ 540.000;Cali;Luis Pérez
+964832757-8;Pinturas Color Vivo;PD-370015;29/08/2026;31/08/2026;31/08/2026;Café molido 500 g;5;$ 900.000;Cali;Luis Pérez
+964832757-8;Pinturas Color Vivo;PD-370015;29/08/2026;31/08/2026;31/08/2026;Jabón de barra x 50;7;$ 1.260.000;Cali;Luis Pérez
+964832757-8;Pinturas Color Vivo;PD-370015;29/08/2026;31/08/2026;31/08/2026;Sal refinada 25 kg;7;$ 1.260.000;Cali;Luis Pérez
+964832757-8;Pinturas Color Vivo;PD-370016;18/09/2026;20/09/2026;20/09/2026;Galletas surtidas x 24;21;$ 3.780.000;Cali;Luis Pérez
+964832757-8;Pinturas Color Vivo;PD-370017;09/10/2026;11/10/2026;11/10/2026;Galletas surtidas x 24;22;$ 3.960.000;Cali;Luis Pérez
+964832757-8;Pinturas Color Vivo;PD-370018;28/10/2026;30/10/2026;30/10/2026;Jabón de barra x 50;19;$ 3.420.000;Cali;Luis Pérez
+946490500-6;Textiles Ginebra;PD-380022;15/08/2026;18/08/2026;23/08/2026;Gaseosa 1,5 L x 12;3;$ 540.000;Ginebra;Marta Ríos
+946490500-6;Textiles Ginebra;PD-380022;15/08/2026;18/08/2026;23/08/2026;Sal refinada 25 kg;7;$ 1.260.000;Ginebra;Marta Ríos
+946490500-6;Textiles Ginebra;PD-380022;15/08/2026;18/08/2026;23/08/2026;Lentejas 25 kg;3;$ 540.000;Ginebra;Marta Ríos
+946490500-6;Textiles Ginebra;PD-380023;05/09/2026;08/09/2026;08/09/2026;Lentejas 25 kg;3;$ 540.000;Ginebra;Marta Ríos
+946490500-6;Textiles Ginebra;PD-380023;05/09/2026;08/09/2026;08/09/2026;Atún en lata x 48;3;$ 540.000;Ginebra;Marta Ríos
+946490500-6;Textiles Ginebra;PD-380023;05/09/2026;08/09/2026;08/09/2026;Gaseosa 1,5 L x 12;6;$ 1.080.000;Ginebra;Marta Ríos
+946490500-6;Textiles Ginebra;PD-380024;15/09/2026;18/09/2026;24/09/2026;Sal refinada 25 kg;12;$ 2.160.000;Ginebra;Marta Ríos
+946490500-6;Textiles Ginebra;PD-380025;02/10/2026;05/10/2026;10/10/2026;Gaseosa 1,5 L x 12;7;$ 1.260.000;Ginebra;Marta Ríos
+946490500-6;Textiles Ginebra;PD-380025;02/10/2026;05/10/2026;10/10/2026;Sal refinada 25 kg;5;$ 900.000;Ginebra;Marta Ríos
+946490500-6;Textiles Ginebra;PD-380026;20/10/2026;23/10/2026;26/10/2026;Lentejas 25 kg;6;$ 1.080.000;Ginebra;Marta Ríos
+946490500-6;Textiles Ginebra;PD-380026;20/10/2026;23/10/2026;26/10/2026;Atún en lata x 48;4;$ 720.000;Ginebra;Marta Ríos
+946490500-6;Textiles Ginebra;PD-380027;07/11/2026;10/11/2026;10/11/2026;Agua 600 ml x 24;13;$ 2.340.000;Ginebra;Marta Ríos
+920251987-6;Café Tostado Dagua;PD-390021;09/08/2026;12/08/2026;12/08/2026;Arroz blanco 25 kg;11;$ 1.980.000;Dagua;Jorge Cuero
+920251987-6;Café Tostado Dagua;PD-390021;09/08/2026;12/08/2026;12/08/2026;Atún en lata x 48;9;$ 1.620.000;Dagua;Jorge Cuero
+920251987-6;Café Tostado Dagua;PD-390022;24/08/2026;27/08/2026;27/08/2026;Aceite de girasol 3 L;15;$ 2.700.000;Dagua;Jorge Cuero
+920251987-6;Café Tostado Dagua;PD-390022;24/08/2026;27/08/2026;27/08/2026;Arroz blanco 25 kg;10;$ 1.800.000;Dagua;Jorge Cuero
+920251987-6;Café Tostado Dagua;PD-390023;08/09/2026;11/09/2026;11/09/2026;Atún en lata x 48;20;$ 3.600.000;Dagua;Jorge Cuero
