@@ -5,7 +5,7 @@ que detecta decisiones + una función que mide su resultado. La bandeja, la memo
 la matriz de delegación, el grupo de control y el asistente son comunes a todos.
 
 Para agregar un paquete nuevo: escribir su YAML de reglas, su módulo con `detectar` y `medir`,
-y registrarlo aquí. Se activan por cliente con ONTARA_PAQUETES (por ejemplo "cartera,comercial,margen,caja").
+y registrarlo aquí. Se activan por cliente con ONTARA_PAQUETES (por ejemplo "cartera,comercial,margen,caja,inventario").
 """
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from typing import Callable
 
 from sqlalchemy.engine import Engine
 
-from . import caja, comercial, margen, reglas
+from . import caja, comercial, inventario, margen, reglas
 
 # Reportes que el cliente puede cargar y el objeto de la ontología que describe sus columnas.
 REPORTES = {
@@ -24,6 +24,7 @@ REPORTES = {
     "lineas": {"nombre": "Ventas por producto: líneas de factura con costo", "objeto": "LineaVenta"},
     "pagos": {"nombre": "Cuentas por pagar: proveedores y obligaciones, con el saldo en bancos",
               "objeto": "CuentaPorPagar"},
+    "inventario": {"nombre": "Inventario: existencias por producto con su costo", "objeto": "Existencia"},
     # No alimenta un paquete: da la fecha real de pago para que Ontara aprenda (ver aprendizaje.py).
     "recaudos": {"nombre": "Recaudos: pagos recibidos de clientes (recibos de caja)", "objeto": "Recaudo"},
 }
@@ -59,11 +60,13 @@ REGISTRO: dict[str, Paquete] = {
     "margen": Paquete("margen", "Margen", "lineas", margen.TIPOS, frozenset(), margen.detectar, margen.medir),
     # Caja tampoco: es una sola caja; no hay a quién dejar sin gestión.
     "caja": Paquete("caja", "Caja a 13 semanas", "pagos", caja.TIPOS, frozenset(), caja.detectar, caja.medir),
+    "inventario": Paquete("inventario", "Inventario", "inventario", inventario.TIPOS, frozenset(),
+                          inventario.detectar, inventario.medir),
 }
 
 
 def activos() -> list[Paquete]:
-    claves = os.environ.get("ONTARA_PAQUETES", "cartera,comercial,margen,caja")
+    claves = os.environ.get("ONTARA_PAQUETES", "cartera,comercial,margen,caja,inventario")
     return [REGISTRO[c.strip()] for c in claves.split(",") if c.strip() in REGISTRO]
 
 

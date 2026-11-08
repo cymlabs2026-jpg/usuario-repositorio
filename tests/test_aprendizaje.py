@@ -36,17 +36,17 @@ def motor():
 
 
 def test_reporte_de_recaudos_se_reconoce_y_se_carga(motor):
-    informe, validas, mapeo = preparar("prueba_recaudos_2026-11-14.csv", "recaudos")
+    informe, validas, mapeo = preparar("aprendizaje_recaudos_2026-11-14.csv", "recaudos")
     assert {"nit", "factura", "fecha_pago", "valor", "recibo"} <= set(mapeo)
     assert informe.semaforo == "verde" and informe.filas_validas == informe.filas_total
-    cargar(motor, "prueba_cartera_corte_2026-10-31.csv", C1)
-    r = cargar(motor, "prueba_recaudos_2026-11-14.csv", C2, "recaudos")
+    cargar(motor, "credito_y_cobro_cartera_2026-10-31.csv", C1)
+    r = cargar(motor, "aprendizaje_recaudos_2026-11-14.csv", C2, "recaudos")
     assert r["decisiones_nuevas"] == 0
     rec = aprendizaje.recaudos_por_factura(motor)
     assert len(rec) == informe.filas_validas
     assert rec["fecha_pago"].between(C1, C2).all()
     # Cargar el mismo reporte dos veces no duplica los pagos.
-    cargar(motor, "prueba_recaudos_2026-11-14.csv", C2, "recaudos")
+    cargar(motor, "aprendizaje_recaudos_2026-11-14.csv", C2, "recaudos")
     assert len(aprendizaje.recaudos_por_factura(motor)) == len(rec)
 
 
@@ -62,7 +62,7 @@ def test_semaforo_de_recaudos_excluye_pagos_sin_cruzar_y_reversiones():
 
 
 def test_cada_decision_nueva_guarda_su_foto_de_variables(motor):
-    cargar(motor, "prueba_cartera_corte_2026-10-31.csv", C1)
+    cargar(motor, "credito_y_cobro_cartera_2026-10-31.csv", C1)
     lista = decisiones.listar(motor, incluir_control=True)
     assert lista and all(d["variables"] for d in lista)
     v = next(d for d in lista if d["tipo"] == "cobrar")["variables"]
@@ -70,13 +70,13 @@ def test_cada_decision_nueva_guarda_su_foto_de_variables(motor):
     assert all(isinstance(x, (int, float, bool)) for x in v.values())
     # La foto es la del momento de la detección: el segundo corte no la sobrescribe.
     antes = {d["id"]: d["variables"] for d in lista}
-    cargar(motor, "prueba_cartera_corte_2026-11-14.csv", C2)
+    cargar(motor, "credito_y_cobro_cartera_2026-11-14.csv", C2)
     despues = {d["id"]: d["variables"] for d in decisiones.listar(motor, None, incluir_control=True)}
     assert all(despues[i] == v for i, v in antes.items())
 
 
 def test_motivo_y_canal_estructurados(motor):
-    cargar(motor, "prueba_cartera_corte_2026-10-31.csv", C1)
+    cargar(motor, "credito_y_cobro_cartera_2026-10-31.csv", C1)
     a, b = decisiones.listar(motor)[:2]
     # Con un motivo de la lista el comentario es opcional; con "otro" no.
     assert decisiones.registrar_accion(motor, a["id"], "descartar", "lider", motivo="ya_pago") == "descartada"
@@ -98,13 +98,13 @@ def test_motivo_y_canal_estructurados(motor):
 
 def test_dataset_une_variables_acciones_y_resultados(motor):
     reglas.guardar_parametros(motor, {"pct_grupo_control": 0}, "gerente", "sin control para la prueba")
-    cargar(motor, "prueba_cartera_corte_2026-10-31.csv", C1)
+    cargar(motor, "credito_y_cobro_cartera_2026-10-31.csv", C1)
     cobros = decisiones.listar(motor, tipo="cobrar")
     decisiones.registrar_accion(motor, cobros[0]["id"], "aprobar", "lider")
     decisiones.registrar_accion(motor, cobros[0]["id"], "ejecutar", "lider", canal="whatsapp")
     decisiones.registrar_accion(motor, cobros[1]["id"], "descartar", "lider", motivo="acuerdo_vigente")
-    cargar(motor, "prueba_cartera_corte_2026-11-14.csv", C2)
-    cargar(motor, "prueba_recaudos_2026-11-14.csv", C2, "recaudos")
+    cargar(motor, "credito_y_cobro_cartera_2026-11-14.csv", C2)
+    cargar(motor, "aprendizaje_recaudos_2026-11-14.csv", C2, "recaudos")
 
     ds = aprendizaje.dataset(motor, horizontes=(14, 30))
     assert len(ds) == len(decisiones.listar(motor, None, incluir_control=True))
@@ -123,7 +123,7 @@ def test_dataset_une_variables_acciones_y_resultados(motor):
 
 
 def test_preparacion_y_descartes(motor):
-    cargar(motor, "prueba_cartera_corte_2026-10-31.csv", C1)
+    cargar(motor, "credito_y_cobro_cartera_2026-10-31.csv", C1)
     d = decisiones.listar(motor, tipo="congelar_credito")[0]
     decisiones.registrar_accion(motor, d["id"], "descartar", "gerente", motivo="cliente_estrategico")
     prep = {p["indicador"]: p for p in aprendizaje.preparacion(motor)}
@@ -135,7 +135,7 @@ def test_preparacion_y_descartes(motor):
 
 
 def test_textos_aprobados(motor):
-    cargar(motor, "prueba_cartera_corte_2026-10-31.csv", C1)
+    cargar(motor, "credito_y_cobro_cartera_2026-10-31.csv", C1)
     d = decisiones.listar(motor, tipo="cobrar")[0]
     aprendizaje.guardar_texto(motor, d["id"], "mensaje_cobro", "Borrador", "Borrador corregido", "lider")
     aprendizaje.guardar_texto(motor, d["id"], "mensaje_cobro", "Igual", "Igual", "lider")

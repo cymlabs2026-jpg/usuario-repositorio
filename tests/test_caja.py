@@ -143,10 +143,10 @@ def cargar(motor, nombre, corte, tipo, saldo=None):
 
 
 def test_flujo_completo_de_caja(motor):
-    cargar(motor, "prueba_cartera_corte_2026-10-31.csv", CORTE, "cartera")
-    cargar(motor, "prueba_ventas_2026-10-31.csv", CORTE, "ventas")
-    cargar(motor, "prueba_lineas_2026-10-31.csv", CORTE, "lineas")
-    r = cargar(motor, "prueba_pagos_2026-10-31.csv", CORTE, "pagos", 250 * M)
+    cargar(motor, "credito_y_cobro_cartera_2026-10-31.csv", CORTE, "cartera")
+    cargar(motor, "foco_comercial_ventas_2026-10-31.csv", CORTE, "ventas")
+    cargar(motor, "margen_ventas_por_producto_2026-10-31.csv", CORTE, "lineas")
+    r = cargar(motor, "caja_13_semanas_cuentas_por_pagar_2026-10-31.csv", CORTE, "pagos", 250 * M)
     assert r["paquetes"] == ["caja"]
     lista = decisiones.listar(motor, None, paquete="caja")
     rojo = next(d for d in lista if d["tipo"] == "caja_bajo_minimo")
@@ -158,12 +158,12 @@ def test_flujo_completo_de_caja(motor):
         assert cx.execute(select(func.count()).select_from(proyecciones_caja)).scalar() == 13
 
     # La caja se recalcula sola cuando llega otro reporte, sin duplicar decisiones.
-    r = cargar(motor, "prueba_ventas_2026-10-31.csv", CORTE, "ventas")
+    r = cargar(motor, "foco_comercial_ventas_2026-10-31.csv", CORTE, "ventas")
     assert len(decisiones.listar(motor, None, paquete="caja")) == len(lista)
 
     decisiones.registrar_accion(motor, ingenio["id"], "aprobar", "gerente")
-    cargar(motor, "prueba_cartera_corte_2026-11-14.csv", C2, "cartera")
-    r = cargar(motor, "prueba_pagos_2026-11-14.csv", C2, "pagos", 390 * M)
+    cargar(motor, "credito_y_cobro_cartera_2026-11-14.csv", C2, "cartera")
+    r = cargar(motor, "caja_13_semanas_cuentas_por_pagar_2026-11-14.csv", C2, "pagos", 390 * M)
     assert r["resultados_medidos"] >= 2
     with motor.connect() as cx:
         fila = cx.execute(select(resultados_caja).where(resultados_caja.c.decision_id == ingenio["id"])

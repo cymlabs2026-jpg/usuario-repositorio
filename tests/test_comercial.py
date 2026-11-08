@@ -114,7 +114,7 @@ def cargar(motor, nombre, corte, tipo):
 
 
 def test_ventas_primero_no_crea_linea_base(motor):
-    r = cargar(motor, "prueba_ventas_2026-10-31.csv", CORTE, "ventas")
+    r = cargar(motor, "foco_comercial_ventas_2026-10-31.csv", CORTE, "ventas")
     assert r["paquetes"] == ["comercial"] and r["decisiones_nuevas"] > 0 and not r["linea_base_creada"]
     with motor.connect() as cx:
         assert cx.execute(select(func.count()).select_from(linea_base)).scalar() == 0
@@ -122,12 +122,12 @@ def test_ventas_primero_no_crea_linea_base(motor):
 
 
 def test_flujo_cartera_y_ventas(motor):
-    cargar(motor, "prueba_cartera_corte_2026-10-31.csv", CORTE, "cartera")
+    cargar(motor, "credito_y_cobro_cartera_2026-10-31.csv", CORTE, "cartera")
     with motor.connect() as cx:
         cupos = dict(cx.execute(select(clientes.c.nit, clientes.c.cupo)).all())
     clave_antes = {d["nit"] for d in decisiones.listar(motor, None, paquete="cartera")
                    if d["evidencia"]["cliente_clave"]}
-    cargar(motor, "prueba_ventas_2026-10-31.csv", CORTE, "ventas")
+    cargar(motor, "foco_comercial_ventas_2026-10-31.csv", CORTE, "ventas")
 
     # El reporte de ventas no borra los cupos y recalcula los clientes clave de Cartera con todas las compras.
     with motor.connect() as cx:
@@ -143,8 +143,8 @@ def test_flujo_cartera_y_ventas(motor):
     assert all(d["paquete"] == "cartera" for d in decisiones.listar(motor, None, paquete="cartera"))
 
     # Segundo corte de cada reporte: se miden resultados y se cierran los clientes que volvieron.
-    cargar(motor, "prueba_cartera_corte_2026-11-14.csv", date(2026, 11, 14), "cartera")
-    r = cargar(motor, "prueba_ventas_2026-11-14.csv", date(2026, 11, 14), "ventas")
+    cargar(motor, "credito_y_cobro_cartera_2026-11-14.csv", date(2026, 11, 14), "cartera")
+    r = cargar(motor, "foco_comercial_ventas_2026-11-14.csv", date(2026, 11, 14), "ventas")
     assert r["resultados_medidos"] > 0 and r["decisiones_cerradas"] > 0
     with motor.connect() as cx:
         volvieron = cx.execute(select(func.count()).select_from(resultados_comercial)
@@ -157,21 +157,21 @@ def test_flujo_cartera_y_ventas(motor):
 
 
 def test_carga_anterior_es_del_mismo_reporte(motor):
-    cargar(motor, "prueba_cartera_corte_2026-10-31.csv", CORTE, "cartera")
-    cargar(motor, "prueba_ventas_2026-10-31.csv", CORTE, "ventas")
-    c2 = cargar(motor, "prueba_cartera_corte_2026-11-14.csv", date(2026, 11, 14), "cartera")["carga_id"]
+    cargar(motor, "credito_y_cobro_cartera_2026-10-31.csv", CORTE, "cartera")
+    cargar(motor, "foco_comercial_ventas_2026-10-31.csv", CORTE, "ventas")
+    c2 = cargar(motor, "credito_y_cobro_cartera_2026-11-14.csv", date(2026, 11, 14), "cartera")["carga_id"]
     assert decisiones._carga_anterior(motor, c2) == 1
 
 
 def test_tipo_de_reporte_invalido(motor):
     informe = calidad.Informe("verde", 0, 0, True, [], [])
     with pytest.raises(ValueError):
-        decisiones.registrar_carga(motor, pd.DataFrame(), informe, {}, CORTE, "x", "u", "inventario")
+        decisiones.registrar_carga(motor, pd.DataFrame(), informe, {}, CORTE, "x", "u", "despachos")
 
 
 # --- Registro de paquetes y reglas ------------------------------------------------------------
 def test_paquetes_activos(monkeypatch):
-    assert [p.clave for p in paquetes.activos()] == ["cartera", "comercial", "margen", "caja"]
+    assert [p.clave for p in paquetes.activos()] == ["cartera", "comercial", "margen", "caja", "inventario"]
     monkeypatch.setenv("ONTARA_PAQUETES", "cartera")
     assert [p.clave for p in paquetes.activos()] == ["cartera"]
     assert paquetes.de_reporte("ventas") == []
@@ -179,7 +179,7 @@ def test_paquetes_activos(monkeypatch):
 
 def test_solo_cartera_activo_ignora_ventas(motor, monkeypatch):
     monkeypatch.setenv("ONTARA_PAQUETES", "cartera")
-    r = cargar(motor, "prueba_ventas_2026-10-31.csv", CORTE, "ventas")
+    r = cargar(motor, "foco_comercial_ventas_2026-10-31.csv", CORTE, "ventas")
     assert r["paquetes"] == [] and decisiones.listar(motor, None) == []
 
 
