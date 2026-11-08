@@ -5,7 +5,7 @@ que detecta decisiones + una función que mide su resultado. La bandeja, la memo
 la matriz de delegación, el grupo de control y el asistente son comunes a todos.
 
 Para agregar un paquete nuevo: escribir su YAML de reglas, su módulo con `detectar` y `medir`,
-y registrarlo aquí. Se activan por cliente con ONTARA_PAQUETES (por ejemplo "cartera,comercial").
+y registrarlo aquí. Se activan por cliente con ONTARA_PAQUETES (por ejemplo "cartera,comercial,margen").
 """
 from __future__ import annotations
 
@@ -15,12 +15,13 @@ from typing import Callable
 
 from sqlalchemy.engine import Engine
 
-from . import comercial, reglas
+from . import comercial, margen, reglas
 
 # Reportes que el cliente puede cargar y el objeto de la ontología que describe sus columnas.
 REPORTES = {
     "cartera": {"nombre": "Cartera: facturas con saldo pendiente", "objeto": "Factura"},
     "ventas": {"nombre": "Ventas: todas las facturas emitidas, incluidas las pagadas", "objeto": "Venta"},
+    "lineas": {"nombre": "Ventas por producto: líneas de factura con costo", "objeto": "LineaVenta"},
 }
 
 
@@ -50,11 +51,13 @@ REGISTRO: dict[str, Paquete] = {
                        _detectar_cartera, _medir_cartera),
     "comercial": Paquete("comercial", "Foco comercial", "ventas", comercial.TIPOS,
                          frozenset({"recuperar_cliente"}), comercial.detectar, comercial.medir),
+    # Margen no usa grupo de control: renegociar precios con unos clientes y no con otros sería injusto.
+    "margen": Paquete("margen", "Margen", "lineas", margen.TIPOS, frozenset(), margen.detectar, margen.medir),
 }
 
 
 def activos() -> list[Paquete]:
-    claves = os.environ.get("ONTARA_PAQUETES", "cartera,comercial")
+    claves = os.environ.get("ONTARA_PAQUETES", "cartera,comercial,margen")
     return [REGISTRO[c.strip()] for c in claves.split(",") if c.strip() in REGISTRO]
 
 

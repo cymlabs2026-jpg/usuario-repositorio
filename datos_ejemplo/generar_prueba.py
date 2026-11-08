@@ -1,5 +1,6 @@
 """Datos de prueba de una distribuidora inventada de Palmira y Cali (40 clientes) que activan todas las
-decisiones de Ontara: dos cortes de cartera y dos reportes de ventas (31/10/2026 y 14/11/2026).
+decisiones de Ontara: dos cortes de cartera, dos reportes de ventas y dos de ventas por producto
+(31/10/2026 y 14/11/2026).
 Nombres y NIT son inventados. Uso:  python datos_ejemplo/generar_prueba.py
 """
 import csv
@@ -172,6 +173,63 @@ def ventas():
     escribir("prueba_ventas_2026-11-14.csv", v2)
 
 
+# --- Ventas por producto: cada factura del reporte de ventas, partida en líneas con costo -----------
+# producto -> margen bruto a precio de lista
+PRODUCTOS = {
+    "Arroz blanco 25 kg": 0.28, "Aceite de girasol 3 L": 0.26, "Azúcar refinada 50 kg": 0.11,
+    "Harina de trigo 50 kg": 0.27, "Panela 24 und": 0.34, "Café molido 500 g": 0.38, "Fríjol cargamanto 25 kg": 0.31,
+    "Lentejas 25 kg": 0.30, "Atún en lata x 48": 0.29, "Leche en polvo 25 kg": 0.28, "Pasta spaghetti x 24": 0.33,
+    "Sal refinada 25 kg": 0.35, "Detergente 10 kg": 0.32, "Jabón de barra x 50": 0.36, "Papel higiénico x 48": 0.30,
+    "Gaseosa 1,5 L x 12": 0.27, "Agua 600 ml x 24": 0.37, "Galletas surtidas x 24": 0.34,
+}
+# Descuento promedio por cliente (el resto recibe entre 2 % y 5 %)
+DESCUENTO = {"Supermercados La Cosecha": 0.14, "Hoteles Farallones": 0.11, "Mercados La 14 Sur": 0.12,
+             "Distribuidora Cañaveral": 0.10, "Constructora Río Cauca": 0.10, "Industrias Plásticas Yumbo": 0.09}
+SUBE_ACEITE = date(2026, 8, 1)          # desde aquí el costo del aceite subió y se vende bajo el costo
+CORRIGE = date(2026, 11, 1)             # desde aquí La Cosecha baja su descuento y el aceite sube de precio
+
+
+def margen_producto(producto, dia):
+    if producto == "Aceite de girasol 3 L" and SUBE_ACEITE <= dia < CORRIGE:
+        return -0.06
+    return PRODUCTOS[producto]
+
+
+def lineas():
+    l1, l2 = [], []
+    nombres_prod = list(PRODUCTOS)
+    for i, (nombre, perfil, _) in enumerate(CLIENTES):
+        nit, r = nit_de(i), random.Random(900 + i)
+        favoritos = r.sample(nombres_prod, 6)
+        if perfil in ("ampliar_grande", "clave_moroso"):
+            favoritos[0] = "Aceite de girasol 3 L"
+        if perfil == "ampliar" and "Azúcar refinada 50 kg" not in favoritos:
+            favoritos[0] = "Azúcar refinada 50 kg"
+        for num, dia, total in ventas_cliente(i, nombre, perfil):
+            if dia <= C1 - timedelta(days=184):
+                continue
+            desc = DESCUENTO.get(nombre, r.uniform(0.02, 0.05))
+            if nombre == "Supermercados La Cosecha" and dia >= CORRIGE:
+                desc = 0.07
+            partes = r.randint(2, 4)
+            pesos_l = [r.random() + 0.3 for _ in range(partes)]
+            for k, prod in enumerate(r.sample(favoritos, partes)):
+                valor = round(total * pesos_l[k] / sum(pesos_l), -2)
+                lista = valor / (1 - desc)
+                costo = round(lista * (1 - margen_producto(prod, dia)), -2)
+                fila_l = {"NIT": nit, "Cliente": nombre, "Factura": num, "Fecha": dia.strftime("%d/%m/%Y"),
+                          "Producto": prod, "Cantidad": max(1, round(valor / 180_000)),
+                          "Descuento": pesos(round(lista - valor, -2)), "Venta neta": pesos(valor),
+                          "Costo": pesos(costo), "Vendedor": VEND[i % 4]}
+                if dia <= C1:
+                    l1.append(fila_l)
+                if dia > C2 - timedelta(days=184):
+                    l2.append(fila_l)
+    escribir("prueba_lineas_2026-10-31.csv", l1)
+    escribir("prueba_lineas_2026-11-14.csv", l2)
+
+
 if __name__ == "__main__":
     cartera()
     ventas()
+    lineas()

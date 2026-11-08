@@ -86,7 +86,7 @@ def a_fecha(valor) -> date | None:
     return f.date()
 
 
-CONVERSORES = {"nit": a_nit, "fecha": a_fecha, "dinero": a_pesos,
+CONVERSORES = {"nit": a_nit, "fecha": a_fecha, "dinero": a_pesos, "numero": a_pesos,
                "texto": lambda v: (str(v).strip() or None) if v is not None else None}
 
 

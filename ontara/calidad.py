@@ -126,3 +126,38 @@ def evaluar_ventas(datos: pd.DataFrame, mapeo: dict[str, str],
     validas = datos.loc[~excluir].copy()
     semaforo = max((x.nivel for x in v), key=ORDEN.get, default="verde")
     return Informe(semaforo, len(datos), len(validas), len(validas) > 0, [], v), validas
+
+
+def evaluar_lineas(datos: pd.DataFrame, mapeo: dict[str, str],
+                   plantilla: Plantilla | None = None) -> tuple[Informe, pd.DataFrame]:
+    """Semáforo para el reporte de ventas por producto (líneas de factura con costo)."""
+    plantilla = plantilla or cargar_plantilla(objeto="LineaVenta")
+    faltan = [c for c in plantilla.requeridos if c not in mapeo]
+    if faltan or datos.empty:
+        return Informe("rojo", len(datos), 0, False, faltan, []), datos.iloc[0:0]
+    v: list[Validacion] = []
+    sin_nit = datos["nit"].isna()
+    v.append(_validacion("NIT válido", "Filas sin NIT o cédula reconocible", sin_nit, datos, True))
+    sin_fecha = datos["fecha"].isna()
+    v.append(_validacion("Fecha legible", "Fecha de la factura vacía o ilegible", sin_fecha, datos, True))
+    sin_producto = datos["producto"].isna()
+    v.append(_validacion("Producto", "Línea sin producto", sin_producto, datos, True))
+    sin_valor = datos["valor"].isna()
+    v.append(_validacion("Valor numérico", "Venta neta vacía o que no es un número", sin_valor, datos, True))
+    sin_costo = datos["costo"].isna()
+    v.append(_validacion("Costo numérico", "Costo vacío o que no es un número: sin costo no hay margen",
+                         sin_costo, datos, True))
+    costo_cero = (datos["costo"].fillna(-1) == 0) & (datos["valor"].fillna(0) > 0)
+    v.append(_validacion("Costo en cero", "Costo en cero: el margen saldría del 100%; revisar el costeo en el ERP",
+                         costo_cero, datos, True))
+    bajo_costo = (datos["valor"] < datos["costo"]).fillna(False) & ~costo_cero
+    v.append(_validacion("Venta bajo el costo", "Líneas vendidas por debajo del costo (se usan; Margen las señala)",
+                         bajo_costo, datos, False, "amarillo"))
+    nombres = datos.dropna(subset=["nit"]).groupby("nit")["cliente"].nunique()
+    varios = datos["nit"].isin(nombres[nombres > 1].index)
+    v.append(_validacion("Un nombre por NIT", "El mismo NIT aparece con nombres distintos",
+                         varios, datos, False, "amarillo"))
+    excluir = sin_nit | sin_fecha | sin_producto | sin_valor | sin_costo | costo_cero
+    validas = datos.loc[~excluir].copy()
+    semaforo = max((x.nivel for x in v), key=ORDEN.get, default="verde")
+    return Informe(semaforo, len(datos), len(validas), len(validas) > 0, [], v), validas

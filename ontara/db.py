@@ -26,7 +26,7 @@ cargas = Table(
     "cargas", metadata,
     Column("id", Integer, primary_key=True),
     Column("tipo", String(20), nullable=False, default="cartera",
-           server_default="cartera"),                       # cartera | ventas (qué reporte es)
+           server_default="cartera"),                       # cartera | ventas | lineas (qué reporte es)
     Column("creada_en", DateTime, nullable=False, default=ahora),
     Column("fecha_corte", Date, nullable=False),
     Column("archivo", String(255)),
@@ -69,6 +69,21 @@ ventas = Table(
     Column("numero", String(60), nullable=False),
     Column("fecha", Date, nullable=False),
     Column("valor", Float, nullable=False),
+    Column("vendedor", String(120)),
+)
+
+lineas_venta = Table(
+    "lineas_venta", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("carga_id", Integer, ForeignKey("cargas.id"), nullable=False, index=True),
+    Column("nit", String(20), nullable=False, index=True),
+    Column("numero", String(60), nullable=False),
+    Column("fecha", Date, nullable=False),
+    Column("producto", String(255), nullable=False, index=True),
+    Column("valor", Float, nullable=False),                 # venta neta de la línea
+    Column("costo", Float, nullable=False),                 # costo total de la línea
+    Column("descuento", Float),                             # descuento en pesos (opcional)
+    Column("cantidad", Float),
     Column("vendedor", String(120)),
 )
 
@@ -136,6 +151,19 @@ resultados_comercial = Table(
     Column("carga_id", Integer, ForeignKey("cargas.id"), nullable=False),
     Column("ventas_despues", Float, nullable=False),        # ventas del cliente desde que se detectó
     Column("volvio_a_comprar", Boolean, nullable=False),
+    Column("atendida", Boolean, nullable=False),
+    Column("medido_en", DateTime, default=ahora),
+)
+
+resultados_margen = Table(
+    "resultados_margen", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("decision_id", Integer, ForeignKey("decisiones.id"), nullable=False, index=True),
+    Column("carga_id", Integer, ForeignKey("cargas.id"), nullable=False),
+    Column("margen_antes_pct", Float, nullable=False),
+    Column("margen_despues_pct", Float, nullable=False),
+    Column("ventas_despues", Float, nullable=False),
+    Column("utilidad_adicional", Float, nullable=False),    # (margen después - antes) × ventas después
     Column("atendida", Boolean, nullable=False),
     Column("medido_en", DateTime, default=ahora),
 )

@@ -1,0 +1,23 @@
+# Reglas del paquete de decisión "Margen". Versión base;
+# cada cliente ajusta los parámetros desde la app y se guarda una versión nueva.
+paquete: margen
+version: 1
+parametros:
+  meses_analisis: 6               # meses de ventas por producto que se analizan
+  margen_minimo_pct: 18           # margen bruto mínimo aceptable para un cliente o un producto
+  ventas_minimas_cliente: 10000000   # ventas del periodo para evaluar a un cliente (COP)
+  ventas_minimas_producto: 10000000  # ventas del periodo para evaluar un producto (COP)
+  descuento_maximo_pct: 8         # política de descuento: % máximo sobre el precio antes de descuento
+  aprobacion_lider_max_cop: 10000000 # utilidad en juego que puede decidir el líder; por encima, el gerente
+  pct_clientes_clave: 80          # clientes clave = los que suman este % de las ventas (curva ABC)
+  clientes_excepcion: []          # NIT que no generan decisiones de margen
+  productos_excepcion: []         # productos que no generan decisiones (por ejemplo, gancho comercial)
+
+descripciones:
+  meses_analisis: Meses de ventas que se analizan
+  margen_minimo_pct: Margen bruto mínimo para clientes y productos (%)
+  ventas_minimas_cliente: Ventas mínimas del periodo para evaluar a un cliente (COP)
+  ventas_minimas_producto: Ventas mínimas del periodo para evaluar un producto (COP)
+  descuento_maximo_pct: Descuento máximo según la política (%)
+  aprobacion_lider_max_cop: El líder decide hasta esta utilidad en juego (COP)
+  pct_clientes_clave: Clientes clave = los que suman este % de las ventas
