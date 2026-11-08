@@ -10,6 +10,7 @@ resultado en pesos contra el saldo vencido que tenía el cliente al detectarla.
 """
 from __future__ import annotations
 
+import hashlib
 from collections import Counter
 from datetime import date
 
@@ -30,6 +31,7 @@ TRANSICIONES = {
     "nota": (set(ABIERTAS) | {"descartada", "cerrada"}, None),
 }
 REQUIEREN_DETALLE = {"ajustar", "descartar", "ejecutar", "nota"}
+NECESITAN_NIVEL = {"aprobar", "ajustar", "descartar"}
 
 
 # --- Carga de datos -----------------------------------------------------------
@@ -103,6 +105,8 @@ def recalcular(motor: Engine, carga_id: int) -> dict:
         corte = cx.execute(select(cargas.c.fecha_corte).where(cargas.c.id == carga_id)).scalar_one()
         info = {r.nit: {"nombre": r.nombre, "cupo": r.cupo} for r in cx.execute(select(clientes))}
     fact = impacto.facturas_de_carga(motor, carga_id)
+    compras = reglas.compras_por_cliente(impacto.facturas_historicas(motor, corte), corte,
+                                         int(p["meses_valor_cliente"]))
     anterior = _carga_anterior(motor, carga_id)
     previo = None
     if anterior:
@@ -112,7 +116,7 @@ def recalcular(motor: Engine, carga_id: int) -> dict:
         previo = dict(reglas.resumen_por_cliente(fa, corte_ant, p["dias_gracia"])
                       [["nit", "saldo_vencido"]].values)
     vencido_hoy = dict(reglas.resumen_por_cliente(fact, corte, p["dias_gracia"])[["nit", "saldo_vencido"]].values)
-    detectadas = reglas.evaluar_cartera(fact, corte, p, info, previo, regla["version"])
+    detectadas = reglas.evaluar_cartera(fact, corte, p, info, previo, regla["version"], compras)
 
     creadas = actualizadas = cerradas = 0
     with motor.begin() as cx:
@@ -130,14 +134,23 @@ def recalcular(motor: Engine, carga_id: int) -> dict:
                 continue
             valores = dict(prioridad=r.prioridad, recomendacion=r.recomendacion, motivo=r.motivo,
                            evidencia=_json_seguro(r.evidencia), regla_version_id=regla["id"],
-                           carga_actual_id=carga_id, actualizada_en=ahora())
+                           carga_actual_id=carga_id, nivel_aprobacion=r.nivel_aprobacion,
+                           actualizada_en=ahora())
             if clave in abiertas:
-                cx.execute(update(decisiones).where(decisiones.c.id == abiertas[clave]["id"]).values(**valores))
+                d = abiertas[clave]
+                if d["grupo"] == "control" and r.saldo_vencido > p["control_monto_maximo"]:
+                    # Seguridad: una deuda que creció por encima del tope sale del grupo de control.
+                    valores["grupo"] = "fuera"
+                    cx.execute(insert(acciones).values(
+                        decision_id=d["id"], tipo="sistema", usuario="ontara",
+                        detalle="Sale del grupo de control: el saldo vencido superó el tope y pasa a la bandeja."))
+                cx.execute(update(decisiones).where(decisiones.c.id == d["id"]).values(**valores))
                 actualizadas += 1
             else:
                 cx.execute(insert(decisiones).values(
                     paquete=reglas.PAQUETE, tipo=r.tipo, nit=r.nit, estado="pendiente",
-                    carga_origen_id=carga_id, saldo_vencido_inicial=r.saldo_vencido, **valores))
+                    carga_origen_id=carga_id, saldo_vencido_inicial=r.saldo_vencido,
+                    grupo=asignar_grupo(r, carga_id, p), **valores))
                 creadas += 1
         for clave, d in abiertas.items():
             if clave not in vistas:
@@ -154,6 +167,16 @@ def recalcular(motor: Engine, carga_id: int) -> dict:
     return {"decisiones_nuevas": creadas, "decisiones_actualizadas": actualizadas,
             "decisiones_cerradas": cerradas, "resultados_medidos": medidas,
             "regla_version": regla["version"]}
+
+
+def asignar_grupo(r: reglas.ResultadoRegla, carga_id: int, p: dict) -> str:
+    """Grupo de control: una fracción de las decisiones de cobro elegibles no se muestra en la bandeja,
+    para comparar cuánto se recupera con y sin Ontara. La asignación es reproducible (hash, no azar)."""
+    pct = float(p.get("pct_grupo_control") or 0)
+    if r.tipo != "cobrar" or pct <= 0 or r.saldo_vencido > float(p["control_monto_maximo"]):
+        return "fuera"
+    sorteo = int(hashlib.sha256(f"{r.nit}|{carga_id}".encode()).hexdigest()[:8], 16) % 100
+    return "control" if sorteo < pct else "tratamiento"
 
 
 def _medir_resultados(motor: Engine, carga_id: int, vencido_hoy: dict) -> int:
@@ -182,15 +205,25 @@ def _medir_resultados(motor: Engine, carga_id: int, vencido_hoy: dict) -> int:
 
 # --- Acciones del usuario -------------------------------------------------------
 def registrar_accion(motor: Engine, decision_id: int, tipo: str, usuario: str,
-                     detalle: str | None = None) -> str:
-    """Aprobar, ajustar, descartar, ejecutar o dejar una nota. Devuelve el nuevo estado."""
+                     detalle: str | None = None, rol: str = "gerente") -> str:
+    """Aprobar, ajustar, descartar, ejecutar o dejar una nota. Devuelve el nuevo estado.
+
+    Matriz de delegación: aprobar, ajustar o descartar una decisión de nivel 'gerente'
+    exige ese rol; el líder puede dejar notas y ejecutar lo que ya se aprobó."""
     if tipo not in TRANSICIONES:
         raise ValueError(f"Acción desconocida: {tipo}")
     if tipo in REQUIEREN_DETALLE and not (detalle and detalle.strip()):
         raise ValueError("Esta acción necesita un comentario (qué se hizo, el ajuste o el motivo).")
     desde, hacia = TRANSICIONES[tipo]
     with motor.begin() as cx:
-        estado = cx.execute(select(decisiones.c.estado).where(decisiones.c.id == decision_id)).scalar_one()
+        fila = cx.execute(select(decisiones.c.estado, decisiones.c.nivel_aprobacion, decisiones.c.grupo)
+                          .where(decisiones.c.id == decision_id)).one()
+        estado = fila.estado
+        if fila.grupo == "control":
+            raise ValueError("Esta decisión está en el grupo de control y no se gestiona desde la bandeja.")
+        if tipo in NECESITAN_NIVEL and not reglas.puede_aprobar(rol, fila.nivel_aprobacion):
+            raise ValueError(f"Esta decisión la aprueba el {fila.nivel_aprobacion}: supera el monto que puede "
+                             f"decidir el rol {rol}. Deja una nota para escalarla.")
         if estado not in desde:
             raise ValueError(f"No se puede '{tipo}' una decisión en estado '{estado}'.")
         cx.execute(insert(acciones).values(decision_id=decision_id, tipo=tipo, usuario=usuario,
@@ -204,10 +237,15 @@ def registrar_accion(motor: Engine, decision_id: int, tipo: str, usuario: str,
 
 # --- Consultas ------------------------------------------------------------------
 def listar(motor: Engine, estados: tuple[str, ...] | None = ABIERTAS, tipo: str | None = None,
-           limite: int = 200) -> list[dict]:
+           limite: int = 200, incluir_control: bool = False, nivel: str | None = None) -> list[dict]:
+    """Decisiones por prioridad. Las del grupo de control no se muestran salvo que se pidan."""
     q = (select(decisiones, clientes.c.nombre.label("cliente"))
          .join(clientes, clientes.c.nit == decisiones.c.nit, isouter=True)
          .order_by(decisiones.c.prioridad.desc()).limit(limite))
+    if not incluir_control:
+        q = q.where(decisiones.c.grupo != "control")
+    if nivel:
+        q = q.where(decisiones.c.nivel_aprobacion == nivel)
     if estados:
         q = q.where(decisiones.c.estado.in_(estados))
     if tipo:

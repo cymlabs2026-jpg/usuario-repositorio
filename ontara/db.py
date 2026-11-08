@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 
 from sqlalchemy import (
     JSON, Boolean, Column, Date, DateTime, Float, ForeignKey, Integer, MetaData,
-    String, Table, Text, create_engine,
+    String, Table, Text, create_engine, inspect, text,
 )
 from sqlalchemy.engine import Engine
 
@@ -86,6 +86,10 @@ decisiones = Table(
     Column("carga_origen_id", Integer, ForeignKey("cargas.id"), nullable=False),
     Column("carga_actual_id", Integer, ForeignKey("cargas.id"), nullable=False),
     Column("saldo_vencido_inicial", Float, nullable=False),
+    Column("nivel_aprobacion", String(20), nullable=False, default="lider",
+           server_default="lider"),                         # lider | gerente (matriz de delegación)
+    Column("grupo", String(20), nullable=False, default="tratamiento",
+           server_default="tratamiento"),                   # tratamiento | control | fuera
     Column("creada_en", DateTime, default=ahora),
     Column("actualizada_en", DateTime, default=ahora),
 )
@@ -133,7 +137,37 @@ consultas_ia = Table(
 )
 
 
+accesos = Table(
+    "accesos", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("usuario", String(255), nullable=False),
+    Column("evento", String(20), nullable=False),           # ingreso | fallido | salida | denegado
+    Column("metodo", String(20), nullable=False),           # google | microsoft | clave | demo
+    Column("detalle", Text),
+    Column("fecha", DateTime, default=ahora),
+)
+
+
+def _migrar(motor: Engine) -> None:
+    """Agrega a una base existente las columnas nuevas que tienen valor por defecto.
+    Suficiente para el piloto; con varios clientes en producción conviene pasar a Alembic."""
+    insp = inspect(motor)
+    with motor.begin() as cx:
+        for tabla in metadata.sorted_tables:
+            if not insp.has_table(tabla.name):
+                continue
+            existentes = {c["name"] for c in insp.get_columns(tabla.name)}
+            for col in tabla.columns:
+                if col.name in existentes or col.server_default is None:
+                    continue
+                tipo = col.type.compile(dialect=motor.dialect)
+                defecto = col.server_default.arg
+                cx.execute(text(f"ALTER TABLE {tabla.name} ADD COLUMN {col.name} {tipo} "
+                                f"NOT NULL DEFAULT '{defecto}'"))
+
+
 def crear_motor(url: str | None = None) -> Engine:
     motor = create_engine(url or config.database_url(), future=True)
     metadata.create_all(motor)
+    _migrar(motor)
     return motor

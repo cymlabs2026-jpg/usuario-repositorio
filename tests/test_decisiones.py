@@ -36,6 +36,7 @@ def test_segundo_corte_actualiza_sin_duplicar_y_cierra_las_pagadas(motor, corte1
 
 
 def test_resultados_en_pesos_distinguen_atendidas(motor, corte1, corte2):
+    reglas.guardar_parametros(motor, {"pct_grupo_control": 0}, "gerente", "sin grupo de control")
     cargar(motor, CORTE_1, corte1)
     cobros = decisiones.listar(motor, tipo="cobrar")
     for d in cobros:
