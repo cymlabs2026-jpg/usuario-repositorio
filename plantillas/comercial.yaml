@@ -1,0 +1,22 @@
+# Plantilla de ontología: empresas comerciales y de distribución.
+# Cada campo estándar lista los nombres de columna con que suele venir en
+# los exportes de Siigo, World Office, SAP o en Excel hechos a mano.
+nombre: comercial
+version: 1
+objetos:
+  Factura:
+    descripcion: Factura de venta a crédito con saldo pendiente
+    campos:
+      nit:               {tipo: nit,    requerido: true,  sinonimos: [nit, identificacion, nit_cliente, id_cliente, cedula_nit, nit_tercero]}
+      cliente:           {tipo: texto,  requerido: true,  sinonimos: [cliente, razon_social, nombre_cliente, nombre_del_tercero, tercero, nombre]}
+      numero:            {tipo: texto,  requerido: true,  sinonimos: [factura, numero_factura, no_factura, num_factura, comprobante, numero]}
+      fecha_emision:     {tipo: fecha,  requerido: true,  sinonimos: [fecha, fecha_factura, fecha_emision, emision, fecha_documento]}
+      fecha_vencimiento: {tipo: fecha,  requerido: true,  sinonimos: [vencimiento, fecha_vencimiento, vence, fecha_vence]}
+      saldo:             {tipo: dinero, requerido: true,  sinonimos: [saldo, saldo_pendiente, por_cobrar, pendiente, saldo_actual]}
+      valor:             {tipo: dinero, requerido: false, sinonimos: [valor, total, valor_factura, valor_total]}
+      vendedor:          {tipo: texto,  requerido: false, sinonimos: [vendedor, asesor, comercial, ejecutivo]}
+      cupo:              {tipo: dinero, requerido: false, sinonimos: [cupo, cupo_credito, limite_credito, cupo_asignado]}
+  Cliente:
+    descripcion: Se deriva de las facturas, agrupando por NIT
+    relaciones:
+      tiene_facturas: Factura.nit

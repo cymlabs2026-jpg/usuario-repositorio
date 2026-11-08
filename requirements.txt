@@ -1,0 +1,9 @@
+streamlit>=1.40
+pandas>=2.2
+openpyxl>=3.1
+sqlalchemy>=2.0
+psycopg[binary]>=3.2
+pyyaml>=6.0
+plotly>=5.20
+anthropic>=2.6
+pytest>=8.0

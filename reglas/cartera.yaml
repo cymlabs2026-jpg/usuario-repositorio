@@ -1,0 +1,15 @@
+# Reglas del paquete de decisión "Cartera". Son la versión base;
+# cada cliente ajusta los parámetros desde la app y se guarda una versión nueva.
+paquete: cartera
+version: 1
+parametros:
+  dias_gracia: 5                # días después del vencimiento antes de contar mora
+  umbral_cobro_minimo: 500000   # saldo vencido mínimo (COP) para generar una decisión de cobro
+  peso_monto: 0.5               # peso del saldo vencido en la prioridad
+  peso_mora: 0.35               # peso de los días de mora
+  peso_tendencia: 0.15          # peso de si la deuda vencida está creciendo
+  mora_maxima_dias: 180         # días a partir de los cuales la mora pesa al máximo
+  umbral_congelar_dias: 90      # mora a partir de la cual se recomienda frenar el crédito
+  dias_compra_reciente: 30      # "sigue comprando" = factura emitida en estos últimos días
+  congelar_por_sobrecupo: true  # recomendar frenar crédito si el saldo supera el cupo
+  clientes_excepcion: []        # NIT de clientes estratégicos que no generan decisiones
