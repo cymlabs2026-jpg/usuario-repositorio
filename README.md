@@ -9,6 +9,9 @@ El segundo paquete es **Foco comercial**: con el reporte de ventas dice qué cli
 compran menos que lo normal, a quién visitar para crecer, y lo cruza con Cartera (por ejemplo, "este cliente dejó
 de comprar y tiene $37 millones vencidos").
 
+El tercero es **Margen**: con el reporte de ventas por producto (venta neta y costo por línea) señala los clientes
+y productos que quedan bajo el margen mínimo y los descuentos fuera de política, con la utilidad en juego en pesos.
+
 **Regla de oro:** la IA no es la fuente de la verdad. Todas las cifras salen de reglas determinísticas; Claude solo
 consulta resultados ya calculados, los explica y redacta mensajes.
 
@@ -23,6 +26,7 @@ consulta resultados ya calculados, los explica y redacta mensajes.
 | 2. Decisiones | `ontara/decisiones.py` | Memoria de decisiones: evidencia, aprobación según el rol, ejecución, cierre automático, grupo de control y resultado medido |
 | 3. Aplicación | `ontara/impacto.py` | Línea base (primera carga), impacto en pesos, días de cartera, caja liberada y comparación contra el grupo de control |
 | 2. Paquetes | `ontara/paquetes.py` | Registro de paquetes: qué reporte usa cada uno, sus tipos de decisión, cómo detecta y cómo mide. Se activan con `ONTARA_PAQUETES` |
+| 2. Margen | `ontara/margen.py` + `reglas/margen.yaml` | Margen bruto por cliente y producto, descuentos fuera de política, ventas bajo el costo y cruce con Cartera y Foco comercial |
 | 2. Foco comercial | `ontara/comercial.py` + `reglas/comercial.yaml` | Ritmo de compra por cliente, alertas de clientes que se enfrían o caen, visitas de crecimiento y cruce con Cartera |
 | 3. Aplicación | `ontara/acceso.py` | Login con Google o Microsoft (o clave PBKDF2), roles y bitácora de accesos |
 | 3. Aplicación | `ontara/asistente.py` | Claude con 4 herramientas de solo lectura; nombres y NIT anonimizados antes de salir (Ley 1581) |
@@ -45,6 +49,10 @@ una distribuidora inventada con 40 clientes. En **Cargar datos**, en este orden:
 | Ventas | `prueba_ventas_2026-10-31.csv` | 31/10/2026 |
 | Cartera | `prueba_cartera_corte_2026-11-14.csv` | 14/11/2026 |
 | Ventas | `prueba_ventas_2026-11-14.csv` | 14/11/2026 |
+| Ventas por producto | `prueba_lineas_2026-10-31.csv` | 31/10/2026 |
+| Ventas por producto | `prueba_lineas_2026-11-14.csv` | 14/11/2026 |
+
+(Los dos reportes de ventas por producto pueden cargarse en cualquier momento después de la primera cartera.)
 
 Los archivos `datos_ejemplo/cartera_corte_*.csv` son el ejemplo pequeño original. Todos los datos son inventados.
 
@@ -82,6 +90,24 @@ si el cliente volvió a comprar y cuánto, con y sin la bandeja (grupo de contro
 Cuando hay reporte de ventas, Cartera calcula los clientes clave con las ventas completas y no solo con las
 facturas abiertas.
 
+### Margen
+
+Usa el reporte de ventas por producto de los últimos 6 meses: una fila por producto de cada factura, con venta neta,
+costo total de la línea y, si el ERP lo trae, descuento en pesos y cantidad. El semáforo excluye las líneas sin costo o
+con costo en cero y avisa (sin excluirlas) las vendidas bajo el costo.
+
+| Decisión | Cuándo aparece | Monto en juego |
+| --- | --- | --- |
+| Margen bajo de cliente | Su margen bruto del periodo está bajo `margen_minimo_pct` (y vendió al menos `ventas_minimas_cliente`) | Utilidad que falta para llegar al mínimo |
+| Margen bajo de producto | Igual, por producto (`ventas_minimas_producto`). Si el margen es negativo, se recomienda corregir antes del próximo pedido | Ídem |
+| Descuento fuera de política | Margen sano pero descuento promedio por encima de `descuento_maximo_pct` | Descuento dado de más |
+
+El líder decide hasta `aprobacion_lider_max_cop` de utilidad en juego; por encima, y siempre con clientes clave,
+el gerente. Margen no usa grupo de control: dejar sin renegociar a algunos clientes a propósito no tiene sentido
+comercial. El impacto se mide de dos formas: el margen de cada cliente o producto desde la decisión frente al que
+tenía, y el margen bruto de los últimos 90 días frente al del primer reporte cargado. `productos_excepcion` sirve
+para productos gancho que se venden con margen bajo a propósito.
+
 ## Las tres decisiones de Cartera
 
 | Decisión | Cuándo aparece | Quién la aprueba |
@@ -108,7 +134,7 @@ mensuales de contabilidad (`ventas_mensuales_cop`) se usan esas; si no, se estim
 | --- | --- | --- |
 | `DATABASE_URL` | Base del cliente. En producción, Cloud SQL: `postgresql+psycopg://usuario:clave@/ontara?host=/cloudsql/PROYECTO:REGION:INSTANCIA` | SQLite local `ontara.db` |
 | `ONTARA_EMPRESA` | Nombre que aparece en la app | Empresa de demostración |
-| `ONTARA_PAQUETES` | Paquetes activos para el cliente, separados por coma | `cartera,comercial` |
+| `ONTARA_PAQUETES` | Paquetes activos para el cliente, separados por coma | `cartera,comercial,margen` |
 | `ONTARA_USUARIOS` | Usuarios autorizados y su rol en JSON (ver abajo). Roles: `gerente` (aprueba montos altos y cambia reglas) y `lider` | Sin login (modo demo) |
 | `ANTHROPIC_API_KEY` | Activa el asistente | Asistente apagado |
 | `ONTARA_MODELO` | Modelo de Claude | `claude-opus-5-5` |

@@ -20,7 +20,7 @@ from sqlalchemy.engine import Engine
 
 from . import comercial, impacto, paquetes, reglas
 from .calidad import Informe
-from .db import acciones, ahora, cargas, clientes, decisiones, facturas, linea_base, resultados, ventas
+from .db import acciones, ahora, cargas, clientes, decisiones, facturas, linea_base, lineas_venta, resultados, ventas
 
 ABIERTAS = ("pendiente", "aprobada", "ajustada", "ejecutada")
 TRANSICIONES = {
@@ -41,7 +41,7 @@ def registrar_carga(motor: Engine, validas: pd.DataFrame, informe: Informe, mape
     (si es la primera) y recalcula los paquetes que usan ese reporte."""
     if not informe.puede_cargar:
         raise ValueError("El semáforo de calidad no permite cargar este archivo.")
-    if tipo not in ("cartera", "ventas"):
+    if tipo not in ("cartera", "ventas", "lineas"):
         raise ValueError(f"Tipo de reporte desconocido: {tipo}")
     with motor.begin() as cx:
         carga_id = cx.execute(insert(cargas).values(
@@ -58,13 +58,24 @@ def registrar_carga(motor: Engine, validas: pd.DataFrame, informe: Informe, mape
             } for r in validas.itertuples(index=False)]
             if filas:
                 cx.execute(insert(facturas), filas)
-        else:
+        elif tipo == "ventas":
             filas = [{
                 "carga_id": carga_id, "nit": r.nit, "numero": str(r.numero), "fecha": r.fecha,
                 "valor": float(r.valor), "vendedor": r.vendedor if isinstance(r.vendedor, str) else None,
             } for r in validas.itertuples(index=False)]
             if filas:
                 cx.execute(insert(ventas), filas)
+        else:
+            def num(x):
+                return None if x is None or pd.isna(x) else float(x)
+            filas = [{
+                "carga_id": carga_id, "nit": r.nit, "numero": str(r.numero), "fecha": r.fecha,
+                "producto": str(r.producto).strip(), "valor": float(r.valor), "costo": float(r.costo),
+                "descuento": num(r.descuento), "cantidad": num(r.cantidad),
+                "vendedor": r.vendedor if isinstance(r.vendedor, str) else None,
+            } for r in validas.itertuples(index=False)]
+            if filas:
+                cx.execute(insert(lineas_venta), filas)
 
         existentes = set(cx.execute(select(clientes.c.nit)).scalars())
         for nit, grupo in validas.groupby("nit"):

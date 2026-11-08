@@ -25,6 +25,19 @@ objetos:
       fecha:    {tipo: fecha,  requerido: true,  sinonimos: [fecha, fecha_factura, fecha_emision, fecha_documento, fecha_venta, emision]}
       valor:    {tipo: dinero, requerido: true,  sinonimos: [valor, total, valor_total, valor_factura, valor_neto, venta, subtotal]}
       vendedor: {tipo: texto,  requerido: false, sinonimos: [vendedor, asesor, comercial, ejecutivo]}
+  LineaVenta:
+    descripcion: Línea de factura de venta con producto y costo. Alimenta Margen
+    campos:
+      nit:       {tipo: nit,    requerido: true,  sinonimos: [nit, identificacion, nit_cliente, id_cliente, cedula_nit, nit_tercero]}
+      cliente:   {tipo: texto,  requerido: true,  sinonimos: [cliente, razon_social, nombre_cliente, nombre_del_tercero, tercero, nombre]}
+      numero:    {tipo: texto,  requerido: true,  sinonimos: [factura, numero_factura, no_factura, num_factura, comprobante, documento]}
+      fecha:     {tipo: fecha,  requerido: true,  sinonimos: [fecha, fecha_factura, fecha_emision, fecha_documento, fecha_venta]}
+      producto:  {tipo: texto,  requerido: true,  sinonimos: [producto, referencia, descripcion, item, articulo, nombre_producto, sku]}
+      valor:     {tipo: dinero, requerido: true,  sinonimos: [valor_neto, venta_neta, valor, total, subtotal, valor_total]}
+      costo:     {tipo: dinero, requerido: true,  sinonimos: [costo, costo_total, costo_venta, costo_de_venta]}
+      descuento: {tipo: dinero, requerido: false, sinonimos: [descuento, valor_descuento, dcto, descuento_valor]}
+      cantidad:  {tipo: numero, requerido: false, sinonimos: [cantidad, unidades, cant]}
+      vendedor:  {tipo: texto,  requerido: false, sinonimos: [vendedor, asesor, comercial, ejecutivo]}
   Cliente:
     descripcion: Se deriva de las facturas y las ventas, agrupando por NIT
     relaciones:

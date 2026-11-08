@@ -15,7 +15,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from ontara import acceso, asistente, calidad, comercial, paquetes, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
+from ontara import acceso, asistente, calidad, comercial, margen, paquetes, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
 from ontara.db import cargas, crear_motor  # noqa: E402
 from sqlalchemy import select  # noqa: E402
 
@@ -32,7 +32,8 @@ COLOR = {"verde": "🟢", "amarillo": "🟡", "rojo": "🔴"}
 TIPO = paquetes.todos_los_tipos()
 ACTIVOS = paquetes.activos()
 NIVEL = {"lider": "Líder", "gerente": "Gerente"}
-ETIQUETAS = {"fecha": "Fecha de la factura", "nit": "NIT", "cliente": "Cliente", "numero": "Número de factura", "fecha_emision": "Fecha de emisión",
+ETIQUETAS = {"fecha": "Fecha de la factura", "producto": "Producto", "costo": "Costo total de la línea",
+             "descuento": "Descuento (pesos)", "cantidad": "Cantidad", "nit": "NIT", "cliente": "Cliente", "numero": "Número de factura", "fecha_emision": "Fecha de emisión",
              "fecha_vencimiento": "Fecha de vencimiento", "saldo": "Saldo", "valor": "Valor", "vendedor": "Vendedor",
              "cupo": "Cupo de crédito"}
 ESTADO = {"pendiente": "Pendiente", "aprobada": "Aprobada", "ajustada": "Ajustada",
@@ -139,8 +140,10 @@ def pagina_cargar():
     tipo = st.radio("¿Qué reporte vas a cargar?", reportes, format_func=lambda t: paquetes.REPORTES[t]["nombre"],
                     horizontal=True)
     usa = ", ".join(p.nombre for p in paquetes.de_reporte(tipo))
-    st.write(("Sube el reporte de cartera por edades o de facturas pendientes" if tipo == "cartera" else
-              "Sube el reporte de ventas de los últimos 12 meses (todas las facturas, incluidas las pagadas)")
+    st.write({"cartera": "Sube el reporte de cartera por edades o de facturas pendientes",
+              "ventas": "Sube el reporte de ventas de los últimos 12 meses (todas las facturas, incluidas las pagadas)",
+              "lineas": "Sube el reporte de ventas por producto de los últimos 6 meses (una fila por producto de cada "
+                        "factura, con venta neta y costo)"}[tipo]
              + " que exportas de tu ERP (Siigo, World Office, SAP) o tu Excel. Ontara reconoce las columnas y "
              f"revisa la calidad antes de guardar nada. Lo usa: {usa}.")
     corte = st.date_input("Fecha de corte del reporte", value=date.today(), format="DD/MM/YYYY")
@@ -165,7 +168,7 @@ def pagina_cargar():
             mapeo[campo.nombre] = sel
 
     datos = ingesta.convertir(crudo, mapeo, plantilla)
-    evaluar = calidad.evaluar if tipo == "cartera" else calidad.evaluar_ventas
+    evaluar = {"cartera": calidad.evaluar, "ventas": calidad.evaluar_ventas, "lineas": calidad.evaluar_lineas}[tipo]
     informe, validas = evaluar(datos, mapeo, plantilla)
     st.subheader(f"2. Semáforo de calidad: {COLOR[informe.semaforo]} {informe.semaforo.capitalize()}")
     if informe.faltan_campos:
@@ -221,9 +224,10 @@ def pagina_bandeja():
     total = sum(d["evidencia"]["saldo_vencido"] for d in lista if d["tipo"] == "cobrar")
     cupo = sum(d["evidencia"].get("aumento_sugerido", 0) for d in lista if d["tipo"] == "ampliar_cupo")
     riesgo = sum(d["saldo_vencido_inicial"] for d in lista if d["tipo"] == "recuperar_cliente")
+    utilidad = sum(d["saldo_vencido_inicial"] for d in lista if d["paquete"] == "margen")
     st.caption(f"{len(lista)} decisiones · {pesos(total)} vencidos en las de cobro · "
                f"{pesos(cupo)} de cupo adicional sugerido · {pesos(riesgo)} de ventas trimestrales en riesgo "
-               f"en clientes que se están enfriando")
+               f"en clientes que se están enfriando · {pesos(utilidad)} de utilidad en juego en margen")
     for d in lista:
         ev = d["evidencia"]
         icono = "🟢" if d["tipo"] in ("ampliar_cupo", "crecer_cliente") else "🔴" if d["prioridad"] >= 70 else \
@@ -236,9 +240,13 @@ def pagina_bandeja():
             detalle_tipo = f"{ev['dias_sin_comprar']} días sin comprar · 90 días {-ev['caida_pct']:+.0f}%"
         elif d["tipo"] == "crecer_cliente":
             detalle_tipo = f"90 días {pesos(ev['ventas_90d'])}"
+        elif d["paquete"] == "margen":
+            detalle_tipo = (f"margen {ev['margen_pct']:.1f}% · descuento {ev['descuento_pct']:.1f}% · "
+                            f"{pesos(ev['utilidad_en_juego'])} en juego")
         else:
             detalle_tipo = f"{pesos(ev['saldo_vencido'])} vencidos · {ev['dias_mora_max']} días"
-        titulo = (f"{icono} {d['prioridad']:.0f} · {d['cliente']}{clave} · {TIPO[d['tipo']]} · "
+        quien_es = d["cliente"] or ev.get("producto") or ev.get("cliente") or d["nit"]
+        titulo = (f"{icono} {d['prioridad']:.0f} · {quien_es}{clave} · {TIPO[d['tipo']]} · "
                   f"{detalle_tipo} · {ESTADO[d['estado']]}{gerente}")
         with st.expander(titulo):
             tarjeta(d)
@@ -250,6 +258,8 @@ def tarjeta(d: dict):
     st.write(d["motivo"])
     if d["paquete"] == "comercial":
         tarjeta_comercial(d, ev)
+    elif d["paquete"] == "margen":
+        tarjeta_margen(d, ev)
     else:
         tarjeta_cartera(d, ev)
     acciones_y_historial(d)
@@ -273,6 +283,32 @@ def tarjeta_comercial(d: dict, ev: dict):
         st.dataframe(tabla.rename(columns={"fecha": "Fecha", "numero": "Factura", "valor": "Valor"}),
                      hide_index=True, use_container_width=True)
     st.caption(f"NIT {d['nit']} · Regla comercial v{ev.get('regla_version')} · reporte {ev['fecha_corte']}")
+
+
+def tarjeta_margen(d: dict, ev: dict):
+    a, b, c, e = st.columns(4)
+    a.metric(f"Ventas {ev['meses_analisis']} meses", pesos(ev["ventas"]))
+    b.metric("Margen bruto", f"{ev['margen_pct']:.1f}%",
+             delta=f"{ev['margen_pct'] - ev['margen_minimo_pct']:+.1f} pts vs. mínimo", delta_color="normal")
+    c.metric("Descuento promedio", f"{ev['descuento_pct']:.1f}%")
+    e.metric("Utilidad en juego", pesos(ev["utilidad_en_juego"]))
+    st.caption(f"Margen de la empresa en el periodo: {ev['margen_empresa_pct']:.1f}%"
+               + (f" · {ev['lineas_bajo_costo']} líneas vendidas bajo el costo ({pesos(ev['perdida_bajo_costo'])} "
+                  f"de pérdida)" if ev.get("lineas_bajo_costo") else "")
+               + (" · ⭐ cliente clave" if ev.get("cliente_clave") else ""))
+    for cruce in ev.get("cruces", []):
+        st.info("Cruce: " + cruce)
+    detalle = ev.get("productos") or ev.get("clientes")
+    if detalle:
+        tabla = pd.DataFrame(detalle).drop(columns=["nit"], errors="ignore")
+        tabla["ventas"] = tabla["ventas"].map(pesos)
+        st.markdown("**Productos de este cliente, de menor a mayor margen**" if ev.get("productos")
+                    else "**Clientes que compran este producto, de menor a mayor margen**")
+        st.dataframe(tabla.rename(columns={"producto": "Producto", "cliente": "Cliente", "ventas": "Ventas",
+                                           "margen_pct": "Margen %", "descuento_pct": "Descuento %"}),
+                     hide_index=True, use_container_width=True)
+    st.caption(f"{'NIT ' + d['nit'] if 'nit' in ev else 'Producto'} · Regla margen v{ev.get('regla_version')} · "
+               f"reporte {ev['fecha_corte']}")
 
 
 def tarjeta_cartera(d: dict, ev: dict):
@@ -344,7 +380,30 @@ def pagina_impacto():
     pestanas = st.tabs([p.nombre for p in ACTIVOS])
     for tab, paq in zip(pestanas, ACTIVOS):
         with tab:
-            impacto_cartera() if paq.clave == "cartera" else impacto_comercial()
+            {"cartera": impacto_cartera, "comercial": impacto_comercial, "margen": impacto_margen}[paq.clave]()
+
+
+def impacto_margen():
+    r = margen.resumen(M)
+    if not r["ultimo_reporte"]:
+        st.info("Carga el reporte de ventas por producto para activar Margen.")
+        return
+    st.caption(f"Último reporte: {r['ultimo_reporte']:%d/%m/%Y}. Margen bruto de los últimos 90 días frente al del "
+               "primer reporte cargado (línea base).")
+    a, b, c = st.columns(3)
+    a.metric("Margen bruto (90 días)", f"{r['margen_hoy_pct']:.1f}%",
+             delta=f"{r['puntos']:+.1f} pts vs. línea base ({r['margen_base_pct']:.1f}%)")
+    b.metric("Utilidad adicional en 90 días", pesos(r["utilidad_adicional_90d"]))
+    c.metric("Utilidad en juego en decisiones abiertas", pesos(r["utilidad_en_juego_abiertas"]))
+    st.caption(f"Decisiones medidas: {r['decisiones_medidas']} · utilidad adicional en decisiones atendidas "
+               f"{pesos(r['utilidad_adicional_atendidas'])} · no atendidas {pesos(r['utilidad_adicional_no_atendidas'])}")
+    mensual = margen.margen_mensual(M)
+    if len(mensual) > 1:
+        fig = px.line(mensual, x="mes", y="margen_pct", markers=True,
+                      labels={"mes": "Mes", "margen_pct": "Margen bruto (%)"})
+        minimo = reglas.regla_activa(M, "margen")["parametros"]["margen_minimo_pct"]
+        fig.add_hline(y=minimo, line_dash="dash", annotation_text="Margen mínimo")
+        st.plotly_chart(fig, use_container_width=True)
 
 
 def impacto_comercial():
