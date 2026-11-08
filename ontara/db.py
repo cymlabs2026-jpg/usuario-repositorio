@@ -25,6 +25,8 @@ def ahora() -> datetime:
 cargas = Table(
     "cargas", metadata,
     Column("id", Integer, primary_key=True),
+    Column("tipo", String(20), nullable=False, default="cartera",
+           server_default="cartera"),                       # cartera | ventas (qué reporte es)
     Column("creada_en", DateTime, nullable=False, default=ahora),
     Column("fecha_corte", Date, nullable=False),
     Column("archivo", String(255)),
@@ -56,6 +58,17 @@ facturas = Table(
     Column("fecha_vencimiento", Date, nullable=False),
     Column("valor", Float),
     Column("saldo", Float, nullable=False),
+    Column("vendedor", String(120)),
+)
+
+ventas = Table(
+    "ventas", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("carga_id", Integer, ForeignKey("cargas.id"), nullable=False, index=True),
+    Column("nit", String(20), nullable=False, index=True),
+    Column("numero", String(60), nullable=False),
+    Column("fecha", Date, nullable=False),
+    Column("valor", Float, nullable=False),
     Column("vendedor", String(120)),
 )
 
@@ -113,6 +126,17 @@ resultados = Table(
     Column("saldo_vencido_despues", Float, nullable=False),
     Column("pesos_recuperados", Float, nullable=False),
     Column("atendida", Boolean, nullable=False),            # hubo aprobación o ejecución antes de medir
+    Column("medido_en", DateTime, default=ahora),
+)
+
+resultados_comercial = Table(
+    "resultados_comercial", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("decision_id", Integer, ForeignKey("decisiones.id"), nullable=False, index=True),
+    Column("carga_id", Integer, ForeignKey("cargas.id"), nullable=False),
+    Column("ventas_despues", Float, nullable=False),        # ventas del cliente desde que se detectó
+    Column("volvio_a_comprar", Boolean, nullable=False),
+    Column("atendida", Boolean, nullable=False),
     Column("medido_en", DateTime, default=ahora),
 )
 

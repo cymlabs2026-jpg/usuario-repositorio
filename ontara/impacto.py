@@ -85,7 +85,8 @@ def obtener_linea_base(motor: Engine) -> dict | None:
 
 def historial(motor: Engine) -> pd.DataFrame:
     with motor.connect() as cx:
-        filas = cx.execute(select(cargas.c.id, cargas.c.fecha_corte).order_by(cargas.c.fecha_corte)).all()
+        filas = cx.execute(select(cargas.c.id, cargas.c.fecha_corte).where(cargas.c.tipo == "cartera")
+                           .order_by(cargas.c.fecha_corte)).all()
     datos = [{"carga_id": i, "fecha_corte": c, **metricas_carga(motor, i)} for i, c in filas]
     return pd.DataFrame(datos)
 
@@ -94,13 +95,14 @@ def resumen(motor: Engine) -> dict:
     """Lo que ve el gerente: base vs. hoy, pesos recuperados y uso de la bandeja."""
     base = obtener_linea_base(motor)
     with motor.connect() as cx:
-        ultima = cx.execute(select(cargas.c.id).order_by(cargas.c.fecha_corte.desc(), cargas.c.id.desc())
-                            .limit(1)).scalar()
+        ultima = cx.execute(select(cargas.c.id).where(cargas.c.tipo == "cartera")
+                            .order_by(cargas.c.fecha_corte.desc(), cargas.c.id.desc()).limit(1)).scalar()
         # último resultado medido por decisión
         sub = (select(resultados.c.decision_id, func.max(resultados.c.id).label("rid"))
                .group_by(resultados.c.decision_id).subquery())
         res = cx.execute(select(resultados).join(sub, resultados.c.id == sub.c.rid)).mappings().all()
         estados = dict(cx.execute(select(decisiones.c.estado, func.count())
+                                  .where(decisiones.c.paquete == "cartera")
                                   .group_by(decisiones.c.estado)).all())
         n_acciones = cx.execute(select(func.count()).select_from(acciones)
                                 .where(acciones.c.tipo != "sistema")).scalar()

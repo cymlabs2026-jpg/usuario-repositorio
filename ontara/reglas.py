@@ -49,25 +49,36 @@ def guardar_parametros(motor: Engine, parametros: dict, usuario: str, nota: str 
     if desconocidos:
         raise ValueError(f"Parámetros no reconocidos: {sorted(desconocidos)}")
     nuevos = {**base, **regla_activa(motor, paquete)["parametros"], **parametros}
-    pesos = nuevos["peso_monto"] + nuevos["peso_mora"] + nuevos["peso_tendencia"]
-    if abs(pesos - 1) > 0.01:
-        raise ValueError(f"Los tres pesos deben sumar 1 (suman {pesos:.2f}).")
-    if not 0 <= float(nuevos["pct_grupo_control"]) <= 50:
-        raise ValueError("El grupo de control debe estar entre 0% y 50% de las decisiones.")
-    if not 0 < float(nuevos["pct_clientes_clave"]) <= 100:
-        raise ValueError("El porcentaje para clientes clave debe estar entre 1 y 100.")
-    if not 0 < float(nuevos["ampliar_uso_minimo"]) <= 2:
-        raise ValueError("El uso mínimo del cupo para ampliar debe estar entre 0 y 2 (200%).")
-    negativos = [k for k in ("aprobacion_lider_max_cop", "ampliar_maximo_cop", "control_monto_maximo",
-                             "ventas_mensuales_cop", "ampliar_pct_sugerido") if float(nuevos[k]) < 0]
-    if negativos:
-        raise ValueError(f"Estos parámetros no pueden ser negativos: {negativos}")
+    validar_parametros(nuevos, paquete)
     with motor.begin() as cx:
         ultima = cx.execute(select(func.max(reglas_version.c.version))
                             .where(reglas_version.c.paquete == paquete)).scalar() or 0
         res = cx.execute(insert(reglas_version).values(
             paquete=paquete, version=ultima + 1, parametros=nuevos, creada_por=usuario, nota=nota))
     return {"id": res.inserted_primary_key[0], "version": ultima + 1, "parametros": nuevos}
+
+
+def validar_parametros(p: dict, paquete: str) -> None:
+    """Rangos que no tienen sentido de negocio se rechazan antes de guardar una versión."""
+    if "pct_grupo_control" in p and not 0 <= float(p["pct_grupo_control"]) <= 50:
+        raise ValueError("El grupo de control debe estar entre 0% y 50% de las decisiones.")
+    if "pct_clientes_clave" in p and not 0 < float(p["pct_clientes_clave"]) <= 100:
+        raise ValueError("El porcentaje para clientes clave debe estar entre 1 y 100.")
+    negativos = [k for k, v in p.items() if isinstance(v, (int, float)) and not isinstance(v, bool) and v < 0]
+    if negativos:
+        raise ValueError(f"Estos parámetros no pueden ser negativos: {sorted(negativos)}")
+    if paquete == PAQUETE:
+        pesos = p["peso_monto"] + p["peso_mora"] + p["peso_tendencia"]
+        if abs(pesos - 1) > 0.01:
+            raise ValueError(f"Los tres pesos deben sumar 1 (suman {pesos:.2f}).")
+        if not 0 < float(p["ampliar_uso_minimo"]) <= 2:
+            raise ValueError("El uso mínimo del cupo para ampliar debe estar entre 0 y 2 (200%).")
+
+
+def descripciones(paquete: str) -> dict[str, str]:
+    """Etiquetas en lenguaje de negocio para el formulario genérico de reglas."""
+    datos = yaml.safe_load((config.DIR_REGLAS / f"{paquete}.yaml").read_text(encoding="utf-8"))
+    return dict(datos.get("descripciones") or {})
 
 
 @dataclass
@@ -78,7 +89,7 @@ class ResultadoRegla:
     prioridad: float             # 0 a 100
     recomendacion: str
     motivo: str
-    saldo_vencido: float
+    saldo_vencido: float         # monto en juego: saldo vencido (cartera) o ventas en riesgo (comercial)
     evidencia: dict = field(default_factory=dict)
     nivel_aprobacion: str = "lider"   # lider | gerente (matriz de delegación)
 

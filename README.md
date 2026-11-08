@@ -5,6 +5,10 @@ evidencia. Este repositorio es el MVP del primer paquete de decisión: **Ontara 
 que le dice al líder de cartera a quién cobrarle primero, a quién frenarle el crédito y a qué buenos pagadores
 ampliarles el cupo para que sigan comprando. Mide el resultado en pesos y en caja liberada.
 
+El segundo paquete es **Foco comercial**: con el reporte de ventas dice qué clientes están dejando de comprar o
+compran menos que lo normal, a quién visitar para crecer, y lo cruza con Cartera (por ejemplo, "este cliente dejó
+de comprar y tiene $37 millones vencidos").
+
 **Regla de oro:** la IA no es la fuente de la verdad. Todas las cifras salen de reglas determinísticas; Claude solo
 consulta resultados ya calculados, los explica y redacta mensajes.
 
@@ -18,6 +22,8 @@ consulta resultados ya calculados, los explica y redacta mensajes.
 | 2. Reglas | `ontara/reglas.py` + `reglas/cartera.yaml` | Prioridad de cobro (monto × mora × tendencia), frenar crédito y ampliar cupo; clientes clave por curva ABC de compras; matriz de delegación. Parámetros versionados |
 | 2. Decisiones | `ontara/decisiones.py` | Memoria de decisiones: evidencia, aprobación según el rol, ejecución, cierre automático, grupo de control y resultado medido |
 | 3. Aplicación | `ontara/impacto.py` | Línea base (primera carga), impacto en pesos, días de cartera, caja liberada y comparación contra el grupo de control |
+| 2. Paquetes | `ontara/paquetes.py` | Registro de paquetes: qué reporte usa cada uno, sus tipos de decisión, cómo detecta y cómo mide. Se activan con `ONTARA_PAQUETES` |
+| 2. Foco comercial | `ontara/comercial.py` + `reglas/comercial.yaml` | Ritmo de compra por cliente, alertas de clientes que se enfrían o caen, visitas de crecimiento y cruce con Cartera |
 | 3. Aplicación | `ontara/acceso.py` | Login con Google o Microsoft (o clave PBKDF2), roles y bitácora de accesos |
 | 3. Aplicación | `ontara/asistente.py` | Claude con 4 herramientas de solo lectura; nombres y NIT anonimizados antes de salir (Ley 1581) |
 | 3. Aplicación | `app/streamlit_app.py` | Bandeja de decisiones, carga de datos, impacto, asistente y reglas |
@@ -30,8 +36,17 @@ pip install -r requirements.txt
 streamlit run app/streamlit_app.py
 ```
 
-En **Cargar datos** sube `datos_ejemplo/cartera_corte_2026-10-31.csv` (fecha de corte 31/10/2026) y luego
-`cartera_corte_2026-11-07.csv` (07/11/2026). Los datos son inventados.
+**Datos de prueba completos** (`datos_ejemplo/prueba/`, generados con `python datos_ejemplo/generar_prueba.py`):
+una distribuidora inventada con 40 clientes. En **Cargar datos**, en este orden:
+
+| Reporte | Archivo | Fecha de corte |
+| --- | --- | --- |
+| Cartera | `prueba_cartera_corte_2026-10-31.csv` | 31/10/2026 |
+| Ventas | `prueba_ventas_2026-10-31.csv` | 31/10/2026 |
+| Cartera | `prueba_cartera_corte_2026-11-14.csv` | 14/11/2026 |
+| Ventas | `prueba_ventas_2026-11-14.csv` | 14/11/2026 |
+
+Los archivos `datos_ejemplo/cartera_corte_*.csv` son el ejemplo pequeño original. Todos los datos son inventados.
 
 Pruebas automáticas:
 
@@ -39,7 +54,35 @@ Pruebas automáticas:
 pytest
 ```
 
-## Las tres decisiones del paquete
+## Paquetes de decisión
+
+Un paquete es un reporte que lo alimenta, reglas versionadas en `reglas/<paquete>.yaml`, una función que detecta
+decisiones y otra que mide su resultado. La bandeja, la memoria de decisiones, la matriz de delegación, el grupo de
+control, el asistente y el formulario de reglas son comunes. Para agregar uno (Margen, Caja, Inventario):
+
+1. Si necesita un reporte nuevo, agregar su objeto en `plantillas/comercial.yaml`, su tabla en `ontara/db.py`
+   y su semáforo en `ontara/calidad.py`.
+2. Escribir `reglas/<paquete>.yaml` con `parametros` y `descripciones` (la página de Reglas se arma sola).
+3. Escribir el módulo con `detectar(motor, carga_id, regla)` y `medir(motor, carga_id)`.
+4. Registrarlo en `ontara/paquetes.py`.
+
+### Foco comercial
+
+Usa el reporte de ventas de los últimos 12 meses (todas las facturas emitidas, incluidas las pagadas).
+
+| Decisión | Cuándo aparece |
+| --- | --- |
+| Recuperar cliente | Lleva más de `factor_atraso` veces su intervalo habitual sin comprar (y al menos `dias_minimos_sin_comprar`), o sigue comprando a su ritmo pero sus ventas de 90 días cayeron `caida_minima_pct` % frente a su trimestre promedio. Si la caída se debe a un periodo sin comprar y ya volvió, la alerta se cierra |
+| Visita de crecimiento | Sus ventas de 90 días crecieron `crecimiento_minimo_pct` % y sigue comprando a su ritmo |
+
+Solo aplica a clientes con al menos `compras_minimas` compras y `ventas_minimas_12m` en el año. Cada decisión trae
+los cruces con Cartera (cobro, crédito frenado o cupo por ampliar). El resultado se mide con el siguiente reporte:
+si el cliente volvió a comprar y cuánto, con y sin la bandeja (grupo de control solo entre clientes no clave).
+
+Cuando hay reporte de ventas, Cartera calcula los clientes clave con las ventas completas y no solo con las
+facturas abiertas.
+
+## Las tres decisiones de Cartera
 
 | Decisión | Cuándo aparece | Quién la aprueba |
 | --- | --- | --- |
@@ -65,6 +108,7 @@ mensuales de contabilidad (`ventas_mensuales_cop`) se usan esas; si no, se estim
 | --- | --- | --- |
 | `DATABASE_URL` | Base del cliente. En producción, Cloud SQL: `postgresql+psycopg://usuario:clave@/ontara?host=/cloudsql/PROYECTO:REGION:INSTANCIA` | SQLite local `ontara.db` |
 | `ONTARA_EMPRESA` | Nombre que aparece en la app | Empresa de demostración |
+| `ONTARA_PAQUETES` | Paquetes activos para el cliente, separados por coma | `cartera,comercial` |
 | `ONTARA_USUARIOS` | Usuarios autorizados y su rol en JSON (ver abajo). Roles: `gerente` (aprueba montos altos y cambia reglas) y `lider` | Sin login (modo demo) |
 | `ANTHROPIC_API_KEY` | Activa el asistente | Asistente apagado |
 | `ONTARA_MODELO` | Modelo de Claude | `claude-opus-5-5` |

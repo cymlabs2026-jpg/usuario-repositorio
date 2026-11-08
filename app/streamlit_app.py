@@ -15,7 +15,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from ontara import acceso, asistente, calidad, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
+from ontara import acceso, asistente, calidad, comercial, paquetes, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
 from ontara.db import cargas, crear_motor  # noqa: E402
 from sqlalchemy import select  # noqa: E402
 
@@ -29,9 +29,10 @@ def motor():
 
 M = motor()
 COLOR = {"verde": "🟢", "amarillo": "🟡", "rojo": "🔴"}
-TIPO = reglas.TIPOS
+TIPO = paquetes.todos_los_tipos()
+ACTIVOS = paquetes.activos()
 NIVEL = {"lider": "Líder", "gerente": "Gerente"}
-ETIQUETAS = {"nit": "NIT", "cliente": "Cliente", "numero": "Número de factura", "fecha_emision": "Fecha de emisión",
+ETIQUETAS = {"fecha": "Fecha de la factura", "nit": "NIT", "cliente": "Cliente", "numero": "Número de factura", "fecha_emision": "Fecha de emisión",
              "fecha_vencimiento": "Fecha de vencimiento", "saldo": "Saldo", "valor": "Valor", "vendedor": "Vendedor",
              "cupo": "Cupo de crédito"}
 ESTADO = {"pendiente": "Pendiente", "aprobada": "Aprobada", "ajustada": "Ajustada",
@@ -133,19 +134,24 @@ with st.sidebar:
 
 # --- Cargar datos ---------------------------------------------------------------------
 def pagina_cargar():
-    st.header("Cargar datos de cartera")
-    st.write("Sube el reporte de cartera por edades o de facturas pendientes que exportas de tu ERP "
-             "(Siigo, World Office, SAP) o tu Excel. Ontara reconoce las columnas y revisa la calidad "
-             "antes de guardar nada.")
+    st.header("Cargar datos")
+    reportes = list(dict.fromkeys(p.reporte for p in ACTIVOS))
+    tipo = st.radio("¿Qué reporte vas a cargar?", reportes, format_func=lambda t: paquetes.REPORTES[t]["nombre"],
+                    horizontal=True)
+    usa = ", ".join(p.nombre for p in paquetes.de_reporte(tipo))
+    st.write(("Sube el reporte de cartera por edades o de facturas pendientes" if tipo == "cartera" else
+              "Sube el reporte de ventas de los últimos 12 meses (todas las facturas, incluidas las pagadas)")
+             + " que exportas de tu ERP (Siigo, World Office, SAP) o tu Excel. Ontara reconoce las columnas y "
+             f"revisa la calidad antes de guardar nada. Lo usa: {usa}.")
     corte = st.date_input("Fecha de corte del reporte", value=date.today(), format="DD/MM/YYYY")
-    archivo = st.file_uploader("Archivo Excel o CSV", type=["xlsx", "xls", "csv"])
+    archivo = st.file_uploader("Archivo Excel o CSV", type=["xlsx", "xls", "csv"], key=f"archivo_{tipo}")
     if not archivo:
         st.info("También puedes probar con los archivos de `datos_ejemplo/`.")
         return
     crudo = ingesta.leer_archivo(archivo.getvalue(), archivo.name)
     st.caption(f"{len(crudo)} filas · {len(crudo.columns)} columnas")
 
-    plantilla = ontologia.cargar_plantilla()
+    plantilla = ontologia.cargar_plantilla(objeto=paquetes.REPORTES[tipo]["objeto"])
     sugerido = ontologia.sugerir_mapeo(list(crudo.columns), plantilla)
     st.subheader("1. Columnas")
     opciones = ["(no está)"] + list(crudo.columns)
@@ -154,12 +160,13 @@ def pagina_cargar():
     for i, campo in enumerate(plantilla.campos_factura):
         etiqueta = ETIQUETAS.get(campo.nombre, campo.nombre) + (" *" if campo.requerido else "")
         actual = sugerido.get(campo.nombre, "(no está)")
-        sel = cols[i % 3].selectbox(etiqueta, opciones, index=opciones.index(actual), key=f"map_{campo.nombre}")
+        sel = cols[i % 3].selectbox(etiqueta, opciones, index=opciones.index(actual), key=f"map_{tipo}_{campo.nombre}")
         if sel != "(no está)":
             mapeo[campo.nombre] = sel
 
     datos = ingesta.convertir(crudo, mapeo, plantilla)
-    informe, validas = calidad.evaluar(datos, mapeo, plantilla)
+    evaluar = calidad.evaluar if tipo == "cartera" else calidad.evaluar_ventas
+    informe, validas = evaluar(datos, mapeo, plantilla)
     st.subheader(f"2. Semáforo de calidad: {COLOR[informe.semaforo]} {informe.semaforo.capitalize()}")
     if informe.faltan_campos:
         st.error("Faltan columnas obligatorias: " + ", ".join(informe.faltan_campos))
@@ -173,13 +180,14 @@ def pagina_cargar():
     } for v in informe.validaciones]), hide_index=True, use_container_width=True)
 
     with motor().connect() as cx:
-        repetida = cx.execute(select(cargas.c.id).where(cargas.c.fecha_corte == corte)).first()
+        repetida = cx.execute(select(cargas.c.id).where(cargas.c.fecha_corte == corte,
+                                                         cargas.c.tipo == tipo)).first()
     if repetida:
         st.warning("Ya hay una carga con esta fecha de corte. Si continúas se guardará otra versión del mismo corte.")
 
     st.subheader("3. Guardar y recalcular")
     if st.button("Cargar y generar decisiones", type="primary", disabled=not informe.puede_cargar):
-        r = decisiones.registrar_carga(M, validas, informe, mapeo, corte, archivo.name, USUARIO)
+        r = decisiones.registrar_carga(M, validas, informe, mapeo, corte, archivo.name, USUARIO, tipo)
         st.success(f"Carga #{r['carga_id']} guardada. Decisiones nuevas: {r['decisiones_nuevas']}, "
                    f"actualizadas: {r['decisiones_actualizadas']}, cerradas: {r['decisiones_cerradas']}. "
                    f"Resultados medidos: {r['resultados_medidos']}.")
@@ -190,30 +198,46 @@ def pagina_cargar():
 # --- Bandeja -----------------------------------------------------------------------------
 def pagina_bandeja():
     st.header("Bandeja de decisiones")
-    c1, c2, c3 = st.columns([2, 1, 1])
+    c0, c1 = st.columns([1, 1])
+    paq = c0.segmented_control("Paquete", ["Todos", *(p.nombre for p in ACTIVOS)], default="Todos")
     filtro = c1.segmented_control("Estado", ["Abiertas", "Pendientes", "Todas"], default="Abiertas")
-    tipo = c2.selectbox("Tipo", ["Todos", *TIPO.values()])
+    paq_k = next((p.clave for p in ACTIVOS if p.nombre == paq), None)
+    tipos_vis = paquetes.obtener(paq_k).tipos if paq_k else TIPO
+    c2, c3, c4 = st.columns(3)
+    tipo = c2.selectbox("Tipo", ["Todos", *tipos_vis.values()])
     quien = c3.selectbox("Quién aprueba", ["Todos", "Líder", "Gerente"],
-                         index=2 if ROL == "gerente" else 0)
+                         index=2 if ROL == "gerente" and paq_k != "comercial" else 0)
     estados = {"Abiertas": decisiones.ABIERTAS, "Pendientes": ("pendiente",), "Todas": None}[filtro or "Abiertas"]
     tipo_k = {v: k for k, v in TIPO.items()}.get(tipo)
     nivel_k = {"Líder": "lider", "Gerente": "gerente"}.get(quien)
-    lista = decisiones.listar(M, estados, tipo_k, nivel=nivel_k)
+    lista = decisiones.listar(M, estados, tipo_k, nivel=nivel_k, paquete=paq_k)
+    vendedores = sorted({d["evidencia"].get("vendedor") or d.get("vendedor") for d in lista} - {None})
+    vend = c4.selectbox("Vendedor", ["Todos", *vendedores])
+    if vend != "Todos":
+        lista = [d for d in lista if (d["evidencia"].get("vendedor") or d.get("vendedor")) == vend]
     if not lista:
-        st.info("No hay decisiones con este filtro. Carga un corte de cartera para empezar.")
+        st.info("No hay decisiones con este filtro. Carga un reporte para empezar.")
         return
     total = sum(d["evidencia"]["saldo_vencido"] for d in lista if d["tipo"] == "cobrar")
     cupo = sum(d["evidencia"].get("aumento_sugerido", 0) for d in lista if d["tipo"] == "ampliar_cupo")
+    riesgo = sum(d["saldo_vencido_inicial"] for d in lista if d["tipo"] == "recuperar_cliente")
     st.caption(f"{len(lista)} decisiones · {pesos(total)} vencidos en las de cobro · "
-               f"{pesos(cupo)} de cupo adicional sugerido para buenos pagadores")
+               f"{pesos(cupo)} de cupo adicional sugerido · {pesos(riesgo)} de ventas trimestrales en riesgo "
+               f"en clientes que se están enfriando")
     for d in lista:
         ev = d["evidencia"]
-        icono = "🟢" if d["tipo"] == "ampliar_cupo" else "🔴" if d["prioridad"] >= 70 else \
+        icono = "🟢" if d["tipo"] in ("ampliar_cupo", "crecer_cliente") else "🔴" if d["prioridad"] >= 70 else \
             "🟡" if d["prioridad"] >= 40 else "⚪"
         clave = " ⭐" if ev.get("cliente_clave") else ""
         gerente = " · aprueba gerente" if d["nivel_aprobacion"] == "gerente" else ""
-        detalle_tipo = (f"{ev.get('uso_cupo_pct', 0):.0f}% del cupo usado" if d["tipo"] == "ampliar_cupo"
-                        else f"{pesos(ev['saldo_vencido'])} vencidos · {ev['dias_mora_max']} días")
+        if d["tipo"] == "ampliar_cupo":
+            detalle_tipo = f"{ev.get('uso_cupo_pct', 0):.0f}% del cupo usado"
+        elif d["tipo"] == "recuperar_cliente":
+            detalle_tipo = f"{ev['dias_sin_comprar']} días sin comprar · 90 días {-ev['caida_pct']:+.0f}%"
+        elif d["tipo"] == "crecer_cliente":
+            detalle_tipo = f"90 días {pesos(ev['ventas_90d'])}"
+        else:
+            detalle_tipo = f"{pesos(ev['saldo_vencido'])} vencidos · {ev['dias_mora_max']} días"
         titulo = (f"{icono} {d['prioridad']:.0f} · {d['cliente']}{clave} · {TIPO[d['tipo']]} · "
                   f"{detalle_tipo} · {ESTADO[d['estado']]}{gerente}")
         with st.expander(titulo):
@@ -224,6 +248,34 @@ def tarjeta(d: dict):
     ev = d["evidencia"]
     st.markdown(f"**Decisión #{d['id']}: {d['recomendacion']}**")
     st.write(d["motivo"])
+    if d["paquete"] == "comercial":
+        tarjeta_comercial(d, ev)
+    else:
+        tarjeta_cartera(d, ev)
+    acciones_y_historial(d)
+
+
+def tarjeta_comercial(d: dict, ev: dict):
+    a, b, c, e = st.columns(4)
+    a.metric("Ventas 12 meses", pesos(ev["ventas_12m"]))
+    b.metric("Últimos 90 días", pesos(ev["ventas_90d"]),
+             delta=f"{-ev['caida_pct']:+.0f}% vs. su trimestre promedio")
+    c.metric("Días sin comprar", ev["dias_sin_comprar"],
+             help=f"Suele comprar cada {ev['frecuencia_dias']:.0f} días" if ev.get("frecuencia_dias") else None)
+    e.metric("Vendedor", ev.get("vendedor") or "Sin dato")
+    st.caption(f"{ev['compras_12m']} compras en 12 meses · cada {ev['frecuencia_dias'] or 0:.0f} días en promedio · "
+               f"{ev['participacion_ventas_pct']}% de las ventas" + (" · ⭐ cliente clave" if ev.get("cliente_clave") else ""))
+    for cruce in ev.get("cruces_cartera", []):
+        st.info("Cruce con Cartera: " + cruce)
+    if ev.get("ultimas_compras"):
+        tabla = pd.DataFrame(ev["ultimas_compras"])
+        tabla["valor"] = tabla["valor"].map(pesos)
+        st.dataframe(tabla.rename(columns={"fecha": "Fecha", "numero": "Factura", "valor": "Valor"}),
+                     hide_index=True, use_container_width=True)
+    st.caption(f"NIT {d['nit']} · Regla comercial v{ev.get('regla_version')} · reporte {ev['fecha_corte']}")
+
+
+def tarjeta_cartera(d: dict, ev: dict):
     a, b, c, e = st.columns(4)
     a.metric("Saldo total", pesos(ev["saldo_total"]))
     if d["tipo"] == "ampliar_cupo":
@@ -237,9 +289,6 @@ def tarjeta(d: dict):
         st.caption(f"Compras de los últimos {ev['meses_valor_cliente']} meses: {pesos(ev['compras_ventana'])} "
                    f"({ev['participacion_compras_pct']}% del total)"
                    + (" · ⭐ cliente clave" if ev.get("cliente_clave") else ""))
-    if d["nivel_aprobacion"] == "gerente":
-        st.warning("Esta decisión la aprueba el gerente (matriz de delegación). "
-                   + ("" if ROL == "gerente" else "Puedes dejar una nota para escalarla."))
     if ev.get("facturas"):
         tabla = pd.DataFrame(ev["facturas"])
         tabla["saldo"] = tabla["saldo"].map(pesos)
@@ -250,6 +299,11 @@ def tarjeta(d: dict):
                f"prioridad = monto {ev['componentes_prioridad']['monto']}, mora "
                f"{ev['componentes_prioridad']['mora']}, tendencia {ev['componentes_prioridad']['tendencia']}")
 
+
+def acciones_y_historial(d: dict):
+    if d["nivel_aprobacion"] == "gerente":
+        st.warning("Esta decisión la aprueba el gerente (matriz de delegación). "
+                   + ("" if ROL == "gerente" else "Puedes dejar una nota para escalarla."))
     det = decisiones.detalle(M, d["id"])
     if d["estado"] in decisiones.ABIERTAS:
         clave = f"txt_{d['id']}"
@@ -286,7 +340,37 @@ def tarjeta(d: dict):
 
 # --- Impacto -------------------------------------------------------------------------------
 def pagina_impacto():
-    st.header("Impacto frente a la línea base")
+    st.header("Impacto")
+    pestanas = st.tabs([p.nombre for p in ACTIVOS])
+    for tab, paq in zip(pestanas, ACTIVOS):
+        with tab:
+            impacto_cartera() if paq.clave == "cartera" else impacto_comercial()
+
+
+def impacto_comercial():
+    r = comercial.resumen(M)
+    if not r["ultimo_reporte"]:
+        st.info("Carga el reporte de ventas para activar Foco comercial.")
+        return
+    st.caption(f"Último reporte de ventas: {r['ultimo_reporte']:%d/%m/%Y}. Los resultados se miden con el siguiente "
+               "reporte: si el cliente alertado volvió a comprar y cuánto.")
+    a, b, c = st.columns(3)
+    a.metric("Alertas medidas", r["alertas_medidas"])
+    b.metric("Clientes atendidos que volvieron", r["volvieron_atendidas"])
+    c.metric("Ventas de clientes atendidos desde la alerta", pesos(r["ventas_recuperadas_atendidas"]))
+    st.subheader("Efecto frente al grupo de control")
+    if not r["n_control"] or r["efecto_estimado"] is None:
+        st.info("Aún no hay resultados del grupo de control. Se miden desde el segundo reporte de ventas.")
+        return
+    x, y, z = st.columns(3)
+    x.metric("Volvieron a comprar con la bandeja", f"{r['pct_volvio_tratamiento']}%", help=f"{r['n_tratamiento']} alertas")
+    y.metric("Volvieron sin gestión (control)", f"{r['pct_volvio_control']}%", help=f"{r['n_control']} alertas")
+    z.metric("Ventas adicionales atribuibles", pesos(r["efecto_estimado"]))
+    if not r["muestra_suficiente"]:
+        st.caption("Todavía hay pocos casos (menos de 10 por grupo): la diferencia puede ser azar.")
+
+
+def impacto_cartera():
     r = impacto.resumen(M)
     if not r["linea_base"]:
         st.info("Todavía no hay línea base. Se crea automáticamente con la primera carga.")
@@ -371,7 +455,52 @@ def pagina_asistente():
 
 # --- Reglas -----------------------------------------------------------------------------------
 def pagina_reglas():
-    st.header("Reglas de cartera")
+    st.header("Reglas")
+    paq = st.segmented_control("Paquete", [p.nombre for p in ACTIVOS], default=ACTIVOS[0].nombre) or ACTIVOS[0].nombre
+    paq = next(p for p in ACTIVOS if p.nombre == paq)
+    if paq.clave == "cartera":
+        reglas_cartera()
+    else:
+        reglas_genericas(paq)
+
+
+def _guardar_y_recalcular(n: dict, nota: str, paq):
+    try:
+        reglas.guardar_parametros(M, n, USUARIO, nota, paquete=paq.clave)
+        ultima = decisiones.ultima_carga(M, paq.reporte)
+        if ultima:
+            decisiones.recalcular(M, ultima)
+        st.success("Reglas guardadas y bandeja recalculada.")
+    except ValueError as e:
+        st.error(str(e))
+
+
+def reglas_genericas(paq):
+    """Formulario a partir del YAML del paquete: sirve para cualquier paquete nuevo sin escribir pantalla."""
+    activa = reglas.regla_activa(M, paq.clave)
+    p = activa["parametros"]
+    etiquetas = reglas.descripciones(paq.clave)
+    st.caption(f"{paq.nombre} · versión activa v{activa['version']}. Cada cambio guarda una versión nueva.")
+    editable = ROL == "gerente"
+    if not editable:
+        st.info("Solo el rol gerente puede cambiar los parámetros.")
+    with st.form(f"reglas_{paq.clave}"):
+        n, cols = {}, st.columns(2)
+        editables = [k for k, v in p.items() if isinstance(v, (int, float))]
+        for i, k in enumerate(editables):
+            v, etiqueta = p[k], etiquetas.get(k, k)
+            if isinstance(v, bool):
+                n[k] = cols[i % 2].checkbox(etiqueta, v)
+            elif isinstance(v, int):
+                n[k] = cols[i % 2].number_input(etiqueta, 0, value=v, step=max(1, 10 ** (len(str(v)) - 2)))
+            else:
+                n[k] = cols[i % 2].number_input(etiqueta, 0.0, value=float(v), step=0.1)
+        nota = st.text_input("¿Por qué el cambio?")
+        if st.form_submit_button("Guardar nueva versión y recalcular", disabled=not editable):
+            _guardar_y_recalcular(n, nota, paq)
+
+
+def reglas_cartera():
     activa = reglas.regla_activa(M)
     p = activa["parametros"]
     st.caption(f"Versión activa: v{activa['version']}. Cada cambio guarda una versión nueva y las decisiones "
@@ -436,16 +565,7 @@ def pagina_reglas():
             format_func=lambda nit: f"{directorio[nit]} ({nit})", placeholder="Elige clientes")
         nota = st.text_input("¿Por qué el cambio?")
         if st.form_submit_button("Guardar nueva versión y recalcular", disabled=not editable):
-            try:
-                reglas.guardar_parametros(M, n, USUARIO, nota)
-                with M.connect() as cx:
-                    ultima = cx.execute(select(cargas.c.id).order_by(cargas.c.fecha_corte.desc(),
-                                                                     cargas.c.id.desc()).limit(1)).scalar()
-                if ultima:
-                    decisiones.recalcular(M, ultima)
-                st.success("Reglas guardadas y bandeja recalculada.")
-            except ValueError as e:
-                st.error(str(e))
+            _guardar_y_recalcular(n, nota, paquetes.obtener("cartera"))
 
 
 # --- Accesos (solo gerente) ---------------------------------------------------------------------

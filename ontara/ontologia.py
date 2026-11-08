@@ -37,14 +37,15 @@ class Plantilla:
         return next(c for c in self.campos_factura if c.nombre == nombre)
 
 
-@lru_cache(maxsize=8)
-def cargar_plantilla(nombre: str | None = None) -> Plantilla:
+@lru_cache(maxsize=16)
+def cargar_plantilla(nombre: str | None = None, objeto: str = "Factura") -> Plantilla:
+    """Campos estándar de un objeto de la ontología: Factura (reporte de cartera) o Venta (reporte de ventas)."""
     nombre = nombre or config.plantilla_sector()
     ruta = config.DIR_PLANTILLAS / f"{nombre}.yaml"
     datos = yaml.safe_load(ruta.read_text(encoding="utf-8"))
     campos = tuple(
         Campo(n, d["tipo"], bool(d.get("requerido")), tuple(d.get("sinonimos", [])))
-        for n, d in datos["objetos"]["Factura"]["campos"].items()
+        for n, d in datos["objetos"][objeto]["campos"].items()
     )
     return Plantilla(datos["nombre"], int(datos["version"]), campos)
 

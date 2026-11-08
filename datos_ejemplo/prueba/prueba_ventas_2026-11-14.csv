@@ -1,0 +1,1221 @@
+NIT;Cliente;Factura;Fecha;Total;Vendedor
+953464097-2;Supermercados La Cosecha;FV-000002;15/11/2025;$ 24.458.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000003;20/11/2025;$ 25.856.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000004;29/11/2025;$ 30.262.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000005;04/12/2025;$ 22.305.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000006;11/12/2025;$ 24.668.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000007;18/12/2025;$ 22.645.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000008;23/12/2025;$ 25.698.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000009;01/01/2026;$ 25.505.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000010;07/01/2026;$ 27.495.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000011;13/01/2026;$ 26.196.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000012;19/01/2026;$ 26.235.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000013;26/01/2026;$ 27.016.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000014;04/02/2026;$ 22.990.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000015;09/02/2026;$ 23.718.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000016;17/02/2026;$ 32.517.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000017;23/02/2026;$ 31.860.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000018;04/03/2026;$ 32.072.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000019;12/03/2026;$ 28.211.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000020;18/03/2026;$ 29.254.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000021;27/03/2026;$ 31.763.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000022;03/04/2026;$ 27.924.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000023;10/04/2026;$ 29.252.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000024;19/04/2026;$ 28.767.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000025;27/04/2026;$ 31.423.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000026;04/05/2026;$ 25.049.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000027;11/05/2026;$ 26.057.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000028;16/05/2026;$ 23.307.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000029;23/05/2026;$ 29.936.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000030;30/05/2026;$ 28.818.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000031;05/06/2026;$ 28.031.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000032;12/06/2026;$ 32.066.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000033;20/06/2026;$ 22.606.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000034;27/06/2026;$ 25.082.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000035;02/07/2026;$ 22.438.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000036;07/07/2026;$ 24.033.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000037;15/07/2026;$ 28.799.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000038;23/07/2026;$ 24.717.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000039;30/07/2026;$ 28.847.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000040;06/08/2026;$ 43.762.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000041;12/08/2026;$ 45.614.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000042;21/08/2026;$ 35.410.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000043;27/08/2026;$ 46.895.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000044;05/09/2026;$ 44.309.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000045;13/09/2026;$ 37.349.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000046;20/09/2026;$ 42.709.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000047;26/09/2026;$ 40.514.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000048;01/10/2026;$ 45.561.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000049;09/10/2026;$ 43.808.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000050;14/10/2026;$ 45.302.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000051;19/10/2026;$ 44.431.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000052;28/10/2026;$ 35.400.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000053;04/11/2026;$ 48.204.000;Ana Gómez
+953464097-2;Supermercados La Cosecha;FV-000054;11/11/2026;$ 40.550.000;Ana Gómez
+940427945-5;Distribuidora Cañaveral;FV-010003;17/11/2025;$ 6.456.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010004;24/11/2025;$ 6.001.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010005;01/12/2025;$ 6.498.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010006;09/12/2025;$ 5.555.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010007;17/12/2025;$ 5.582.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010008;24/12/2025;$ 6.117.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010009;01/01/2026;$ 7.672.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010010;06/01/2026;$ 6.816.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010011;12/01/2026;$ 6.615.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010012;19/01/2026;$ 8.134.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010013;24/01/2026;$ 7.355.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010014;30/01/2026;$ 7.106.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010015;04/02/2026;$ 5.947.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010016;11/02/2026;$ 5.941.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010017;16/02/2026;$ 6.046.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010018;21/02/2026;$ 8.109.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010019;01/03/2026;$ 6.815.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010020;10/03/2026;$ 5.998.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010021;18/03/2026;$ 8.224.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010022;23/03/2026;$ 7.251.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010023;01/04/2026;$ 6.592.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010024;06/04/2026;$ 7.872.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010025;15/04/2026;$ 7.918.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010026;23/04/2026;$ 6.587.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010027;01/05/2026;$ 6.491.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010028;08/05/2026;$ 8.262.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010029;13/05/2026;$ 6.546.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010030;21/05/2026;$ 6.228.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010031;26/05/2026;$ 5.598.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010032;03/06/2026;$ 6.852.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010033;09/06/2026;$ 6.664.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010034;18/06/2026;$ 6.256.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010035;25/06/2026;$ 6.115.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010036;04/07/2026;$ 6.946.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010037;09/07/2026;$ 5.865.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010038;14/07/2026;$ 8.260.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010039;23/07/2026;$ 6.483.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010040;30/07/2026;$ 6.330.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010041;08/08/2026;$ 10.928.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010042;13/08/2026;$ 8.829.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010043;22/08/2026;$ 10.424.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010044;29/08/2026;$ 11.402.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010045;06/09/2026;$ 8.665.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010046;15/09/2026;$ 11.152.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010047;21/09/2026;$ 10.434.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010048;30/09/2026;$ 11.740.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010049;06/10/2026;$ 8.293.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010050;15/10/2026;$ 11.411.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010051;24/10/2026;$ 12.430.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010052;29/10/2026;$ 12.122.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010053;04/11/2026;$ 9.563.000;Luis Pérez
+940427945-5;Distribuidora Cañaveral;FV-010054;11/11/2026;$ 11.244.000;Luis Pérez
+972143795-9;Panadería Pan del Valle;FV-020003;18/11/2025;$ 8.176.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020004;26/11/2025;$ 7.906.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020005;01/12/2025;$ 7.900.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020006;09/12/2025;$ 6.925.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020007;15/12/2025;$ 6.408.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020008;20/12/2025;$ 7.355.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020009;29/12/2025;$ 6.172.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020010;04/01/2026;$ 7.109.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020011;09/01/2026;$ 7.916.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020012;14/01/2026;$ 7.220.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020013;20/01/2026;$ 6.071.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020014;25/01/2026;$ 8.004.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020015;03/02/2026;$ 5.665.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020016;08/02/2026;$ 6.189.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020017;17/02/2026;$ 6.211.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020018;23/02/2026;$ 8.050.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020019;01/03/2026;$ 6.996.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020020;08/03/2026;$ 8.090.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020021;17/03/2026;$ 8.001.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020022;24/03/2026;$ 6.594.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020023;02/04/2026;$ 6.896.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020024;11/04/2026;$ 5.829.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020025;17/04/2026;$ 5.558.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020026;24/04/2026;$ 6.545.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020027;30/04/2026;$ 7.339.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020028;05/05/2026;$ 6.622.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020029;12/05/2026;$ 6.075.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020030;20/05/2026;$ 6.886.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020031;25/05/2026;$ 6.390.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020032;30/05/2026;$ 6.075.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020033;06/06/2026;$ 7.699.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020034;13/06/2026;$ 7.118.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020035;19/06/2026;$ 8.023.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020036;28/06/2026;$ 5.597.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020037;03/07/2026;$ 6.408.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020038;12/07/2026;$ 7.687.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020039;19/07/2026;$ 5.785.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020040;26/07/2026;$ 7.558.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020041;03/08/2026;$ 7.641.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020042;11/08/2026;$ 6.680.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020043;19/08/2026;$ 6.662.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020044;24/08/2026;$ 5.640.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020045;31/08/2026;$ 6.699.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020046;05/09/2026;$ 6.741.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020047;11/09/2026;$ 7.625.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020048;17/09/2026;$ 8.122.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020049;22/09/2026;$ 6.738.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020050;28/09/2026;$ 7.459.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020051;07/10/2026;$ 6.836.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020052;12/10/2026;$ 6.904.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020053;19/10/2026;$ 6.660.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020054;24/10/2026;$ 8.007.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020055;30/10/2026;$ 5.544.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020056;04/11/2026;$ 7.808.000;Marta Ríos
+972143795-9;Panadería Pan del Valle;FV-020057;10/11/2026;$ 8.159.000;Marta Ríos
+986692358-0;Ferretería El Tornillo;FV-030004;19/11/2025;$ 5.640.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030005;27/11/2025;$ 7.460.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030006;02/12/2025;$ 7.858.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030007;11/12/2025;$ 7.577.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030008;19/12/2025;$ 6.687.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030009;24/12/2025;$ 7.827.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030010;02/01/2026;$ 6.558.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030011;10/01/2026;$ 7.176.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030012;18/01/2026;$ 7.500.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030013;25/01/2026;$ 6.691.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030014;01/02/2026;$ 7.493.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030015;09/02/2026;$ 5.900.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030016;16/02/2026;$ 5.733.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030017;22/02/2026;$ 8.260.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030018;02/03/2026;$ 8.113.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030019;08/03/2026;$ 5.708.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030020;13/03/2026;$ 6.069.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030021;19/03/2026;$ 7.446.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030022;27/03/2026;$ 8.160.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030023;02/04/2026;$ 7.006.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030024;07/04/2026;$ 6.862.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030025;13/04/2026;$ 5.714.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030026;19/04/2026;$ 6.808.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030027;26/04/2026;$ 7.903.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030028;05/05/2026;$ 8.228.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030029;10/05/2026;$ 6.857.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030030;16/05/2026;$ 7.226.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030031;25/05/2026;$ 8.081.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030032;02/06/2026;$ 6.125.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030033;07/06/2026;$ 7.456.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030034;16/06/2026;$ 5.998.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030035;22/06/2026;$ 6.334.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030036;01/07/2026;$ 8.244.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030037;07/07/2026;$ 6.686.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030038;14/07/2026;$ 6.192.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030039;20/07/2026;$ 7.517.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030040;25/07/2026;$ 8.089.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030041;01/08/2026;$ 7.969.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030042;06/08/2026;$ 9.592.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030043;15/08/2026;$ 10.521.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030044;24/08/2026;$ 10.449.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030045;29/08/2026;$ 9.255.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030046;03/09/2026;$ 9.128.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030047;12/09/2026;$ 11.102.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030048;19/09/2026;$ 11.019.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030049;27/09/2026;$ 8.585.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030050;06/10/2026;$ 10.038.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030051;14/10/2026;$ 9.650.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030052;21/10/2026;$ 10.107.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030053;30/10/2026;$ 8.652.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030054;04/11/2026;$ 8.795.000;Jorge Cuero
+986692358-0;Ferretería El Tornillo;FV-030055;13/11/2026;$ 10.232.000;Jorge Cuero
+970717355-8;Droguería San Rafael;FV-040003;17/11/2025;$ 7.587.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040004;26/11/2025;$ 7.227.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040005;05/12/2025;$ 7.035.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040006;12/12/2025;$ 5.819.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040007;17/12/2025;$ 7.836.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040008;23/12/2025;$ 6.651.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040009;01/01/2026;$ 7.806.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040010;07/01/2026;$ 8.073.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040011;15/01/2026;$ 5.855.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040012;23/01/2026;$ 7.629.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040013;28/01/2026;$ 7.999.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040014;03/02/2026;$ 5.568.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040015;08/02/2026;$ 8.131.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040016;13/02/2026;$ 6.277.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040017;21/02/2026;$ 6.795.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040018;01/03/2026;$ 7.563.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040019;06/03/2026;$ 7.177.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040020;14/03/2026;$ 5.866.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040021;21/03/2026;$ 8.217.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040022;27/03/2026;$ 6.758.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040023;03/04/2026;$ 7.212.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040024;11/04/2026;$ 7.304.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040025;16/04/2026;$ 7.725.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040026;23/04/2026;$ 8.014.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040027;01/05/2026;$ 6.077.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040028;09/05/2026;$ 6.652.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040029;18/05/2026;$ 6.478.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040030;24/05/2026;$ 6.755.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040031;31/05/2026;$ 7.671.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040032;06/06/2026;$ 5.767.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040033;15/06/2026;$ 8.035.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040034;22/06/2026;$ 6.945.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040035;30/06/2026;$ 7.612.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040036;07/07/2026;$ 8.168.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040037;15/07/2026;$ 7.301.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040038;21/07/2026;$ 7.895.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040039;29/07/2026;$ 8.180.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040040;06/08/2026;$ 10.245.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040041;15/08/2026;$ 11.566.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040042;22/08/2026;$ 12.194.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040043;27/08/2026;$ 11.088.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040044;02/09/2026;$ 12.354.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040045;07/09/2026;$ 11.782.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040046;12/09/2026;$ 9.468.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040047;18/09/2026;$ 10.013.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040048;27/09/2026;$ 9.170.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040049;04/10/2026;$ 11.091.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040050;11/10/2026;$ 10.169.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040051;17/10/2026;$ 9.457.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040052;25/10/2026;$ 11.864.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040053;03/11/2026;$ 11.820.000;Ana Gómez
+970717355-8;Droguería San Rafael;FV-040054;10/11/2026;$ 11.305.000;Ana Gómez
+973695798-4;Restaurante Sabor Caleño;FV-050003;19/11/2025;$ 6.338.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050004;28/11/2025;$ 7.307.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050005;03/12/2025;$ 6.650.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050006;12/12/2025;$ 6.644.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050007;21/12/2025;$ 7.321.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050008;26/12/2025;$ 7.589.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050009;02/01/2026;$ 8.201.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050010;10/01/2026;$ 6.215.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050011;15/01/2026;$ 6.344.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050012;21/01/2026;$ 6.115.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050013;29/01/2026;$ 7.657.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050014;07/02/2026;$ 7.673.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050015;12/02/2026;$ 6.582.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050016;19/02/2026;$ 7.798.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050017;26/02/2026;$ 8.102.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050018;05/03/2026;$ 6.038.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050019;10/03/2026;$ 6.567.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050020;19/03/2026;$ 7.922.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050021;27/03/2026;$ 6.639.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050022;03/04/2026;$ 6.298.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050023;09/04/2026;$ 5.998.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050024;16/04/2026;$ 6.684.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050025;21/04/2026;$ 6.970.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050026;30/04/2026;$ 6.459.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050027;07/05/2026;$ 7.294.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050028;12/05/2026;$ 6.436.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050029;21/05/2026;$ 6.924.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050030;26/05/2026;$ 6.954.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050031;31/05/2026;$ 7.290.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050032;08/06/2026;$ 6.463.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050033;16/06/2026;$ 8.101.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050034;25/06/2026;$ 6.999.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050035;03/07/2026;$ 6.931.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050036;08/07/2026;$ 7.462.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050037;17/07/2026;$ 6.583.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050038;23/07/2026;$ 6.453.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050039;28/07/2026;$ 6.290.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050040;05/08/2026;$ 5.724.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050041;13/08/2026;$ 6.100.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050042;22/08/2026;$ 6.610.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050043;27/08/2026;$ 5.647.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050044;05/09/2026;$ 6.250.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050045;13/09/2026;$ 6.440.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050046;21/09/2026;$ 7.028.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050047;26/09/2026;$ 6.750.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050048;01/10/2026;$ 8.079.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050049;10/10/2026;$ 6.051.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050050;19/10/2026;$ 6.564.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050051;28/10/2026;$ 6.743.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050052;02/11/2026;$ 7.261.000;Luis Pérez
+973695798-4;Restaurante Sabor Caleño;FV-050053;08/11/2026;$ 7.416.000;Luis Pérez
+944763531-4;Minimercado El Paisa;FV-060002;19/11/2025;$ 7.440.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060003;02/12/2025;$ 7.163.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060004;15/12/2025;$ 7.207.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060005;30/12/2025;$ 6.047.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060006;14/01/2026;$ 5.524.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060007;26/01/2026;$ 7.213.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060008;10/02/2026;$ 5.487.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060009;26/02/2026;$ 5.531.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060010;11/03/2026;$ 7.364.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060011;24/03/2026;$ 5.235.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060012;09/04/2026;$ 5.219.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060013;25/04/2026;$ 7.248.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060014;10/05/2026;$ 6.840.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060015;22/05/2026;$ 6.693.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060016;05/06/2026;$ 5.464.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060017;18/06/2026;$ 6.503.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060018;30/06/2026;$ 6.817.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060019;15/07/2026;$ 5.393.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060020;30/07/2026;$ 5.573.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060021;12/08/2026;$ 6.075.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060022;28/08/2026;$ 6.460.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060023;10/09/2026;$ 5.829.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060024;25/09/2026;$ 6.731.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060025;10/10/2026;$ 7.313.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060026;22/10/2026;$ 6.364.000;Marta Ríos
+944763531-4;Minimercado El Paisa;FV-060027;07/11/2026;$ 7.403.000;Marta Ríos
+924338283-9;Agrotienda La Palma;FV-070002;27/11/2025;$ 6.410.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070003;10/12/2025;$ 6.323.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070004;22/12/2025;$ 6.112.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070005;04/01/2026;$ 7.553.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070006;16/01/2026;$ 6.294.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070007;29/01/2026;$ 7.494.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070008;10/02/2026;$ 5.515.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070009;23/02/2026;$ 6.897.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070010;11/03/2026;$ 6.212.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070011;25/03/2026;$ 6.141.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070012;09/04/2026;$ 6.002.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070013;23/04/2026;$ 7.334.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070014;09/05/2026;$ 5.709.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070015;23/05/2026;$ 6.925.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070016;05/06/2026;$ 5.279.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070017;17/06/2026;$ 6.866.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070018;29/06/2026;$ 6.908.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070019;14/07/2026;$ 6.891.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070020;26/07/2026;$ 6.721.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070021;09/08/2026;$ 5.200.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070022;22/08/2026;$ 7.462.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070023;06/09/2026;$ 5.538.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070024;22/09/2026;$ 5.330.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070025;04/10/2026;$ 6.685.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070026;19/10/2026;$ 5.434.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070027;31/10/2026;$ 5.571.000;Jorge Cuero
+924338283-9;Agrotienda La Palma;FV-070028;14/11/2026;$ 7.608.000;Jorge Cuero
+938048866-0;Constructora Río Cauca;FV-080002;18/11/2025;$ 19.349.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080003;28/11/2025;$ 24.566.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080004;10/12/2025;$ 21.823.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080005;21/12/2025;$ 23.617.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080006;02/01/2026;$ 21.626.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080007;14/01/2026;$ 25.303.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080008;25/01/2026;$ 21.846.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080009;03/02/2026;$ 21.419.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080010;12/02/2026;$ 26.026.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080011;20/02/2026;$ 25.488.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080012;28/02/2026;$ 21.853.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080013;10/03/2026;$ 20.424.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080014;22/03/2026;$ 23.504.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080015;03/04/2026;$ 21.551.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080016;13/04/2026;$ 20.245.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080017;21/04/2026;$ 24.342.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080018;03/05/2026;$ 27.273.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080019;13/05/2026;$ 19.170.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080020;21/05/2026;$ 26.328.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080021;31/05/2026;$ 26.645.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080022;08/06/2026;$ 21.777.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080023;20/06/2026;$ 19.705.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080024;01/07/2026;$ 25.642.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080025;12/07/2026;$ 20.427.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080026;20/07/2026;$ 18.586.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080027;01/08/2026;$ 24.945.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080028;13/08/2026;$ 20.151.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080029;24/08/2026;$ 26.750.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080030;04/09/2026;$ 21.445.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080031;12/09/2026;$ 18.683.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080032;23/09/2026;$ 23.502.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080033;01/10/2026;$ 22.728.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080034;12/10/2026;$ 19.001.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080035;22/10/2026;$ 24.835.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080036;31/10/2026;$ 23.502.000;Ana Gómez
+938048866-0;Constructora Río Cauca;FV-080037;10/11/2026;$ 21.786.000;Ana Gómez
+958522765-7;Hoteles Farallones;FV-090002;15/11/2025;$ 24.892.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090003;23/11/2025;$ 23.782.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090004;05/12/2025;$ 24.522.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090005;15/12/2025;$ 21.996.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090006;23/12/2025;$ 23.885.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090007;31/12/2025;$ 23.241.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090008;08/01/2026;$ 20.467.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090009;19/01/2026;$ 20.234.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090010;27/01/2026;$ 18.699.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090011;05/02/2026;$ 25.625.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090012;16/02/2026;$ 23.030.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090013;27/02/2026;$ 26.027.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090014;11/03/2026;$ 23.870.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090015;23/03/2026;$ 27.625.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090016;01/04/2026;$ 26.237.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090017;10/04/2026;$ 21.482.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090018;19/04/2026;$ 20.372.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090019;29/04/2026;$ 26.849.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090020;10/05/2026;$ 22.763.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090021;20/05/2026;$ 18.721.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090022;01/06/2026;$ 20.432.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090023;11/06/2026;$ 20.466.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090024;23/06/2026;$ 23.876.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090025;04/07/2026;$ 23.860.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090026;13/07/2026;$ 22.277.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090027;24/07/2026;$ 19.484.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090028;04/08/2026;$ 13.643.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090029;12/08/2026;$ 13.526.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090030;24/08/2026;$ 14.066.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090031;04/09/2026;$ 11.024.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090032;15/09/2026;$ 12.883.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090033;27/09/2026;$ 11.601.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090034;08/10/2026;$ 12.435.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090035;20/10/2026;$ 12.238.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090036;29/10/2026;$ 12.851.000;Luis Pérez
+958522765-7;Hoteles Farallones;FV-090037;09/11/2026;$ 11.242.000;Luis Pérez
+980059494-6;Tienda Doña Inés;FV-100001;17/11/2025;$ 2.526.000;Marta Ríos
+980059494-6;Tienda Doña Inés;FV-100002;09/12/2025;$ 2.661.000;Marta Ríos
+980059494-6;Tienda Doña Inés;FV-100003;28/12/2025;$ 2.382.000;Marta Ríos
+980059494-6;Tienda Doña Inés;FV-100004;18/01/2026;$ 3.205.000;Marta Ríos
+980059494-6;Tienda Doña Inés;FV-100005;07/02/2026;$ 2.824.000;Marta Ríos
+980059494-6;Tienda Doña Inés;FV-100006;27/02/2026;$ 2.623.000;Marta Ríos
+980059494-6;Tienda Doña Inés;FV-100007;20/03/2026;$ 3.295.000;Marta Ríos
+980059494-6;Tienda Doña Inés;FV-100008;11/04/2026;$ 3.029.000;Marta Ríos
+980059494-6;Tienda Doña Inés;FV-100009;02/05/2026;$ 3.100.000;Marta Ríos
+980059494-6;Tienda Doña Inés;FV-100010;25/05/2026;$ 2.645.000;Marta Ríos
+980059494-6;Tienda Doña Inés;FV-100011;13/06/2026;$ 2.861.000;Marta Ríos
+980059494-6;Tienda Doña Inés;FV-100012;02/07/2026;$ 3.241.000;Marta Ríos
+980059494-6;Tienda Doña Inés;FV-100013;21/07/2026;$ 3.156.000;Marta Ríos
+980059494-6;Tienda Doña Inés;FV-100014;12/08/2026;$ 3.011.000;Marta Ríos
+980059494-6;Tienda Doña Inés;FV-100015;01/09/2026;$ 2.943.000;Marta Ríos
+980059494-6;Tienda Doña Inés;FV-100016;05/11/2026;$ 2.872.000;Marta Ríos
+934328958-1;Cafetería El Parque;FV-110002;16/11/2025;$ 1.307.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110003;25/11/2025;$ 1.436.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110004;07/12/2025;$ 1.497.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110005;16/12/2025;$ 1.323.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110006;24/12/2025;$ 1.213.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110007;01/01/2026;$ 1.117.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110008;12/01/2026;$ 1.320.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110009;22/01/2026;$ 1.071.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110010;31/01/2026;$ 1.459.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110011;12/02/2026;$ 1.124.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110012;24/02/2026;$ 1.367.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110013;07/03/2026;$ 1.496.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110014;15/03/2026;$ 1.429.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110015;27/03/2026;$ 1.201.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110016;07/04/2026;$ 1.556.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110017;17/04/2026;$ 1.343.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110018;29/04/2026;$ 1.278.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110019;08/05/2026;$ 1.570.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110020;16/05/2026;$ 1.294.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110021;25/05/2026;$ 1.511.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110022;02/06/2026;$ 1.188.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110023;12/06/2026;$ 1.055.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110024;20/06/2026;$ 1.277.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110025;01/07/2026;$ 1.402.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110026;10/07/2026;$ 1.441.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110027;18/07/2026;$ 1.331.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110028;28/07/2026;$ 1.338.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110029;05/08/2026;$ 1.112.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110030;17/08/2026;$ 1.182.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110031;28/08/2026;$ 1.561.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110032;06/09/2026;$ 1.524.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110033;14/09/2026;$ 1.318.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110034;23/09/2026;$ 1.391.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110035;01/10/2026;$ 1.055.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110036;11/10/2026;$ 1.141.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110037;20/10/2026;$ 1.557.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110038;31/10/2026;$ 1.388.000;Jorge Cuero
+934328958-1;Cafetería El Parque;FV-110039;11/11/2026;$ 1.323.000;Jorge Cuero
+915805427-8;Papelería Tuluá;FV-120002;18/11/2025;$ 1.243.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120003;30/11/2025;$ 1.266.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120004;09/12/2025;$ 1.169.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120005;18/12/2025;$ 1.055.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120006;26/12/2025;$ 1.315.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120007;06/01/2026;$ 1.118.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120008;16/01/2026;$ 1.427.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120009;26/01/2026;$ 1.480.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120010;03/02/2026;$ 1.381.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120011;15/02/2026;$ 1.403.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120012;23/02/2026;$ 1.180.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120013;04/03/2026;$ 1.244.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120014;13/03/2026;$ 1.289.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120015;24/03/2026;$ 1.420.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120016;05/04/2026;$ 1.064.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120017;13/04/2026;$ 1.497.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120018;25/04/2026;$ 1.288.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120019;04/05/2026;$ 1.327.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120020;15/05/2026;$ 1.126.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120021;24/05/2026;$ 1.370.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120022;04/06/2026;$ 1.520.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120023;16/06/2026;$ 1.092.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120024;26/06/2026;$ 1.389.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120025;08/07/2026;$ 1.395.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120026;17/07/2026;$ 1.251.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120027;25/07/2026;$ 1.549.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120028;02/08/2026;$ 1.337.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120029;11/08/2026;$ 1.459.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120030;19/08/2026;$ 1.083.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120031;31/08/2026;$ 1.435.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120032;08/09/2026;$ 1.471.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120033;20/09/2026;$ 1.370.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120034;30/09/2026;$ 1.426.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120035;09/10/2026;$ 1.493.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120036;19/10/2026;$ 1.223.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120037;31/10/2026;$ 1.512.000;Ana Gómez
+915805427-8;Papelería Tuluá;FV-120038;10/11/2026;$ 1.524.000;Ana Gómez
+930294429-4;Lácteos La Vaquita;FV-130002;15/11/2025;$ 1.148.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130003;26/11/2025;$ 1.364.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130004;06/12/2025;$ 1.222.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130005;17/12/2025;$ 1.053.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130006;27/12/2025;$ 1.459.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130007;07/01/2026;$ 1.550.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130008;19/01/2026;$ 1.128.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130009;27/01/2026;$ 1.558.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130010;06/02/2026;$ 1.479.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130011;15/02/2026;$ 1.148.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130012;27/02/2026;$ 1.088.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130013;08/03/2026;$ 1.542.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130014;17/03/2026;$ 1.181.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130015;29/03/2026;$ 1.072.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130016;09/04/2026;$ 1.426.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130017;18/04/2026;$ 1.345.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130018;27/04/2026;$ 1.259.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130019;08/05/2026;$ 1.375.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130020;17/05/2026;$ 1.549.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130021;28/05/2026;$ 1.167.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130022;08/06/2026;$ 1.063.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130023;19/06/2026;$ 1.282.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130024;27/06/2026;$ 1.565.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130025;09/07/2026;$ 1.280.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130026;19/07/2026;$ 1.267.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130027;31/07/2026;$ 1.488.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130028;12/08/2026;$ 1.487.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130029;23/08/2026;$ 1.407.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130030;31/08/2026;$ 1.503.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130031;12/09/2026;$ 1.482.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130032;24/09/2026;$ 1.284.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130033;05/10/2026;$ 1.306.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130034;14/10/2026;$ 1.529.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130035;26/10/2026;$ 1.381.000;Luis Pérez
+930294429-4;Lácteos La Vaquita;FV-130036;06/11/2026;$ 1.240.000;Luis Pérez
+932139144-6;Frutería El Mango;FV-140003;29/11/2025;$ 1.950.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140004;14/12/2025;$ 1.674.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140005;28/12/2025;$ 1.706.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140006;11/01/2026;$ 1.828.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140007;25/01/2026;$ 1.481.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140008;06/02/2026;$ 1.992.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140009;18/02/2026;$ 1.744.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140010;05/03/2026;$ 1.628.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140011;21/03/2026;$ 1.775.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140012;05/04/2026;$ 1.874.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140013;21/04/2026;$ 2.198.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140014;04/05/2026;$ 1.856.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140015;17/05/2026;$ 1.625.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140016;29/05/2026;$ 1.822.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140017;11/06/2026;$ 2.039.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140018;24/06/2026;$ 1.743.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140019;09/07/2026;$ 1.567.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140020;22/07/2026;$ 1.575.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140021;06/08/2026;$ 2.042.000;Marta Ríos
+932139144-6;Frutería El Mango;FV-140022;19/08/2026;$ 1.571.000;Marta Ríos
+928839953-3;Peluquería Estilo;FV-150003;21/11/2025;$ 1.297.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150004;01/12/2025;$ 1.317.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150005;09/12/2025;$ 1.497.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150006;17/12/2025;$ 1.467.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150007;28/12/2025;$ 1.177.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150008;07/01/2026;$ 1.557.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150009;19/01/2026;$ 1.410.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150010;30/01/2026;$ 1.571.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150011;10/02/2026;$ 1.272.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150012;19/02/2026;$ 1.487.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150013;02/03/2026;$ 1.539.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150014;11/03/2026;$ 1.198.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150015;21/03/2026;$ 1.389.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150016;29/03/2026;$ 1.505.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150017;07/04/2026;$ 1.485.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150018;15/04/2026;$ 1.120.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150019;24/04/2026;$ 1.375.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150020;02/05/2026;$ 1.277.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150021;13/05/2026;$ 1.519.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150022;23/05/2026;$ 1.429.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150023;04/06/2026;$ 1.104.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150024;14/06/2026;$ 1.555.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150025;22/06/2026;$ 1.247.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150026;04/07/2026;$ 1.087.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150027;15/07/2026;$ 1.372.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150028;27/07/2026;$ 1.283.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150029;05/08/2026;$ 1.162.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150030;14/08/2026;$ 1.172.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150031;24/08/2026;$ 1.289.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150032;05/09/2026;$ 1.401.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150033;17/09/2026;$ 1.175.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150034;28/09/2026;$ 1.375.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150035;08/10/2026;$ 1.313.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150036;18/10/2026;$ 1.406.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150037;29/10/2026;$ 1.063.000;Jorge Cuero
+928839953-3;Peluquería Estilo;FV-150038;08/11/2026;$ 1.130.000;Jorge Cuero
+948911953-1;Taller El Rin;FV-160002;30/11/2025;$ 3.224.000;Ana Gómez
+948911953-1;Taller El Rin;FV-160003;23/12/2025;$ 2.228.000;Ana Gómez
+948911953-1;Taller El Rin;FV-160004;13/01/2026;$ 2.275.000;Ana Gómez
+948911953-1;Taller El Rin;FV-160005;01/02/2026;$ 3.164.000;Ana Gómez
+948911953-1;Taller El Rin;FV-160006;24/02/2026;$ 3.025.000;Ana Gómez
+948911953-1;Taller El Rin;FV-160007;17/03/2026;$ 2.503.000;Ana Gómez
+948911953-1;Taller El Rin;FV-160008;07/04/2026;$ 2.695.000;Ana Gómez
+948911953-1;Taller El Rin;FV-160009;29/04/2026;$ 2.371.000;Ana Gómez
+948911953-1;Taller El Rin;FV-160010;18/05/2026;$ 2.674.000;Ana Gómez
+948911953-1;Taller El Rin;FV-160011;06/06/2026;$ 3.027.000;Ana Gómez
+948911953-1;Taller El Rin;FV-160012;27/06/2026;$ 3.149.000;Ana Gómez
+948911953-1;Taller El Rin;FV-160013;17/07/2026;$ 2.752.000;Ana Gómez
+948911953-1;Taller El Rin;FV-160014;08/08/2026;$ 3.253.000;Ana Gómez
+948911953-1;Taller El Rin;FV-160015;30/08/2026;$ 2.227.000;Ana Gómez
+948911953-1;Taller El Rin;FV-160016;03/11/2026;$ 2.552.000;Ana Gómez
+961386688-9;Granero San José;FV-170002;26/11/2025;$ 2.110.000;Luis Pérez
+961386688-9;Granero San José;FV-170003;11/12/2025;$ 2.060.000;Luis Pérez
+961386688-9;Granero San José;FV-170004;26/12/2025;$ 1.698.000;Luis Pérez
+961386688-9;Granero San José;FV-170005;08/01/2026;$ 1.893.000;Luis Pérez
+961386688-9;Granero San José;FV-170006;20/01/2026;$ 2.127.000;Luis Pérez
+961386688-9;Granero San José;FV-170007;04/02/2026;$ 2.191.000;Luis Pérez
+961386688-9;Granero San José;FV-170008;20/02/2026;$ 2.143.000;Luis Pérez
+961386688-9;Granero San José;FV-170009;06/03/2026;$ 1.480.000;Luis Pérez
+961386688-9;Granero San José;FV-170010;22/03/2026;$ 1.952.000;Luis Pérez
+961386688-9;Granero San José;FV-170011;03/04/2026;$ 1.955.000;Luis Pérez
+961386688-9;Granero San José;FV-170012;18/04/2026;$ 1.654.000;Luis Pérez
+961386688-9;Granero San José;FV-170013;30/04/2026;$ 1.626.000;Luis Pérez
+961386688-9;Granero San José;FV-170014;16/05/2026;$ 1.785.000;Luis Pérez
+961386688-9;Granero San José;FV-170015;31/05/2026;$ 1.659.000;Luis Pérez
+961386688-9;Granero San José;FV-170016;12/06/2026;$ 1.895.000;Luis Pérez
+961386688-9;Granero San José;FV-170017;25/06/2026;$ 1.894.000;Luis Pérez
+961386688-9;Granero San José;FV-170018;07/07/2026;$ 1.748.000;Luis Pérez
+961386688-9;Granero San José;FV-170019;19/07/2026;$ 2.103.000;Luis Pérez
+961386688-9;Granero San José;FV-170020;01/08/2026;$ 1.604.000;Luis Pérez
+961386688-9;Granero San José;FV-170021;14/08/2026;$ 1.552.000;Luis Pérez
+961386688-9;Granero San José;FV-170022;27/08/2026;$ 1.729.000;Luis Pérez
+960595023-0;Carnicería La Res;FV-180002;24/11/2025;$ 1.663.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180003;09/12/2025;$ 2.008.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180004;25/12/2025;$ 2.070.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180005;06/01/2026;$ 2.115.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180006;22/01/2026;$ 2.171.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180007;05/02/2026;$ 1.633.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180008;19/02/2026;$ 1.612.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180009;07/03/2026;$ 1.960.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180010;19/03/2026;$ 2.030.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180011;04/04/2026;$ 2.193.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180012;17/04/2026;$ 2.091.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180013;02/05/2026;$ 1.918.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180014;18/05/2026;$ 2.001.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180015;01/06/2026;$ 1.561.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180016;17/06/2026;$ 1.597.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180017;02/07/2026;$ 1.743.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180018;15/07/2026;$ 1.722.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180019;28/07/2026;$ 1.565.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180020;09/08/2026;$ 1.785.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180021;21/08/2026;$ 1.977.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180022;04/09/2026;$ 1.500.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180023;17/09/2026;$ 2.156.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180024;02/10/2026;$ 2.101.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180025;15/10/2026;$ 1.998.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180026;29/10/2026;$ 2.086.000;Marta Ríos
+960595023-0;Carnicería La Res;FV-180027;14/11/2026;$ 1.769.000;Marta Ríos
+937212997-3;Miscelánea Palmira;FV-190002;05/12/2025;$ 2.472.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190003;26/12/2025;$ 3.281.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190004;18/01/2026;$ 2.457.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190005;06/02/2026;$ 2.886.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190006;26/02/2026;$ 2.370.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190007;20/03/2026;$ 3.143.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190008;08/04/2026;$ 3.216.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190009;30/04/2026;$ 2.664.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190010;21/05/2026;$ 2.929.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190011;09/06/2026;$ 2.982.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190012;02/07/2026;$ 2.317.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190013;24/07/2026;$ 2.251.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190014;14/08/2026;$ 2.506.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190015;04/09/2026;$ 2.216.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190016;26/09/2026;$ 2.365.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190017;17/10/2026;$ 2.843.000;Jorge Cuero
+937212997-3;Miscelánea Palmira;FV-190018;06/11/2026;$ 2.660.000;Jorge Cuero
+997039823-7;Comercializadora Pacífico;FV-200003;20/11/2025;$ 5.797.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200004;01/12/2025;$ 6.835.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200005;10/12/2025;$ 5.647.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200006;19/12/2025;$ 6.164.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200007;27/12/2025;$ 5.597.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200008;08/01/2026;$ 5.243.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200009;19/01/2026;$ 5.305.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200010;30/01/2026;$ 5.918.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200011;07/02/2026;$ 6.328.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200012;17/02/2026;$ 6.035.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200013;26/02/2026;$ 7.062.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200014;07/03/2026;$ 6.264.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200015;18/03/2026;$ 6.378.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200016;30/03/2026;$ 6.240.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200017;09/04/2026;$ 6.477.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200018;17/04/2026;$ 6.760.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200019;27/04/2026;$ 7.010.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200020;08/05/2026;$ 5.880.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200021;17/05/2026;$ 5.992.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200022;29/05/2026;$ 6.321.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200023;06/06/2026;$ 6.148.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200024;15/06/2026;$ 7.058.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200025;25/06/2026;$ 6.128.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200026;04/07/2026;$ 6.318.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200027;16/07/2026;$ 6.927.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200028;24/07/2026;$ 6.208.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200029;02/08/2026;$ 7.026.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200030;11/08/2026;$ 5.115.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200031;23/08/2026;$ 5.023.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200032;02/09/2026;$ 7.084.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200033;14/09/2026;$ 5.419.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200034;25/09/2026;$ 6.971.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200035;04/10/2026;$ 5.054.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200036;14/10/2026;$ 5.598.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200037;23/10/2026;$ 5.864.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200038;03/11/2026;$ 6.865.000;Ana Gómez
+997039823-7;Comercializadora Pacífico;FV-200039;14/11/2026;$ 5.382.000;Ana Gómez
+925160854-2;Avícola El Gallo;FV-210003;19/11/2025;$ 6.655.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210004;29/11/2025;$ 7.034.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210005;09/12/2025;$ 5.381.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210006;21/12/2025;$ 5.041.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210007;01/01/2026;$ 6.490.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210008;11/01/2026;$ 6.329.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210009;19/01/2026;$ 6.756.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210010;29/01/2026;$ 6.605.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210011;09/02/2026;$ 4.746.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210012;17/02/2026;$ 5.936.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210013;25/02/2026;$ 6.174.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210014;09/03/2026;$ 4.846.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210015;21/03/2026;$ 5.022.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210016;02/04/2026;$ 6.723.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210017;13/04/2026;$ 6.689.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210018;22/04/2026;$ 6.538.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210019;04/05/2026;$ 4.930.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210020;13/05/2026;$ 5.950.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210021;25/05/2026;$ 5.664.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210022;06/06/2026;$ 6.333.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210023;16/06/2026;$ 5.107.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210024;24/06/2026;$ 6.392.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210025;04/07/2026;$ 5.137.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210026;16/07/2026;$ 6.793.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210027;26/07/2026;$ 6.027.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210028;05/08/2026;$ 6.849.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210029;13/08/2026;$ 5.914.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210030;23/08/2026;$ 5.374.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210031;04/09/2026;$ 6.189.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210032;16/09/2026;$ 6.041.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210033;26/09/2026;$ 6.074.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210034;05/10/2026;$ 4.893.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210035;17/10/2026;$ 5.460.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210036;29/10/2026;$ 5.587.000;Luis Pérez
+925160854-2;Avícola El Gallo;FV-210037;09/11/2026;$ 5.425.000;Luis Pérez
+983567294-1;Colegio Los Andes;FV-220002;15/11/2025;$ 6.545.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220003;24/11/2025;$ 6.467.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220004;06/12/2025;$ 6.833.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220005;18/12/2025;$ 6.655.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220006;27/12/2025;$ 6.323.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220007;04/01/2026;$ 6.232.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220008;15/01/2026;$ 6.090.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220009;27/01/2026;$ 5.476.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220010;06/02/2026;$ 5.317.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220011;17/02/2026;$ 5.069.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220012;27/02/2026;$ 5.698.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220013;11/03/2026;$ 5.849.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220014;22/03/2026;$ 5.618.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220015;03/04/2026;$ 5.660.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220016;14/04/2026;$ 7.025.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220017;25/04/2026;$ 6.859.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220018;05/05/2026;$ 6.563.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220019;13/05/2026;$ 6.350.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220020;24/05/2026;$ 6.196.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220021;03/06/2026;$ 5.057.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220022;13/06/2026;$ 5.227.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220023;24/06/2026;$ 6.826.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220024;06/07/2026;$ 6.964.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220025;18/07/2026;$ 6.837.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220026;29/07/2026;$ 7.021.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220027;09/08/2026;$ 3.494.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220028;21/08/2026;$ 3.132.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220029;29/08/2026;$ 3.321.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220030;10/09/2026;$ 3.446.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220031;21/09/2026;$ 2.464.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220032;03/10/2026;$ 3.223.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220033;15/10/2026;$ 2.568.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220034;24/10/2026;$ 2.481.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220035;03/11/2026;$ 2.718.000;Marta Ríos
+983567294-1;Colegio Los Andes;FV-220036;11/11/2026;$ 2.991.000;Marta Ríos
+982354302-4;Clínica Veterinaria Huellas;FV-230001;21/11/2025;$ 14.605.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230002;14/12/2025;$ 11.823.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230003;05/01/2026;$ 10.800.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230004;28/01/2026;$ 13.047.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230005;16/02/2026;$ 12.030.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230006;10/03/2026;$ 13.786.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230007;31/03/2026;$ 11.897.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230008;23/04/2026;$ 12.316.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230009;16/05/2026;$ 13.130.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230010;06/06/2026;$ 14.681.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230011;26/06/2026;$ 12.352.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230012;17/07/2026;$ 10.143.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230013;08/08/2026;$ 11.427.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230014;28/08/2026;$ 10.903.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230015;19/09/2026;$ 12.938.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230016;12/10/2026;$ 10.206.000;Jorge Cuero
+982354302-4;Clínica Veterinaria Huellas;FV-230017;04/11/2026;$ 12.933.000;Jorge Cuero
+911647958-7;Mercados La 14 Sur;FV-240003;21/11/2025;$ 5.293.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240004;29/11/2025;$ 6.097.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240005;07/12/2025;$ 5.060.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240006;16/12/2025;$ 5.490.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240007;28/12/2025;$ 6.621.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240008;09/01/2026;$ 5.439.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240009;20/01/2026;$ 5.050.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240010;31/01/2026;$ 5.892.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240011;12/02/2026;$ 6.915.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240012;22/02/2026;$ 6.135.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240013;06/03/2026;$ 6.405.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240014;18/03/2026;$ 5.321.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240015;29/03/2026;$ 6.716.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240016;07/04/2026;$ 6.883.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240017;17/04/2026;$ 5.910.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240018;26/04/2026;$ 6.709.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240019;05/05/2026;$ 5.202.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240020;13/05/2026;$ 5.718.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240021;23/05/2026;$ 5.145.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240022;02/06/2026;$ 6.967.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240023;13/06/2026;$ 6.458.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240024;23/06/2026;$ 5.606.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240025;02/07/2026;$ 6.519.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240026;12/07/2026;$ 4.795.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240027;21/07/2026;$ 6.931.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240028;29/07/2026;$ 6.064.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240029;06/08/2026;$ 5.400.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240030;14/08/2026;$ 6.524.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240031;22/08/2026;$ 5.447.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240032;31/08/2026;$ 5.526.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240033;10/09/2026;$ 5.192.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240034;18/09/2026;$ 4.969.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240035;28/09/2026;$ 6.919.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240036;09/10/2026;$ 5.516.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240037;21/10/2026;$ 6.107.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240038;29/10/2026;$ 6.133.000;Ana Gómez
+911647958-7;Mercados La 14 Sur;FV-240039;07/11/2026;$ 5.315.000;Ana Gómez
+920391375-3;Transportes Buga;FV-250002;23/11/2025;$ 13.324.000;Luis Pérez
+920391375-3;Transportes Buga;FV-250003;16/12/2025;$ 10.489.000;Luis Pérez
+920391375-3;Transportes Buga;FV-250004;08/01/2026;$ 11.332.000;Luis Pérez
+920391375-3;Transportes Buga;FV-250005;30/01/2026;$ 14.037.000;Luis Pérez
+920391375-3;Transportes Buga;FV-250006;18/02/2026;$ 13.304.000;Luis Pérez
+920391375-3;Transportes Buga;FV-250007;10/03/2026;$ 13.799.000;Luis Pérez
+920391375-3;Transportes Buga;FV-250008;01/04/2026;$ 10.889.000;Luis Pérez
+920391375-3;Transportes Buga;FV-250009;23/04/2026;$ 13.119.000;Luis Pérez
+920391375-3;Transportes Buga;FV-250010;16/05/2026;$ 11.309.000;Luis Pérez
+920391375-3;Transportes Buga;FV-250011;08/06/2026;$ 14.608.000;Luis Pérez
+920391375-3;Transportes Buga;FV-250012;01/07/2026;$ 10.272.000;Luis Pérez
+920391375-3;Transportes Buga;FV-250013;24/07/2026;$ 13.587.000;Luis Pérez
+920391375-3;Transportes Buga;FV-250014;12/08/2026;$ 11.831.000;Luis Pérez
+920391375-3;Transportes Buga;FV-250015;31/08/2026;$ 12.741.000;Luis Pérez
+986548185-2;Industrias Plásticas Yumbo;FV-260003;24/11/2025;$ 5.875.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260004;06/12/2025;$ 6.957.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260005;14/12/2025;$ 6.745.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260006;23/12/2025;$ 6.451.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260007;01/01/2026;$ 6.225.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260008;09/01/2026;$ 6.800.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260009;21/01/2026;$ 6.305.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260010;29/01/2026;$ 6.002.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260011;08/02/2026;$ 5.720.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260012;17/02/2026;$ 6.466.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260013;27/02/2026;$ 5.474.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260014;11/03/2026;$ 5.251.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260015;22/03/2026;$ 5.281.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260016;03/04/2026;$ 6.405.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260017;12/04/2026;$ 4.967.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260018;21/04/2026;$ 5.643.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260019;30/04/2026;$ 5.022.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260020;08/05/2026;$ 4.924.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260021;20/05/2026;$ 6.841.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260022;28/05/2026;$ 5.132.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260023;05/06/2026;$ 6.772.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260024;16/06/2026;$ 7.080.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260025;24/06/2026;$ 5.915.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260026;02/07/2026;$ 6.375.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260027;13/07/2026;$ 6.069.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260028;21/07/2026;$ 5.117.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260029;02/08/2026;$ 5.135.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260030;12/08/2026;$ 6.869.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260031;23/08/2026;$ 4.928.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260032;04/09/2026;$ 4.811.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260033;15/09/2026;$ 4.740.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260034;27/09/2026;$ 6.974.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260035;05/10/2026;$ 5.813.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260036;13/10/2026;$ 6.077.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260037;22/10/2026;$ 5.775.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260038;02/11/2026;$ 5.516.000;Marta Ríos
+986548185-2;Industrias Plásticas Yumbo;FV-260039;12/11/2026;$ 6.726.000;Marta Ríos
+980992505-5;Distribuciones Jamundí;FV-270002;25/11/2025;$ 7.678.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270003;08/12/2025;$ 7.667.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270004;20/12/2025;$ 6.669.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270005;02/01/2026;$ 9.069.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270006;17/01/2026;$ 8.904.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270007;31/01/2026;$ 9.405.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270008;12/02/2026;$ 7.878.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270009;27/02/2026;$ 9.063.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270010;13/03/2026;$ 7.247.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270011;29/03/2026;$ 9.272.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270012;10/04/2026;$ 9.415.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270013;24/04/2026;$ 7.643.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270014;07/05/2026;$ 8.096.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270015;20/05/2026;$ 7.552.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270016;01/06/2026;$ 7.839.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270017;16/06/2026;$ 9.814.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270018;28/06/2026;$ 6.641.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270019;14/07/2026;$ 7.500.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270020;30/07/2026;$ 8.369.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270021;14/08/2026;$ 6.731.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270022;28/08/2026;$ 9.534.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270023;09/09/2026;$ 8.238.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270024;21/09/2026;$ 8.076.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270025;03/10/2026;$ 7.434.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270026;16/10/2026;$ 7.795.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270027;30/10/2026;$ 8.564.000;Jorge Cuero
+980992505-5;Distribuciones Jamundí;FV-270028;11/11/2026;$ 7.486.000;Jorge Cuero
+983644543-5;Almacén El Ahorro;FV-280002;20/11/2025;$ 2.947.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280003;02/12/2025;$ 2.575.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280004;14/12/2025;$ 2.662.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280005;23/12/2025;$ 3.097.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280006;01/01/2026;$ 2.599.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280007;10/01/2026;$ 2.805.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280008;22/01/2026;$ 3.167.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280009;02/02/2026;$ 3.302.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280010;10/02/2026;$ 3.022.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280011;20/02/2026;$ 3.377.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280012;28/02/2026;$ 2.875.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280013;09/03/2026;$ 2.719.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280014;19/03/2026;$ 3.275.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280015;27/03/2026;$ 3.176.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280016;07/04/2026;$ 2.383.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280017;18/04/2026;$ 3.259.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280018;26/04/2026;$ 2.905.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280019;06/05/2026;$ 2.676.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280020;16/05/2026;$ 2.521.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280021;27/05/2026;$ 2.417.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280022;08/06/2026;$ 2.866.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280023;16/06/2026;$ 3.458.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280024;24/06/2026;$ 3.035.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280025;05/07/2026;$ 2.588.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280026;15/07/2026;$ 2.444.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280027;26/07/2026;$ 3.414.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280028;03/08/2026;$ 2.453.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280029;12/08/2026;$ 2.727.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280030;22/08/2026;$ 2.759.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280031;01/09/2026;$ 2.527.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280032;10/09/2026;$ 3.174.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280033;03/11/2026;$ 3.422.000;Ana Gómez
+983644543-5;Almacén El Ahorro;FV-280034;12/11/2026;$ 2.747.000;Ana Gómez
+954117437-0;Hotel Plaza Cali;FV-290002;24/11/2025;$ 7.388.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290003;16/12/2025;$ 6.810.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290004;07/01/2026;$ 5.533.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290005;29/01/2026;$ 5.926.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290006;17/02/2026;$ 5.327.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290007;11/03/2026;$ 6.529.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290008;31/03/2026;$ 5.874.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290009;22/04/2026;$ 6.326.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290010;13/05/2026;$ 5.835.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290011;02/06/2026;$ 7.099.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290012;21/06/2026;$ 5.292.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290013;13/07/2026;$ 6.129.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290014;02/08/2026;$ 5.826.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290015;22/08/2026;$ 7.377.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290016;11/09/2026;$ 5.295.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290017;01/10/2026;$ 7.313.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290018;20/10/2026;$ 7.118.000;Luis Pérez
+954117437-0;Hotel Plaza Cali;FV-290019;12/11/2026;$ 6.592.000;Luis Pérez
+991571729-1;Licorera del Sur;FV-300002;17/11/2025;$ 4.699.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300003;03/12/2025;$ 4.127.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300004;19/12/2025;$ 3.968.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300005;01/01/2026;$ 3.371.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300006;17/01/2026;$ 4.830.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300007;02/02/2026;$ 4.483.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300008;16/02/2026;$ 4.631.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300009;02/03/2026;$ 3.357.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300010;14/03/2026;$ 3.878.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300011;27/03/2026;$ 4.898.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300012;08/04/2026;$ 3.344.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300013;22/04/2026;$ 4.529.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300014;05/05/2026;$ 4.973.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300015;19/05/2026;$ 4.784.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300016;04/06/2026;$ 3.336.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300017;19/06/2026;$ 3.347.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300018;05/07/2026;$ 4.672.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300019;20/07/2026;$ 3.507.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300020;02/08/2026;$ 4.598.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300021;16/08/2026;$ 3.630.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300022;29/08/2026;$ 4.576.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300023;13/09/2026;$ 4.550.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300024;27/09/2026;$ 3.845.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300025;13/10/2026;$ 4.313.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300026;27/10/2026;$ 4.287.000;Marta Ríos
+991571729-1;Licorera del Sur;FV-300027;08/11/2026;$ 3.369.000;Marta Ríos
+995828706-6;Empaques Candelaria;FV-310001;21/11/2025;$ 5.288.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310002;13/12/2025;$ 6.427.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310003;04/01/2026;$ 6.305.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310004;23/01/2026;$ 5.091.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310005;11/02/2026;$ 5.690.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310006;03/03/2026;$ 6.499.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310007;22/03/2026;$ 6.628.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310008;11/04/2026;$ 5.549.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310009;04/05/2026;$ 5.088.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310010;24/05/2026;$ 5.935.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310011;15/06/2026;$ 7.197.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310012;06/07/2026;$ 5.299.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310013;27/07/2026;$ 5.457.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310014;17/08/2026;$ 7.157.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310015;07/09/2026;$ 5.080.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310016;28/09/2026;$ 6.507.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310017;19/10/2026;$ 5.627.000;Jorge Cuero
+995828706-6;Empaques Candelaria;FV-310018;08/11/2026;$ 7.342.000;Jorge Cuero
+938165757-4;Muebles El Roble;FV-320002;18/11/2025;$ 3.437.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320003;28/11/2025;$ 3.213.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320004;06/12/2025;$ 2.533.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320005;16/12/2025;$ 3.358.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320006;26/12/2025;$ 3.062.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320007;04/01/2026;$ 3.067.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320008;14/01/2026;$ 2.919.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320009;24/01/2026;$ 3.073.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320010;05/02/2026;$ 2.683.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320011;13/02/2026;$ 2.500.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320012;21/02/2026;$ 3.429.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320013;02/03/2026;$ 3.293.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320014;14/03/2026;$ 2.457.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320015;24/03/2026;$ 2.568.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320016;03/04/2026;$ 3.518.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320017;12/04/2026;$ 2.619.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320018;23/04/2026;$ 2.400.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320019;05/05/2026;$ 3.102.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320020;15/05/2026;$ 2.772.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320021;27/05/2026;$ 3.349.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320022;04/06/2026;$ 3.487.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320023;14/06/2026;$ 3.298.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320024;25/06/2026;$ 2.990.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320025;03/07/2026;$ 3.142.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320026;11/07/2026;$ 2.510.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320027;21/07/2026;$ 3.160.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320028;02/08/2026;$ 2.578.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320029;10/08/2026;$ 3.467.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320030;19/08/2026;$ 3.267.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320031;29/08/2026;$ 2.613.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320032;02/11/2026;$ 2.748.000;Ana Gómez
+938165757-4;Muebles El Roble;FV-320033;12/11/2026;$ 2.801.000;Ana Gómez
+971553150-9;Óptica Visión;FV-330002;16/11/2025;$ 4.763.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330003;28/11/2025;$ 4.126.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330004;12/12/2025;$ 3.626.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330005;27/12/2025;$ 3.548.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330006;08/01/2026;$ 3.901.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330007;20/01/2026;$ 3.813.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330008;01/02/2026;$ 3.657.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330009;17/02/2026;$ 4.440.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330010;05/03/2026;$ 4.851.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330011;19/03/2026;$ 3.479.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330012;01/04/2026;$ 4.921.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330013;14/04/2026;$ 4.379.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330014;30/04/2026;$ 4.380.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330015;12/05/2026;$ 4.382.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330016;24/05/2026;$ 4.846.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330017;08/06/2026;$ 4.347.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330018;20/06/2026;$ 3.505.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330019;04/07/2026;$ 4.216.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330020;20/07/2026;$ 4.500.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330021;02/08/2026;$ 3.830.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330022;18/08/2026;$ 3.700.000;Luis Pérez
+971553150-9;Óptica Visión;FV-330023;02/09/2026;$ 3.467.000;Luis Pérez
+961139731-5;Gimnasio Fuerza;FV-340002;29/11/2025;$ 4.172.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340003;13/12/2025;$ 3.905.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340004;28/12/2025;$ 3.338.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340005;09/01/2026;$ 3.613.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340006;25/01/2026;$ 4.953.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340007;09/02/2026;$ 4.934.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340008;22/02/2026;$ 4.894.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340009;08/03/2026;$ 4.353.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340010;23/03/2026;$ 3.729.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340011;04/04/2026;$ 4.268.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340012;18/04/2026;$ 3.346.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340013;30/04/2026;$ 4.595.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340014;13/05/2026;$ 3.902.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340015;25/05/2026;$ 4.651.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340016;10/06/2026;$ 4.593.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340017;25/06/2026;$ 3.571.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340018;10/07/2026;$ 4.391.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340019;25/07/2026;$ 4.223.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340020;09/08/2026;$ 3.673.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340021;24/08/2026;$ 4.884.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340022;07/09/2026;$ 4.148.000;Marta Ríos
+961139731-5;Gimnasio Fuerza;FV-340023;06/11/2026;$ 3.539.000;Marta Ríos
+995822412-1;Floristería Orquídea;FV-350002;18/11/2025;$ 3.166.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350003;27/11/2025;$ 2.514.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350004;06/12/2025;$ 3.426.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350005;15/12/2025;$ 2.920.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350006;27/12/2025;$ 2.826.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350007;07/01/2026;$ 3.291.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350008;16/01/2026;$ 3.350.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350009;27/01/2026;$ 2.392.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350010;08/02/2026;$ 3.109.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350011;17/02/2026;$ 3.119.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350012;26/02/2026;$ 2.725.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350013;08/03/2026;$ 3.211.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350014;19/03/2026;$ 2.404.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350015;31/03/2026;$ 3.524.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350016;10/04/2026;$ 2.585.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350017;21/04/2026;$ 3.546.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350018;29/04/2026;$ 3.017.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350019;07/05/2026;$ 3.502.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350020;18/05/2026;$ 3.398.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350021;30/05/2026;$ 2.442.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350022;09/06/2026;$ 3.551.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350023;19/06/2026;$ 2.693.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350024;27/06/2026;$ 3.424.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350025;06/07/2026;$ 2.739.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350026;17/07/2026;$ 3.441.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350027;29/07/2026;$ 2.720.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350028;09/08/2026;$ 3.151.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350029;18/08/2026;$ 3.443.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350030;30/08/2026;$ 2.509.000;Jorge Cuero
+995822412-1;Floristería Orquídea;FV-350031;07/09/2026;$ 3.419.000;Jorge Cuero
+915174340-4;Repuestos Autovalle;FV-360002;29/11/2025;$ 7.125.000;Ana Gómez
+915174340-4;Repuestos Autovalle;FV-360003;18/12/2025;$ 6.353.000;Ana Gómez
+915174340-4;Repuestos Autovalle;FV-360004;09/01/2026;$ 6.040.000;Ana Gómez
+915174340-4;Repuestos Autovalle;FV-360005;31/01/2026;$ 6.774.000;Ana Gómez
+915174340-4;Repuestos Autovalle;FV-360006;20/02/2026;$ 6.066.000;Ana Gómez
+915174340-4;Repuestos Autovalle;FV-360007;14/03/2026;$ 5.083.000;Ana Gómez
+915174340-4;Repuestos Autovalle;FV-360008;04/04/2026;$ 5.912.000;Ana Gómez
+915174340-4;Repuestos Autovalle;FV-360009;24/04/2026;$ 5.546.000;Ana Gómez
+915174340-4;Repuestos Autovalle;FV-360010;15/05/2026;$ 5.892.000;Ana Gómez
+915174340-4;Repuestos Autovalle;FV-360011;07/06/2026;$ 6.167.000;Ana Gómez
+915174340-4;Repuestos Autovalle;FV-360012;29/06/2026;$ 5.125.000;Ana Gómez
+915174340-4;Repuestos Autovalle;FV-360013;18/07/2026;$ 5.834.000;Ana Gómez
+915174340-4;Repuestos Autovalle;FV-360014;06/08/2026;$ 7.421.000;Ana Gómez
+915174340-4;Repuestos Autovalle;FV-360015;29/08/2026;$ 5.242.000;Ana Gómez
+964832757-8;Pinturas Color Vivo;FV-370002;04/12/2025;$ 5.078.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370003;27/12/2025;$ 6.759.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370004;16/01/2026;$ 6.722.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370005;06/02/2026;$ 5.757.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370006;25/02/2026;$ 6.420.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370007;19/03/2026;$ 5.950.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370008;09/04/2026;$ 6.530.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370009;28/04/2026;$ 5.638.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370010;18/05/2026;$ 5.328.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370011;08/06/2026;$ 7.334.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370012;27/06/2026;$ 5.490.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370013;19/07/2026;$ 6.671.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370014;11/08/2026;$ 3.472.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370015;31/08/2026;$ 3.488.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370016;20/09/2026;$ 3.820.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370017;11/10/2026;$ 3.956.000;Luis Pérez
+964832757-8;Pinturas Color Vivo;FV-370018;30/10/2026;$ 3.504.000;Luis Pérez
+946490500-6;Textiles Ginebra;FV-380002;19/11/2025;$ 3.384.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380003;03/12/2025;$ 3.851.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380004;15/12/2025;$ 4.777.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380005;28/12/2025;$ 3.955.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380006;09/01/2026;$ 4.214.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380007;24/01/2026;$ 4.004.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380008;09/02/2026;$ 4.851.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380009;23/02/2026;$ 4.073.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380010;10/03/2026;$ 4.096.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380011;25/03/2026;$ 4.127.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380012;07/04/2026;$ 3.807.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380013;19/04/2026;$ 3.617.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380014;03/05/2026;$ 4.849.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380015;17/05/2026;$ 3.795.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380016;01/06/2026;$ 3.690.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380017;13/06/2026;$ 3.491.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380018;28/06/2026;$ 4.456.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380019;13/07/2026;$ 4.927.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380020;25/07/2026;$ 4.530.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380021;08/08/2026;$ 1.887.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380022;23/08/2026;$ 2.246.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380023;08/09/2026;$ 2.190.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380024;24/09/2026;$ 2.175.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380025;10/10/2026;$ 2.120.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380026;26/10/2026;$ 1.693.000;Marta Ríos
+946490500-6;Textiles Ginebra;FV-380027;10/11/2026;$ 2.259.000;Marta Ríos
+920251987-6;Café Tostado Dagua;FV-390002;15/11/2025;$ 4.718.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390003;29/11/2025;$ 3.707.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390004;11/12/2025;$ 3.672.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390005;27/12/2025;$ 3.515.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390006;12/01/2026;$ 4.444.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390007;24/01/2026;$ 4.006.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390008;05/02/2026;$ 3.381.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390009;17/02/2026;$ 4.127.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390010;04/03/2026;$ 4.150.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390011;18/03/2026;$ 4.142.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390012;03/04/2026;$ 4.915.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390013;19/04/2026;$ 3.935.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390014;04/05/2026;$ 4.296.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390015;18/05/2026;$ 3.841.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390016;03/06/2026;$ 3.714.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390017;18/06/2026;$ 3.778.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390018;30/06/2026;$ 4.548.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390019;12/07/2026;$ 3.388.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390020;27/07/2026;$ 4.755.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390021;12/08/2026;$ 3.657.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390022;27/08/2026;$ 4.423.000;Jorge Cuero
+920251987-6;Café Tostado Dagua;FV-390023;11/09/2026;$ 3.510.000;Jorge Cuero

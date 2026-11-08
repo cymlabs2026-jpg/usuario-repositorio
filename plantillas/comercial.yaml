@@ -16,7 +16,16 @@ objetos:
       valor:             {tipo: dinero, requerido: false, sinonimos: [valor, total, valor_factura, valor_total]}
       vendedor:          {tipo: texto,  requerido: false, sinonimos: [vendedor, asesor, comercial, ejecutivo]}
       cupo:              {tipo: dinero, requerido: false, sinonimos: [cupo, cupo_credito, limite_credito, cupo_asignado]}
+  Venta:
+    descripcion: Factura de venta emitida (pagada o no). Alimenta Foco comercial y el valor del cliente
+    campos:
+      nit:      {tipo: nit,    requerido: true,  sinonimos: [nit, identificacion, nit_cliente, id_cliente, cedula_nit, nit_tercero]}
+      cliente:  {tipo: texto,  requerido: true,  sinonimos: [cliente, razon_social, nombre_cliente, nombre_del_tercero, tercero, nombre]}
+      numero:   {tipo: texto,  requerido: true,  sinonimos: [factura, numero_factura, no_factura, num_factura, comprobante, numero, documento]}
+      fecha:    {tipo: fecha,  requerido: true,  sinonimos: [fecha, fecha_factura, fecha_emision, fecha_documento, fecha_venta, emision]}
+      valor:    {tipo: dinero, requerido: true,  sinonimos: [valor, total, valor_total, valor_factura, valor_neto, venta, subtotal]}
+      vendedor: {tipo: texto,  requerido: false, sinonimos: [vendedor, asesor, comercial, ejecutivo]}
   Cliente:
-    descripcion: Se deriva de las facturas, agrupando por NIT
+    descripcion: Se deriva de las facturas y las ventas, agrupando por NIT
     relaciones:
       tiene_facturas: Factura.nit
