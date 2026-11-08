@@ -57,6 +57,14 @@ objetos:
       fecha_vencimiento: {tipo: fecha,  requerido: true,  sinonimos: [vencimiento, fecha_vencimiento, vence, fecha_vence, fecha_pago, fecha_de_pago]}
       saldo:             {tipo: dinero, requerido: true,  sinonimos: [saldo, saldo_pendiente, por_pagar, pendiente, valor_pendiente, saldo_actual]}
       categoria:         {tipo: texto,  requerido: false, sinonimos: [categoria, concepto, tipo, clase, cuenta]}
+  Existencia:
+    descripcion: Existencias de un producto en una bodega a la fecha de corte. Alimenta Inventario
+    campos:
+      producto:       {tipo: texto,  requerido: true,  sinonimos: [producto, referencia, descripcion, item, articulo, nombre_producto, sku]}
+      bodega:         {tipo: texto,  requerido: false, sinonimos: [bodega, almacen, sede, ubicacion]}
+      cantidad:       {tipo: numero, requerido: true,  sinonimos: [cantidad, existencia, existencias, saldo_unidades, unidades, stock, disponible]}
+      costo_unitario: {tipo: dinero, requerido: false, sinonimos: [costo_unitario, costo_promedio, costo_unidad, costo_prom, valor_unitario]}
+      costo_total:    {tipo: dinero, requerido: false, sinonimos: [costo_total, valor_inventario, valor_total, costo, total]}
   Cliente:
     descripcion: Se deriva de las facturas y las ventas, agrupando por NIT
     relaciones:

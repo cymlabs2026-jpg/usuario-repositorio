@@ -226,3 +226,35 @@ def evaluar_pagos(datos: pd.DataFrame, mapeo: dict[str, str],
     validas = datos.loc[~excluir].copy()
     semaforo = max((x.nivel for x in v), key=ORDEN.get, default="verde")
     return Informe(semaforo, len(datos), len(validas), len(validas) > 0, [], v), validas
+
+
+def evaluar_inventario(datos: pd.DataFrame, mapeo: dict[str, str],
+                       plantilla: Plantilla | None = None) -> tuple[Informe, pd.DataFrame]:
+    """Semáforo para el reporte de existencias por producto (y bodega)."""
+    plantilla = plantilla or cargar_plantilla(objeto="Existencia")
+    faltan = [c for c in plantilla.requeridos if c not in mapeo]
+    if not faltan and "costo_unitario" not in mapeo and "costo_total" not in mapeo:
+        faltan = ["costo_unitario o costo_total"]
+    if faltan or datos.empty:
+        return Informe("rojo", len(datos), 0, False, faltan, []), datos.iloc[0:0]
+    v: list[Validacion] = []
+    sin_producto = datos["producto"].isna()
+    v.append(_validacion("Producto", "Fila sin producto", sin_producto, datos, True))
+    sin_cantidad = datos["cantidad"].isna()
+    v.append(_validacion("Cantidad numérica", "Cantidad vacía o que no es un número", sin_cantidad, datos, True))
+    negativa = datos["cantidad"].fillna(0) < 0
+    v.append(_validacion("Existencias negativas", "Cantidades negativas: el kárdex está descuadrado", negativa,
+                         datos, True))
+    costo = datos["costo_total"].where(datos["costo_total"].notna(), datos["cantidad"] * datos["costo_unitario"])
+    sin_costo = costo.isna() | ((costo <= 0) & (datos["cantidad"].fillna(0) > 0))
+    v.append(_validacion("Costo", "Sin costo unitario ni costo total: no se puede valorar el inventario",
+                         sin_costo, datos, True))
+    bodega = datos["bodega"].fillna("")
+    dup = datos.assign(_b=bodega).duplicated(subset=["producto", "_b"], keep="first") & datos["producto"].notna()
+    v.append(_validacion("Producto único por bodega", "Producto repetido en la misma bodega (se deja el primero)",
+                         dup, datos, True, "amarillo"))
+    excluir = sin_producto | sin_cantidad | negativa | sin_costo | dup
+    validas = datos.loc[~excluir].copy()
+    validas["costo_total"] = costo[~excluir]
+    semaforo = max((x.nivel for x in v), key=ORDEN.get, default="verde")
+    return Informe(semaforo, len(datos), len(validas), len(validas) > 0, [], v), validas

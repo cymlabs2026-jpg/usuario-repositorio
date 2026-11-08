@@ -115,9 +115,9 @@ def cargar(motor, nombre, corte, tipo):
 
 def test_flujo_completo_de_margen(motor):
     c2 = date(2026, 11, 14)
-    cargar(motor, "prueba_cartera_corte_2026-10-31.csv", CORTE, "cartera")
-    cargar(motor, "prueba_ventas_2026-10-31.csv", CORTE, "ventas")
-    r = cargar(motor, "prueba_lineas_2026-10-31.csv", CORTE, "lineas")
+    cargar(motor, "credito_y_cobro_cartera_2026-10-31.csv", CORTE, "cartera")
+    cargar(motor, "foco_comercial_ventas_2026-10-31.csv", CORTE, "ventas")
+    r = cargar(motor, "margen_ventas_por_producto_2026-10-31.csv", CORTE, "lineas")
     assert r["paquetes"] == ["margen"] and r["decisiones_nuevas"] > 0
     lista = decisiones.listar(motor, None, paquete="margen")
     tipos = {d["tipo"] for d in lista}
@@ -129,7 +129,7 @@ def test_flujo_completo_de_margen(motor):
 
     cosecha = next(d for d in lista if d["cliente"] == "Supermercados La Cosecha")
     decisiones.registrar_accion(motor, cosecha["id"], "aprobar", "gerente")
-    cargar(motor, "prueba_lineas_2026-11-14.csv", c2, "lineas")
+    cargar(motor, "margen_ventas_por_producto_2026-11-14.csv", c2, "lineas")
     with motor.connect() as cx:
         fila = cx.execute(select(resultados_margen).where(resultados_margen.c.decision_id == cosecha["id"])
                           ).mappings().one()
@@ -143,5 +143,5 @@ def test_flujo_completo_de_margen(motor):
 
 def test_reporte_de_lineas_sin_margen_activo(motor, monkeypatch):
     monkeypatch.setenv("ONTARA_PAQUETES", "cartera,comercial")
-    r = cargar(motor, "prueba_lineas_2026-10-31.csv", CORTE, "lineas")
+    r = cargar(motor, "margen_ventas_por_producto_2026-10-31.csv", CORTE, "lineas")
     assert r["paquetes"] == [] and decisiones.listar(motor, None, paquete="margen") == []

@@ -1,7 +1,7 @@
 """Datos de prueba de una distribuidora inventada de Palmira y Cali (40 clientes) que activan todas las
-decisiones de Ontara: dos cortes de cartera, dos reportes de ventas, dos de ventas por producto
-y dos de cuentas por pagar (31/10/2026 y 14/11/2026), más un reporte de recaudos con los pagos recibidos entre
-los dos cortes.
+decisiones de Ontara: dos cortes de cartera, dos reportes de ventas, dos de ventas por producto, dos de cuentas
+por pagar y dos de existencias de inventario (31/10/2026 y 14/11/2026), más un reporte de recaudos con los pagos
+recibidos entre los dos cortes. Cada archivo lleva el nombre del paquete que lo usa en la aplicación.
 Nombres y NIT son inventados. Uso:  python datos_ejemplo/generar_prueba.py
 """
 import csv
@@ -124,8 +124,8 @@ def cartera():
         for num, dia, valor in ventas_cliente(i, nombre, perfil):
             if C1 < dia <= C2:
                 filas2.append(fila(nit, nombre, num, dia, valor, valor, i, cupo_m * M))
-    escribir("prueba_cartera_corte_2026-10-31.csv", filas1)
-    escribir("prueba_cartera_corte_2026-11-14.csv", filas2)
+    escribir("credito_y_cobro_cartera_2026-10-31.csv", filas1)
+    escribir("credito_y_cobro_cartera_2026-11-14.csv", filas2)
 
 
 # --- Ventas: 12 meses de facturas emitidas (pagadas o no) -------------------------------------
@@ -174,8 +174,8 @@ def ventas():
                 v1.append(fila_v)
             if dia > C2 - timedelta(days=365):
                 v2.append(fila_v)
-    escribir("prueba_ventas_2026-10-31.csv", v1)
-    escribir("prueba_ventas_2026-11-14.csv", v2)
+    escribir("foco_comercial_ventas_2026-10-31.csv", v1)
+    escribir("foco_comercial_ventas_2026-11-14.csv", v2)
 
 
 # --- Ventas por producto: cada factura del reporte de ventas, partida en líneas con costo -----------
@@ -230,8 +230,8 @@ def lineas():
                     l1.append(fila_l)
                 if dia > C2 - timedelta(days=184):
                     l2.append(fila_l)
-    escribir("prueba_lineas_2026-10-31.csv", l1)
-    escribir("prueba_lineas_2026-11-14.csv", l2)
+    escribir("margen_ventas_por_producto_2026-10-31.csv", l1)
+    escribir("margen_ventas_por_producto_2026-11-14.csv", l2)
 
 
 # --- Recaudos: pagos recibidos entre los dos cortes, cruzados con la factura que pagan ---------------
@@ -250,7 +250,7 @@ def recaudos():
                           "Fecha de pago": dia.strftime("%d/%m/%Y"), "Documento cruce": num,
                           "Valor pagado": pesos(pagado)})
     filas.sort(key=lambda f: (f["Fecha de pago"][6:], f["Fecha de pago"][3:5], f["Fecha de pago"][:2]))
-    escribir("prueba_recaudos_2026-11-14.csv", filas)
+    escribir("aprendizaje_recaudos_2026-11-14.csv", filas)
 
 
 # --- Cuentas por pagar: proveedores y obligaciones programadas ------------------------------------
@@ -296,7 +296,7 @@ def cuentas_proveedor(i, nombre, mensual, plazo, corte):
 
 
 def pagos():
-    for corte, archivo in ((C1, "prueba_pagos_2026-10-31.csv"), (C2, "prueba_pagos_2026-11-14.csv")):
+    for corte, archivo in ((C1, "caja_13_semanas_cuentas_por_pagar_2026-10-31.csv"), (C2, "caja_13_semanas_cuentas_por_pagar_2026-11-14.csv")):
         filas = []
         for i, (nombre, mensual, plazo) in enumerate(PROVEEDORES):
             nit = f"8{random.Random(70 + i).randint(10_000_000, 99_999_999)}"
@@ -319,9 +319,58 @@ def pagos():
 
 
 
+# --- Inventario: existencias por producto, calculadas con la demanda real del reporte de ventas por producto ------
+# días de cobertura de cada producto al 31/10 (los demás quedan entre 30 y 60)
+COBERTURA = {"Arroz blanco 25 kg": 6, "Leche en polvo 25 kg": 3, "Panela 24 und": 10, "Aceite de girasol 3 L": 8,
+             "Café molido 500 g": 150, "Detergente 10 kg": 210, "Galletas surtidas x 24": 125}
+# productos que ya no se venden: (cantidad, costo unitario)
+SIN_MOVIMIENTO = {"Harina de maíz 25 kg": (90, 98_000), "Vinagre 3 L x 6": (160, 26_000),
+                  "Gelatina caja x 24": (110, 54_000)}
+BODEGAS = ["Palmira", "Cali"]
+
+
+def _demanda(archivo, corte):
+    """Unidades por día y costo unitario de cada producto en los 90 días antes del corte."""
+    with open(OUT / archivo, encoding="utf-8") as f:
+        filas = list(csv.DictReader(f, delimiter=";"))
+    uds, costo = {}, {}
+    for r in filas:
+        d, m, a = r["Fecha"].split("/")
+        if date(int(a), int(m), int(d)) <= corte - timedelta(days=90):
+            continue
+        uds[r["Producto"]] = uds.get(r["Producto"], 0) + int(r["Cantidad"])
+        costo[r["Producto"]] = costo.get(r["Producto"], 0) + int(r["Costo"].replace("$", "").replace(".", "").strip())
+    return {k: (uds[k] / 90, costo[k] / uds[k]) for k in uds}
+
+
+def inventario():
+    dem = _demanda("margen_ventas_por_producto_2026-10-31.csv", C1)
+    cobertura2 = {}
+    for corte, archivo in ((C1, "inventario_existencias_2026-10-31.csv"), (C2, "inventario_existencias_2026-11-14.csv")):
+        filas = []
+        for k, prod in enumerate(sorted(dem)):
+            por_dia, costo_u = dem[prod]
+            dias = COBERTURA.get(prod, 30 + (k * 7) % 31)
+            if corte == C2:
+                # Se repuso el arroz y la leche; la panela se agotó; el café bajó con promoción; lo demás rota.
+                dias = {"Arroz blanco 25 kg": 38, "Leche en polvo 25 kg": 41, "Panela 24 und": 0,
+                        "Café molido 500 g": 70}.get(prod, max(dias - 14, 25) if dias < 100 else dias - 10)
+            cantidad = round(por_dia * dias)
+            for b, parte in zip(BODEGAS, (0.6, 0.4)):
+                filas.append({"Referencia": prod, "Bodega": b, "Existencia": round(cantidad * parte),
+                              "Costo promedio": pesos(round(costo_u, -2))})
+        for prod, (cantidad, costo_u) in SIN_MOVIMIENTO.items():
+            if corte == C2 and prod == "Harina de maíz 25 kg":
+                cantidad = 0                                       # se liquidó tras la alerta
+            filas.append({"Referencia": prod, "Bodega": "Palmira", "Existencia": cantidad,
+                          "Costo promedio": pesos(costo_u)})
+        escribir(archivo, filas)
+
+
 if __name__ == "__main__":
     cartera()
     ventas()
     lineas()
     recaudos()
     pagos()
+    inventario()

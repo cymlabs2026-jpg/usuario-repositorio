@@ -27,6 +27,7 @@ consulta resultados ya calculados, los explica y redacta mensajes.
 | 3. Aplicación | `ontara/impacto.py` | Línea base (primera carga), impacto en pesos, días de cartera, caja liberada y comparación contra el grupo de control |
 | 2. Paquetes | `ontara/paquetes.py` | Registro de paquetes: qué reporte usa cada uno, sus tipos de decisión, cómo detecta y cómo mide. Se activan con `ONTARA_PAQUETES` |
 | 2. Margen | `ontara/margen.py` + `reglas/margen.yaml` | Margen bruto por cliente y producto, descuentos fuera de política, ventas bajo el costo y cruce con Cartera y Foco comercial |
+| 2. Inventario | `ontara/inventario.py` + `reglas/inventario.yaml` | Cobertura por producto con la demanda de las ventas por producto: reponer antes del quiebre y liberar capital en inventario lento o sin movimiento; cruce con Margen y Caja |
 | 2. Caja a 13 semanas | `ontara/caja.py` + `reglas/caja.yaml` | Saldo en bancos proyectado semana a semana; semanas bajo la caja mínima con qué cobrar, qué pagos aplazar y cuánto financiar; excedentes |
 | 2. Foco comercial | `ontara/comercial.py` + `reglas/comercial.yaml` | Ritmo de compra por cliente, alertas de clientes que se enfrían o caen, visitas de crecimiento y cruce con Cartera |
 | 3. Aplicación | `ontara/acceso.py` | Login con Google o Microsoft (o clave PBKDF2), roles y bitácora de accesos |
@@ -43,22 +44,25 @@ streamlit run app/streamlit_app.py
 ```
 
 **Datos de prueba completos** (`datos_ejemplo/prueba/`, generados con `python datos_ejemplo/generar_prueba.py`):
-una distribuidora inventada con 40 clientes. En **Cargar datos**, en este orden:
+una distribuidora inventada con 40 clientes. Cada archivo se llama como el paquete que lo usa en la aplicación,
+seguido del reporte y la fecha de corte: `<paquete>_<reporte>_<fecha>.csv`. En **Cargar datos**, en este orden:
 
-| Reporte | Archivo | Fecha de corte | Saldo en bancos |
-| --- | --- | --- | --- |
-| Cartera | `prueba_cartera_corte_2026-10-31.csv` | 31/10/2026 | |
-| Ventas | `prueba_ventas_2026-10-31.csv` | 31/10/2026 | |
-| Ventas por producto | `prueba_lineas_2026-10-31.csv` | 31/10/2026 | |
-| Cuentas por pagar | `prueba_pagos_2026-10-31.csv` | 31/10/2026 | 250.000.000 |
-| Cartera | `prueba_cartera_corte_2026-11-14.csv` | 14/11/2026 | |
-| Ventas | `prueba_ventas_2026-11-14.csv` | 14/11/2026 | |
-| Ventas por producto | `prueba_lineas_2026-11-14.csv` | 14/11/2026 | |
-| Recaudos | `prueba_recaudos_2026-11-14.csv` | 14/11/2026 | |
-| Cuentas por pagar | `prueba_pagos_2026-11-14.csv` | 14/11/2026 | 390.000.000 |
+| Paquete en la app | Reporte | Archivo | Fecha de corte | Saldo en bancos |
+| --- | --- | --- | --- | --- |
+| Crédito y cobro | Cartera | `credito_y_cobro_cartera_2026-10-31.csv` | 31/10/2026 | |
+| Foco comercial | Ventas | `foco_comercial_ventas_2026-10-31.csv` | 31/10/2026 | |
+| Margen | Ventas por producto | `margen_ventas_por_producto_2026-10-31.csv` | 31/10/2026 | |
+| Caja a 13 semanas | Cuentas por pagar | `caja_13_semanas_cuentas_por_pagar_2026-10-31.csv` | 31/10/2026 | 250.000.000 |
+| Inventario | Inventario | `inventario_existencias_2026-10-31.csv` | 31/10/2026 | |
+| Crédito y cobro | Cartera | `credito_y_cobro_cartera_2026-11-14.csv` | 14/11/2026 | |
+| Foco comercial | Ventas | `foco_comercial_ventas_2026-11-14.csv` | 14/11/2026 | |
+| Margen | Ventas por producto | `margen_ventas_por_producto_2026-11-14.csv` | 14/11/2026 | |
+| Aprendizaje | Recaudos | `aprendizaje_recaudos_2026-11-14.csv` | 14/11/2026 | |
+| Caja a 13 semanas | Cuentas por pagar | `caja_13_semanas_cuentas_por_pagar_2026-11-14.csv` | 14/11/2026 | 390.000.000 |
+| Inventario | Inventario | `inventario_existencias_2026-11-14.csv` | 14/11/2026 | |
 
-(Cada paquete solo necesita sus reportes: Cartera la cartera, Foco comercial las ventas, Margen las ventas por
-producto y Caja las cuentas por pagar, que proyecta mejor si ya hay cartera, ventas y margen.)
+(Cada paquete solo necesita sus reportes, aunque varios se apoyan en otros: Caja proyecta mejor con cartera,
+ventas y margen, e Inventario necesita las ventas por producto de Margen para saber qué rota.)
 
 Los archivos `datos_ejemplo/cartera_corte_*.csv` son el ejemplo pequeño original. Todos los datos son inventados.
 
@@ -72,7 +76,7 @@ pytest
 
 Un paquete es un reporte que lo alimenta, reglas versionadas en `reglas/<paquete>.yaml`, una función que detecta
 decisiones y otra que mide su resultado. La bandeja, la memoria de decisiones, la matriz de delegación, el grupo de
-control, el asistente y el formulario de reglas son comunes. Para agregar uno (Inventario, Despacho):
+control, el asistente y el formulario de reglas son comunes. Para agregar uno (por ejemplo, Despacho):
 
 1. Si necesita un reporte nuevo, agregar su objeto en `plantillas/comercial.yaml`, su tabla en `ontara/db.py`
    y su semáforo en `ontara/calidad.py`.
@@ -142,6 +146,22 @@ Con cada reporte nuevo de cuentas por pagar se mide cuánto del déficit quedó 
 verdad (el documento sigue abierto con fecha posterior) y la precisión: el saldo real en bancos frente al que
 proyectó el reporte anterior. La caja se recalcula sola cuando llega una cartera, ventas, margen o recaudos nuevos.
 
+### Inventario
+
+Usa el reporte de **existencias** a la fecha de corte: producto, bodega (opcional), cantidad y costo unitario o
+total. La demanda de cada producto sale del reporte de ventas por producto de Margen (últimos `dias_demanda` días);
+sin él, Inventario no genera decisiones y se recalcula solo cuando llega.
+
+| Decisión | Cuándo aparece | Monto en juego |
+| --- | --- | --- |
+| Reponer antes del quiebre | La cobertura (existencias ÷ unidades vendidas por día) es menor que `dias_reposicion` + `dias_seguridad`. Sugiere cuántas unidades pedir para cubrir `dias_objetivo` después de que llegue el pedido y cuántas ventas se pierden si no se pide hoy | Valor de la compra sugerida |
+| Liberar capital en inventario | Cobertura mayor que `dias_exceso` (sobra lo que pasa de `dias_objetivo`) o sin ventas en `dias_sin_movimiento` días (todo el inventario) | Capital que se puede liberar |
+
+Cruces: si el producto se vende bajo el costo (Margen), la recomendación es corregir el precio antes de reponer; si
+Caja tiene semanas en rojo, se pide negociar el plazo de las compras y el inventario lento aparece como palanca de
+caja. Con el siguiente reporte de existencias se mide si el producto igual se agotó y cuánto capital se liberó, y en
+Impacto se comparan capital, días de inventario, % de inventario lento y productos agotados contra el primer reporte.
+
 ## Aprendizaje (etapa 0: instrumentar)
 
 Ontara todavía no cambia reglas ni entrena modelos por su cuenta: primero guarda lo que hará falta para
@@ -191,7 +211,7 @@ mensuales de contabilidad (`ventas_mensuales_cop`) se usan esas; si no, se estim
 | --- | --- | --- |
 | `DATABASE_URL` | Base del cliente. En producción, Cloud SQL: `postgresql+psycopg://usuario:clave@/ontara?host=/cloudsql/PROYECTO:REGION:INSTANCIA` | SQLite local `ontara.db` |
 | `ONTARA_EMPRESA` | Nombre que aparece en la app | Empresa de demostración |
-| `ONTARA_PAQUETES` | Paquetes activos para el cliente, separados por coma | `cartera,comercial,margen,caja` |
+| `ONTARA_PAQUETES` | Paquetes activos para el cliente, separados por coma | `cartera,comercial,margen,caja,inventario` |
 | `ONTARA_USUARIOS` | Usuarios autorizados y su rol en JSON (ver abajo). Roles: `gerente` (aprueba montos altos y cambia reglas) y `lider` | Sin login (modo demo) |
 | `ANTHROPIC_API_KEY` | Activa el asistente | Asistente apagado |
 | `ONTARA_MODELO` | Modelo de Claude | `claude-opus-5-5` |

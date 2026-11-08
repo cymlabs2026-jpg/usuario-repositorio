@@ -1,0 +1,24 @@
+# Reglas del paquete de decisión "Inventario". Versión base;
+# cada cliente ajusta los parámetros desde la app y se guarda una versión nueva.
+paquete: inventario
+version: 1
+parametros:
+  dias_demanda: 90                # días de ventas por producto con que se calcula la demanda diaria
+  dias_reposicion: 15             # días que tarda en llegar un pedido al proveedor
+  dias_seguridad: 7               # colchón: se repone cuando la cobertura baja de reposición + seguridad
+  dias_objetivo: 30               # cobertura que se busca después de comprar (o que se deja al liberar)
+  dias_exceso: 90                 # más cobertura que esto es inventario lento
+  dias_sin_movimiento: 90         # sin ventas en estos días = inventario sin movimiento
+  capital_minimo_cop: 2000000     # no se generan decisiones por montos menores
+  aprobacion_lider_max_cop: 20000000 # monto que puede decidir el líder; por encima, el gerente
+  productos_excepcion: []         # productos que no generan decisiones (por ejemplo, de temporada)
+
+descripciones:
+  dias_demanda: Días de ventas para calcular la demanda
+  dias_reposicion: Días que tarda en llegar un pedido
+  dias_seguridad: Días de colchón de seguridad
+  dias_objetivo: Cobertura objetivo después de comprar (días)
+  dias_exceso: Cobertura a partir de la cual es inventario lento (días)
+  dias_sin_movimiento: Días sin ventas para considerarlo sin movimiento
+  capital_minimo_cop: Monto mínimo para generar una decisión (COP)
+  aprobacion_lider_max_cop: El líder decide hasta este monto (COP)

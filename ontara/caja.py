@@ -240,6 +240,8 @@ def evaluar_caja(proy: pd.DataFrame, cobros: pd.DataFrame, cxp: pd.DataFrame, co
                "proyeccion": tabla, "supuestos": supuestos or {}}
     ampliaciones = [(d["id"], float((d["evidencia"] or {}).get("aumento_sugerido", 0)))
                     for ds in otras.values() for d in ds if d["tipo"] == "ampliar_cupo"]
+    liberables = [(d["id"], float((d["evidencia"] or {}).get("capital_liberable", 0)))
+                  for ds in otras.values() for d in ds if d["tipo"] == "liberar_inventario"]
     salida: list[reglas.ResultadoRegla] = []
     eps = episodios(proy, minimo)
     max_def = max((e["deficit"] for e in eps), default=1.0)
@@ -288,6 +290,10 @@ def evaluar_caja(proy: pd.DataFrame, cobros: pd.DataFrame, cxp: pd.DataFrame, co
               "fin": e["fin"].isoformat(), "deficit": round(e["deficit"], 0), "saldo_minimo": round(e["saldo_minimo"], 0),
               "cobrar": cobrar, "aplazar": aplazar, "financiar": round(financiar, 0),
               "cruces": [], "nombre_mostrar": f"Semana del {_f(e['inicio'])}"}
+        if liberables:
+            total = sum(m for _, m in liberables)
+            ev["cruces"].append(f"Inventario tiene {_pesos(total)} en producto lento o sin movimiento (decisiones "
+                                f"{', '.join('#' + str(i) for i, _ in liberables[:6])}): liquidarlo es caja sin deuda.")
         if ampliaciones:
             total = sum(m for _, m in ampliaciones)
             ev["cruces"].append(f"Hay {len(ampliaciones)} ampliaciones de cupo pendientes en Cartera por "

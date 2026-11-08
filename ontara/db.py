@@ -26,7 +26,7 @@ cargas = Table(
     "cargas", metadata,
     Column("id", Integer, primary_key=True),
     Column("tipo", String(20), nullable=False, default="cartera",
-           server_default="cartera"),                       # cartera | ventas | lineas | pagos | recaudos
+           server_default="cartera"),                       # cartera | ventas | lineas | pagos | inventario | recaudos
     Column("creada_en", DateTime, nullable=False, default=ahora),
     Column("fecha_corte", Date, nullable=False),
     Column("archivo", String(255)),
@@ -105,6 +105,16 @@ saldos_caja = Table(
     Column("id", Integer, primary_key=True),
     Column("carga_id", Integer, ForeignKey("cargas.id"), nullable=False, index=True),
     Column("saldo_bancos", Float, nullable=False),          # saldo en bancos a la fecha de corte
+)
+
+existencias = Table(
+    "existencias", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("carga_id", Integer, ForeignKey("cargas.id"), nullable=False, index=True),
+    Column("producto", String(255), nullable=False, index=True),
+    Column("bodega", String(120)),
+    Column("cantidad", Float, nullable=False),
+    Column("costo_total", Float, nullable=False),            # cantidad × costo unitario
 )
 
 reglas_version = Table(
@@ -244,6 +254,20 @@ resultados_caja = Table(
     Column("monto_antes", Float, nullable=False),           # déficit o pago a mover al detectarla
     Column("monto_despues", Float, nullable=False),         # lo que queda sin resolver en este reporte
     Column("cubierto", Float, nullable=False),
+    Column("atendida", Boolean, nullable=False),
+    Column("medido_en", DateTime, default=ahora),
+)
+
+resultados_inventario = Table(
+    "resultados_inventario", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("decision_id", Integer, ForeignKey("decisiones.id"), nullable=False, index=True),
+    Column("carga_id", Integer, ForeignKey("cargas.id"), nullable=False),
+    Column("capital_antes", Float, nullable=False),         # capital liberable (o compra sugerida) al detectarla
+    Column("capital_despues", Float, nullable=False),
+    Column("liberado", Float, nullable=False),
+    Column("quiebre", Boolean, nullable=False),             # el producto se agotó (cantidad en cero)
+    Column("cobertura_dias", Float),
     Column("atendida", Boolean, nullable=False),
     Column("medido_en", DateTime, default=ahora),
 )

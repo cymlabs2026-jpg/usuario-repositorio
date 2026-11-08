@@ -15,7 +15,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from ontara import acceso, aprendizaje, asistente, caja, calidad, comercial, margen, paquetes, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
+from ontara import acceso, aprendizaje, asistente, caja, calidad, comercial, inventario, margen, paquetes, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
 from ontara.db import cargas, crear_motor  # noqa: E402
 from sqlalchemy import select  # noqa: E402
 
@@ -36,7 +36,8 @@ ETIQUETAS = {"fecha": "Fecha de la factura", "producto": "Producto", "costo": "C
              "descuento": "Descuento (pesos)", "cantidad": "Cantidad", "nit": "NIT", "cliente": "Cliente", "numero": "Número de factura", "fecha_emision": "Fecha de emisión",
              "fecha_vencimiento": "Fecha de vencimiento", "saldo": "Saldo", "valor": "Valor", "vendedor": "Vendedor",
              "cupo": "Cupo de crédito", "factura": "Factura que se paga", "fecha_pago": "Fecha de pago",
-             "recibo": "Recibo de caja", "proveedor": "Proveedor", "categoria": "Concepto o categoría"}
+             "recibo": "Recibo de caja", "proveedor": "Proveedor", "categoria": "Concepto o categoría",
+             "bodega": "Bodega", "costo_unitario": "Costo unitario (promedio)", "costo_total": "Costo total"}
 ESTADO = {"pendiente": "Pendiente", "aprobada": "Aprobada", "ajustada": "Ajustada",
           "ejecutada": "Ejecutada", "descartada": "Descartada", "cerrada": "Cerrada"}
 
@@ -146,6 +147,8 @@ def pagina_cargar():
               "ventas": "Sube el reporte de ventas de los últimos 12 meses (todas las facturas, incluidas las pagadas)",
               "lineas": "Sube el reporte de ventas por producto de los últimos 6 meses (una fila por producto de cada "
                         "factura, con venta neta y costo)",
+              "inventario": "Sube el reporte de existencias por producto (y bodega) con su costo unitario o total, a la "
+                            "fecha de corte",
               "pagos": "Sube el reporte de cuentas por pagar (facturas de proveedores pendientes) con las obligaciones "
                        "programadas que quieras incluir: nómina, impuestos, cuotas de crédito y arriendo, con su fecha "
                        "de pago",
@@ -180,7 +183,7 @@ def pagina_cargar():
 
     datos = ingesta.convertir(crudo, mapeo, plantilla)
     evaluar = {"cartera": calidad.evaluar, "ventas": calidad.evaluar_ventas, "lineas": calidad.evaluar_lineas,
-               "pagos": calidad.evaluar_pagos, "recaudos": calidad.evaluar_recaudos}[tipo]
+               "pagos": calidad.evaluar_pagos, "inventario": calidad.evaluar_inventario, "recaudos": calidad.evaluar_recaudos}[tipo]
     informe, validas = evaluar(datos, mapeo, plantilla)
     st.subheader(f"2. Semáforo de calidad: {COLOR[informe.semaforo]} {informe.semaforo.capitalize()}")
     if informe.faltan_campos:
@@ -264,6 +267,12 @@ def pagina_bandeja():
                             else f"semana {ev['semana_desde']} · faltan {pesos(ev['deficit'])}")
         elif d["tipo"] == "aplazar_pago_proveedor":
             detalle_tipo = f"{pesos(ev['monto'])} a correr {ev['dias_aplazamiento']} días"
+        elif d["tipo"] == "reponer_producto":
+            detalle_tipo = ("agotado" if ev["cantidad"] <= 0 else f"alcanza para {ev['cobertura_dias']:.0f} días") + \
+                f" · pedir {pesos(ev['compra_sugerida'])}"
+        elif d["tipo"] == "liberar_inventario":
+            detalle_tipo = ("sin movimiento" if ev["sin_movimiento"] else f"{ev['cobertura_dias']:.0f} días de inventario") + \
+                f" · {pesos(ev['capital_liberable'])} por liberar"
         elif d["tipo"] == "excedente_de_caja":
             detalle_tipo = f"{pesos(ev['excedente'])} sin uso en 13 semanas"
         elif d["paquete"] == "margen":
@@ -286,6 +295,8 @@ def tarjeta(d: dict):
         tarjeta_comercial(d, ev)
     elif d["paquete"] == "margen":
         tarjeta_margen(d, ev)
+    elif d["paquete"] == "inventario":
+        tarjeta_inventario(d, ev)
     elif d["paquete"] == "caja":
         tarjeta_caja(d, ev)
     else:
@@ -337,6 +348,25 @@ def tarjeta_margen(d: dict, ev: dict):
                      hide_index=True, use_container_width=True)
     st.caption(f"{'NIT ' + d['nit'] if 'nit' in ev else 'Producto'} · Regla margen v{ev.get('regla_version')} · "
                f"reporte {ev['fecha_corte']}")
+
+
+def tarjeta_inventario(d: dict, ev: dict):
+    a, b, c, e = st.columns(4)
+    a.metric("Existencias", f"{ev['cantidad']:,.0f} und".replace(",", "."), help=ev.get("bodegas") or None)
+    b.metric("Cobertura", "Sin ventas" if ev["cobertura_dias"] is None else f"{ev['cobertura_dias']:.0f} días")
+    c.metric("Vende por día", f"{ev['unidades_dia']:.1f} und")
+    if d["tipo"] == "reponer_producto":
+        e.metric("Compra sugerida", pesos(ev["compra_sugerida"]), help=f"{ev['unidades_sugeridas']} unidades")
+        if ev.get("ventas_en_riesgo"):
+            st.caption(f"Si se pide hoy, igual quedan {ev['dias_sin_stock']:.0f} días sin producto: "
+                       f"{pesos(ev['ventas_en_riesgo'])} en ventas en riesgo.")
+    else:
+        e.metric("Capital por liberar", pesos(ev["capital_liberable"]))
+    for cruce in ev.get("cruces", []):
+        st.info("Cruce: " + cruce)
+    st.caption(f"Costo unitario {pesos(ev['costo_unitario'])} · margen {ev['margen_pct']}% · última venta "
+               f"{ev.get('ultima_venta') or 'sin registro'} · pedido tarda {ev['dias_reposicion']:.0f} días · objetivo "
+               f"{ev['dias_objetivo']:.0f} días · Regla inventario v{ev.get('regla_version')} · reporte {ev['fecha_corte']}")
 
 
 def grafico_caja(proy: pd.DataFrame, minimo: float, alto: int = 320):
@@ -518,7 +548,31 @@ def pagina_impacto():
     for tab, paq in zip(pestanas, ACTIVOS):
         with tab:
             {"cartera": impacto_cartera, "comercial": impacto_comercial, "margen": impacto_margen,
-             "caja": impacto_caja}[paq.clave]()
+             "caja": impacto_caja, "inventario": impacto_inventario}[paq.clave]()
+
+
+def impacto_inventario():
+    r = inventario.resumen(M)
+    if not r["ultimo_reporte"]:
+        st.info("Carga el reporte de existencias para activar Inventario.")
+        return
+    if not r["hay_demanda"]:
+        st.warning("Falta el reporte de ventas por producto (Margen): sin él no se sabe qué rota y qué no.")
+    base, hoy = r["base"], r["hoy"]
+    st.caption(f"Último reporte: {r['ultimo_reporte']:%d/%m/%Y}, frente al primero ({base['fecha']:%d/%m/%Y}).")
+    a, b, c, e = st.columns(4)
+    a.metric("Capital en inventario", pesos(hoy["capital"]), delta=pesos(hoy["capital"] - base["capital"]),
+             delta_color="inverse")
+    if hoy["dias_inventario"] is not None:
+        b.metric("Días de inventario", f"{hoy['dias_inventario']:.0f}",
+                 delta=(f"{hoy['dias_inventario'] - base['dias_inventario']:+.0f}" if base["dias_inventario"] else None),
+                 delta_color="inverse")
+    c.metric("Inventario lento o sin movimiento", f"{hoy['pct_lento']:.0f}%",
+             delta=f"{hoy['pct_lento'] - base['pct_lento']:+.0f} pts", delta_color="inverse")
+    e.metric("Productos agotados", hoy["agotados"])
+    x, y = st.columns(2)
+    x.metric("Capital liberado en decisiones atendidas", pesos(r["capital_liberado_atendidas"]))
+    y.metric("Reposiciones medidas que igual se agotaron", f"{r['quiebres']} de {r['reposiciones_medidas']}")
 
 
 def impacto_caja():
