@@ -20,7 +20,8 @@ from sqlalchemy.engine import Engine
 
 from . import comercial, impacto, paquetes, reglas
 from .calidad import Informe
-from .db import acciones, ahora, cargas, clientes, decisiones, facturas, linea_base, lineas_venta, resultados, ventas
+from .db import (acciones, ahora, cargas, clientes, decisiones, facturas, linea_base, lineas_venta, recaudos,
+                 resultados, ventas)
 
 ABIERTAS = ("pendiente", "aprobada", "ajustada", "ejecutada")
 TRANSICIONES = {
@@ -33,6 +34,30 @@ TRANSICIONES = {
 REQUIEREN_DETALLE = {"ajustar", "descartar", "ejecutar", "nota"}
 NECESITAN_NIVEL = {"aprobar", "ajustar", "descartar"}
 
+# Motivos estructurados: convierten el "por qué" de cada descarte o ajuste en un dato que se puede contar.
+# Con un motivo de la lista (distinto de "otro") el comentario es opcional.
+MOTIVOS = {
+    "descartar": {
+        "ya_pago": "Ya pagó o hay un pago en camino",
+        "acuerdo_vigente": "Hay un acuerdo de pago vigente",
+        "cliente_estrategico": "Cliente estratégico o relación de la gerencia",
+        "dato_incorrecto": "El dato del ERP está mal",
+        "no_es_momento": "No es el momento (temporada, negociación en curso)",
+        "no_aplica": "La regla no aplica a este caso",
+        "otro": "Otro (explicar en el comentario)",
+    },
+    "ajustar": {
+        "monto": "Otro monto",
+        "plazo": "Otro plazo o fecha",
+        "canal": "Otro canal o responsable",
+        "condicion": "Otra condición",
+        "otro": "Otro (explicar en el comentario)",
+    },
+}
+# Cómo se gestionó la decisión al marcarla ejecutada.
+CANALES = {"llamada": "Llamada", "whatsapp": "WhatsApp", "correo": "Correo", "visita": "Visita",
+           "juridico": "Cobro jurídico", "otro": "Otro"}
+
 
 # --- Carga de datos -----------------------------------------------------------
 def registrar_carga(motor: Engine, validas: pd.DataFrame, informe: Informe, mapeo: dict,
@@ -41,7 +66,7 @@ def registrar_carga(motor: Engine, validas: pd.DataFrame, informe: Informe, mape
     (si es la primera) y recalcula los paquetes que usan ese reporte."""
     if not informe.puede_cargar:
         raise ValueError("El semáforo de calidad no permite cargar este archivo.")
-    if tipo not in ("cartera", "ventas", "lineas"):
+    if tipo not in ("cartera", "ventas", "lineas", "recaudos"):
         raise ValueError(f"Tipo de reporte desconocido: {tipo}")
     with motor.begin() as cx:
         carga_id = cx.execute(insert(cargas).values(
@@ -65,6 +90,13 @@ def registrar_carga(motor: Engine, validas: pd.DataFrame, informe: Informe, mape
             } for r in validas.itertuples(index=False)]
             if filas:
                 cx.execute(insert(ventas), filas)
+        elif tipo == "recaudos":
+            filas = [{
+                "carga_id": carga_id, "nit": r.nit, "factura": str(r.factura), "fecha_pago": r.fecha_pago,
+                "valor": float(r.valor), "recibo": r.recibo if isinstance(r.recibo, str) else None,
+            } for r in validas.itertuples(index=False)]
+            if filas:
+                cx.execute(insert(recaudos), filas)
         else:
             def num(x):
                 return None if x is None or pd.isna(x) else float(x)
@@ -78,7 +110,8 @@ def registrar_carga(motor: Engine, validas: pd.DataFrame, informe: Informe, mape
                 cx.execute(insert(lineas_venta), filas)
 
         existentes = set(cx.execute(select(clientes.c.nit)).scalars())
-        for nit, grupo in validas.groupby("nit"):
+        # Los recaudos no crean ni actualizan clientes: se cruzan con los que ya existen.
+        for nit, grupo in (validas.iloc[0:0] if tipo == "recaudos" else validas).groupby("nit"):
             nombre = Counter(grupo["cliente"].dropna()).most_common(1)
             vend = grupo["vendedor"].dropna()
             datos = {"nombre": nombre[0][0] if nombre else nit,
@@ -215,7 +248,8 @@ def sincronizar(motor: Engine, paq, carga_id: int, detectadas: list[reglas.Resul
                 cx.execute(insert(decisiones).values(
                     paquete=paq.clave, tipo=r.tipo, nit=r.nit, estado="pendiente",
                     carga_origen_id=carga_id, saldo_vencido_inicial=r.saldo_vencido,
-                    grupo=asignar_grupo(r, carga_id, p, paq.tipos_control), **valores))
+                    grupo=asignar_grupo(r, carga_id, p, paq.tipos_control),
+                    variables=variables_de(r), **valores))
                 creadas += 1
         for clave, d in abiertas.items():
             if clave not in vistas:
@@ -228,6 +262,25 @@ def sincronizar(motor: Engine, paq, carga_id: int, detectadas: list[reglas.Resul
                 cerradas += 1
     return {"decisiones_nuevas": creadas, "decisiones_actualizadas": actualizadas,
             "decisiones_cerradas": cerradas}
+
+
+def variables_de(r: reglas.ResultadoRegla) -> dict:
+    """Foto numérica de la decisión cuando se detectó: los valores simples de la evidencia (montos, días,
+    porcentajes, banderas) y un nivel de los diccionarios anidados. Las listas (facturas, productos) y los
+    textos se dejan fuera: son para leer, no para entrenar. No se actualiza en los cortes siguientes."""
+    def simple(v):
+        return isinstance(v, (bool, int, float)) and not (isinstance(v, float) and v != v)
+
+    salida = {"prioridad": float(r.prioridad), "monto_en_juego": float(r.saldo_vencido),
+              "requiere_gerente": r.nivel_aprobacion == "gerente"}
+    for k, v in (_json_seguro(r.evidencia) or {}).items():
+        if k == "regla_version":
+            continue
+        if simple(v):
+            salida[k] = v
+        elif isinstance(v, dict):
+            salida.update({f"{k}_{k2}": v2 for k2, v2 in v.items() if simple(v2)})
+    return salida
 
 
 def asignar_grupo(r: reglas.ResultadoRegla, carga_id: int, p: dict,
@@ -277,14 +330,28 @@ def medir_cartera(motor: Engine, carga_id: int) -> int:
 
 # --- Acciones del usuario -------------------------------------------------------
 def registrar_accion(motor: Engine, decision_id: int, tipo: str, usuario: str,
-                     detalle: str | None = None, rol: str = "gerente") -> str:
+                     detalle: str | None = None, rol: str = "gerente", motivo: str | None = None,
+                     canal: str | None = None, fecha_compromiso: date | None = None,
+                     monto_compromiso: float | None = None) -> str:
     """Aprobar, ajustar, descartar, ejecutar o dejar una nota. Devuelve el nuevo estado.
 
     Matriz de delegación: aprobar, ajustar o descartar una decisión de nivel 'gerente'
-    exige ese rol; el líder puede dejar notas y ejecutar lo que ya se aprobó."""
+    exige ese rol; el líder puede dejar notas y ejecutar lo que ya se aprobó.
+
+    Para aprender: `motivo` (descartar, ajustar) sale de MOTIVOS; `canal` (ejecutar) de CANALES;
+    `fecha_compromiso` y `monto_compromiso` guardan lo que el cliente prometió pagar."""
     if tipo not in TRANSICIONES:
         raise ValueError(f"Acción desconocida: {tipo}")
-    if tipo in REQUIEREN_DETALLE and not (detalle and detalle.strip()):
+    motivo = motivo or None
+    if motivo and motivo not in MOTIVOS.get(tipo, {}):
+        raise ValueError(f"Motivo desconocido para '{tipo}': {motivo}")
+    canal = canal or None
+    if canal and canal not in CANALES:
+        raise ValueError(f"Canal desconocido: {canal}")
+    if monto_compromiso is not None and monto_compromiso < 0:
+        raise ValueError("El monto prometido no puede ser negativo.")
+    motivo_basta = (motivo is not None and motivo != "otro") or (tipo == "ejecutar" and canal not in (None, "otro"))
+    if tipo in REQUIEREN_DETALLE and not (detalle and detalle.strip()) and not motivo_basta:
         raise ValueError("Esta acción necesita un comentario (qué se hizo, el ajuste o el motivo).")
     desde, hacia = TRANSICIONES[tipo]
     with motor.begin() as cx:
@@ -299,7 +366,9 @@ def registrar_accion(motor: Engine, decision_id: int, tipo: str, usuario: str,
         if estado not in desde:
             raise ValueError(f"No se puede '{tipo}' una decisión en estado '{estado}'.")
         cx.execute(insert(acciones).values(decision_id=decision_id, tipo=tipo, usuario=usuario,
-                                           detalle=(detalle or "").strip() or None))
+                                           detalle=(detalle or "").strip() or None, motivo=motivo,
+                                           canal=canal, fecha_compromiso=fecha_compromiso,
+                                           monto_compromiso=monto_compromiso))
         if hacia:
             cx.execute(update(decisiones).where(decisiones.c.id == decision_id)
                        .values(estado=hacia, actualizada_en=ahora()))

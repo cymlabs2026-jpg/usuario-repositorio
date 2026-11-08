@@ -26,7 +26,7 @@ cargas = Table(
     "cargas", metadata,
     Column("id", Integer, primary_key=True),
     Column("tipo", String(20), nullable=False, default="cartera",
-           server_default="cartera"),                       # cartera | ventas | lineas (qué reporte es)
+           server_default="cartera"),                       # cartera | ventas | lineas | recaudos (qué reporte es)
     Column("creada_en", DateTime, nullable=False, default=ahora),
     Column("fecha_corte", Date, nullable=False),
     Column("archivo", String(255)),
@@ -118,6 +118,8 @@ decisiones = Table(
            server_default="lider"),                         # lider | gerente (matriz de delegación)
     Column("grupo", String(20), nullable=False, default="tratamiento",
            server_default="tratamiento"),                   # tratamiento | control | fuera
+    # Foto de las variables del cliente cuando se detectó la decisión (para aprender después).
+    Column("variables", JSON, nullable=False, default=dict, server_default="{}"),
     Column("creada_en", DateTime, default=ahora),
     Column("actualizada_en", DateTime, default=ahora),
 )
@@ -130,6 +132,12 @@ acciones = Table(
     Column("usuario", String(120), nullable=False),
     Column("detalle", Text),
     Column("fecha", DateTime, default=ahora),
+    # Datos estructurados para aprender (ver aprendizaje.py): por qué se descartó o ajustó,
+    # cómo se gestionó y qué se prometió.
+    Column("motivo", String(40)),                           # ver decisiones.MOTIVOS
+    Column("canal", String(20)),                            # ver decisiones.CANALES
+    Column("fecha_compromiso", Date),                       # fecha en que el cliente prometió pagar
+    Column("monto_compromiso", Float),                      # monto que prometió pagar
 )
 
 resultados = Table(
@@ -168,6 +176,31 @@ resultados_margen = Table(
     Column("medido_en", DateTime, default=ahora),
 )
 
+# Recaudos: pagos recibidos de clientes (recibos de caja). Dan la fecha real de pago de cada factura.
+recaudos = Table(
+    "recaudos", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("carga_id", Integer, ForeignKey("cargas.id"), nullable=False, index=True),
+    Column("nit", String(20), nullable=False, index=True),
+    Column("factura", String(60), nullable=False),         # número de la factura que se paga
+    Column("fecha_pago", Date, nullable=False),
+    Column("valor", Float, nullable=False),
+    Column("recibo", String(60)),
+)
+
+# Textos que Claude redactó y la versión que la persona aprobó o envió (ejemplos para aprender el tono).
+textos_aprobados = Table(
+    "textos_aprobados", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("decision_id", Integer, ForeignKey("decisiones.id"), nullable=False, index=True),
+    Column("tipo", String(30), nullable=False),             # mensaje_cobro
+    Column("borrador", Text, nullable=False),
+    Column("final", Text, nullable=False),
+    Column("editado", Boolean, nullable=False),
+    Column("usuario", String(120), nullable=False),
+    Column("fecha", DateTime, default=ahora),
+)
+
 linea_base = Table(
     "linea_base", metadata,
     Column("id", Integer, primary_key=True),
@@ -201,8 +234,8 @@ accesos = Table(
 
 
 def _migrar(motor: Engine) -> None:
-    """Agrega a una base existente las columnas nuevas que tienen valor por defecto.
-    Suficiente para el piloto; con varios clientes en producción conviene pasar a Alembic."""
+    """Agrega a una base existente las columnas nuevas: las que tienen valor por defecto y las que
+    aceptan vacío. Suficiente para el piloto; con varios clientes en producción conviene pasar a Alembic."""
     insp = inspect(motor)
     with motor.begin() as cx:
         for tabla in metadata.sorted_tables:
@@ -210,9 +243,13 @@ def _migrar(motor: Engine) -> None:
                 continue
             existentes = {c["name"] for c in insp.get_columns(tabla.name)}
             for col in tabla.columns:
-                if col.name in existentes or col.server_default is None:
+                if col.name in existentes:
                     continue
                 tipo = col.type.compile(dialect=motor.dialect)
+                if col.server_default is None:
+                    if col.nullable:
+                        cx.execute(text(f"ALTER TABLE {tabla.name} ADD COLUMN {col.name} {tipo}"))
+                    continue
                 defecto = col.server_default.arg
                 cx.execute(text(f"ALTER TABLE {tabla.name} ADD COLUMN {col.name} {tipo} "
                                 f"NOT NULL DEFAULT '{defecto}'"))
