@@ -20,8 +20,8 @@ from sqlalchemy.engine import Engine
 
 from . import comercial, impacto, paquetes, reglas
 from .calidad import Informe
-from .db import (acciones, ahora, cargas, clientes, decisiones, facturas, linea_base, lineas_venta, recaudos,
-                 resultados, ventas)
+from .db import (acciones, ahora, cargas, clientes, cuentas_por_pagar, decisiones, facturas, linea_base,
+                 lineas_venta, recaudos, resultados, saldos_caja, ventas)
 
 ABIERTAS = ("pendiente", "aprobada", "ajustada", "ejecutada")
 TRANSICIONES = {
@@ -61,13 +61,17 @@ CANALES = {"llamada": "Llamada", "whatsapp": "WhatsApp", "correo": "Correo", "vi
 
 # --- Carga de datos -----------------------------------------------------------
 def registrar_carga(motor: Engine, validas: pd.DataFrame, informe: Informe, mapeo: dict,
-                    fecha_corte: date, archivo: str, usuario: str, tipo: str = "cartera") -> dict:
-    """Guarda un reporte (cartera o ventas), actualiza clientes, fija la línea base de cartera
-    (si es la primera) y recalcula los paquetes que usan ese reporte."""
+                    fecha_corte: date, archivo: str, usuario: str, tipo: str = "cartera",
+                    saldo_bancos: float | None = None) -> dict:
+    """Guarda un reporte (cartera, ventas, líneas, cuentas por pagar o recaudos), actualiza clientes, fija la
+    línea base de cartera (si es la primera) y recalcula los paquetes que usan ese reporte.
+    El reporte de cuentas por pagar exige el saldo en bancos a la fecha de corte."""
     if not informe.puede_cargar:
         raise ValueError("El semáforo de calidad no permite cargar este archivo.")
-    if tipo not in ("cartera", "ventas", "lineas", "recaudos"):
+    if tipo not in ("cartera", "ventas", "lineas", "pagos", "recaudos"):
         raise ValueError(f"Tipo de reporte desconocido: {tipo}")
+    if tipo == "pagos" and saldo_bancos is None:
+        raise ValueError("Para proyectar la caja falta el saldo en bancos a la fecha de corte.")
     with motor.begin() as cx:
         carga_id = cx.execute(insert(cargas).values(
             tipo=tipo, fecha_corte=fecha_corte, archivo=archivo, usuario=usuario,
@@ -97,6 +101,16 @@ def registrar_carga(motor: Engine, validas: pd.DataFrame, informe: Informe, mape
             } for r in validas.itertuples(index=False)]
             if filas:
                 cx.execute(insert(recaudos), filas)
+        elif tipo == "pagos":
+            filas = [{
+                "carga_id": carga_id, "nit": r.nit, "proveedor": str(r.proveedor or r.nit), "numero": str(r.numero),
+                "fecha_emision": None if r.fecha_emision is None or pd.isna(r.fecha_emision) else r.fecha_emision,
+                "fecha_vencimiento": r.fecha_vencimiento, "saldo": float(r.saldo),
+                "categoria": r.categoria if isinstance(r.categoria, str) else None,
+            } for r in validas.itertuples(index=False)]
+            if filas:
+                cx.execute(insert(cuentas_por_pagar), filas)
+            cx.execute(insert(saldos_caja).values(carga_id=carga_id, saldo_bancos=float(saldo_bancos)))
         else:
             def num(x):
                 return None if x is None or pd.isna(x) else float(x)
@@ -110,8 +124,9 @@ def registrar_carga(motor: Engine, validas: pd.DataFrame, informe: Informe, mape
                 cx.execute(insert(lineas_venta), filas)
 
         existentes = set(cx.execute(select(clientes.c.nit)).scalars())
-        # Los recaudos no crean ni actualizan clientes: se cruzan con los que ya existen.
-        for nit, grupo in (validas.iloc[0:0] if tipo == "recaudos" else validas).groupby("nit"):
+        # Los recaudos no crean ni actualizan clientes (se cruzan con los que ya existen) y los proveedores
+        # del reporte de cuentas por pagar no son clientes.
+        for nit, grupo in (validas.iloc[0:0] if tipo in ("recaudos", "pagos") else validas).groupby("nit"):
             nombre = Counter(grupo["cliente"].dropna()).most_common(1)
             vend = grupo["vendedor"].dropna()
             datos = {"nombre": nombre[0][0] if nombre else nit,
@@ -134,6 +149,12 @@ def registrar_carga(motor: Engine, validas: pd.DataFrame, informe: Informe, mape
         # Las ventas cambian quiénes son los clientes clave: se recalcula también el último corte de cartera.
         ult = ultima_carga(motor, "cartera")
         if ult and any(p.clave == "cartera" for p in paquetes.activos()):
+            recalcular(motor, ult)
+    if tipo != "pagos":
+        # La caja proyecta con la última cartera, las ventas, el margen y los recaudos: se recalcula con cada
+        # reporte nuevo.
+        ult = ultima_carga(motor, "pagos")
+        if ult and any(p.clave == "caja" for p in paquetes.activos()):
             recalcular(motor, ult)
     return {"carga_id": carga_id, "linea_base_creada": primera, **resumen}
 

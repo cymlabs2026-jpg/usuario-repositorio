@@ -1,6 +1,7 @@
 """Datos de prueba de una distribuidora inventada de Palmira y Cali (40 clientes) que activan todas las
-decisiones de Ontara: dos cortes de cartera, dos reportes de ventas y dos de ventas por producto
-(31/10/2026 y 14/11/2026), más un reporte de recaudos con los pagos recibidos entre los dos cortes.
+decisiones de Ontara: dos cortes de cartera, dos reportes de ventas, dos de ventas por producto
+y dos de cuentas por pagar (31/10/2026 y 14/11/2026), más un reporte de recaudos con los pagos recibidos entre
+los dos cortes.
 Nombres y NIT son inventados. Uso:  python datos_ejemplo/generar_prueba.py
 """
 import csv
@@ -117,8 +118,12 @@ def cartera():
             valor = round(valor, -3)
             if s1:
                 filas1.append(fila(nit, nombre, num, emision, valor, round(s1, -3), i, cupo_m * M))
-            if s2:
+            if s2 and emision <= C1:
                 filas2.append(fila(nit, nombre, num, emision, valor, round(s2, -3), i, cupo_m * M))
+        # Lo facturado entre los dos cortes sale del reporte de ventas, para que cartera y ventas cuadren.
+        for num, dia, valor in ventas_cliente(i, nombre, perfil):
+            if C1 < dia <= C2:
+                filas2.append(fila(nit, nombre, num, dia, valor, valor, i, cupo_m * M))
     escribir("prueba_cartera_corte_2026-10-31.csv", filas1)
     escribir("prueba_cartera_corte_2026-11-14.csv", filas2)
 
@@ -248,8 +253,75 @@ def recaudos():
     escribir("prueba_recaudos_2026-11-14.csv", filas)
 
 
+# --- Cuentas por pagar: proveedores y obligaciones programadas ------------------------------------
+# (proveedor, compras mensuales en millones, plazo en días)
+PROVEEDORES = [
+    ("Ingenio Providencia Comercial", 120, 30), ("Aceites del Pacífico", 95, 30), ("Molinos Harineros del Valle", 85, 45),
+    ("Lácteos Colanta Distribución", 60, 30), ("Granos y Cereales Andinos", 55, 45), ("Empaques Plásticos Yumbo", 25, 60),
+    ("Café Tostadores del Cauca", 40, 30), ("Arrocera La Esperanza", 70, 30), ("Distribuidora de Sal Marina", 18, 30),
+    ("Transportes Logísticos Cali", 22, 15), ("Enlatados del Sur", 35, 45), ("Bebidas Andinas", 30, 30),
+]
+APLAZA = {"Ingenio Providencia Comercial"}    # acepta correr 30 días su compra de temporada (segundo reporte)
+# Compras de temporada para diciembre: son las que rompen la caja.
+TEMPORADA = {"Aceites del Pacífico": (date(2026, 10, 15), date(2026, 12, 15), 150 * M),
+             "Ingenio Providencia Comercial": (date(2026, 10, 22), date(2026, 12, 22), 100 * M)}
+SALDO_BANCOS = {C1: 250 * M, C2: 390 * M}   # se digitan al cargar cada reporte
+OBLIGACIONES = []                        # (nit, nombre, documento, vence, valor, categoría)
+for mes, anio in ((11, 2026), (12, 2026), (1, 2027), (2, 2027)):
+    OBLIGACIONES += [
+        ("860000001", "Nómina y prestaciones", f"NOM-{anio}{mes:02d}-1", date(anio, mes, 15), 40 * M, "Nómina"),
+        ("860000001", "Nómina y prestaciones", f"NOM-{anio}{mes:02d}-2", date(anio, mes, 28 if mes == 2 else 30), 40 * M,
+         "Nómina"),
+        ("800197268", "DIAN", f"RTE-{anio}{mes:02d}", date(anio, mes, 20), 10 * M, "Impuestos"),
+        ("890903938", "Bancolombia cuota crédito", f"CR-{anio}{mes:02d}", date(anio, mes, 10), 20 * M, "Crédito"),
+        ("900555444", "Inmobiliaria Bodega Palmira", f"ARR-{anio}{mes:02d}", date(anio, mes, 5), 12 * M, "Arriendo"),
+    ]
+OBLIGACIONES += [("860000001", "Nómina y prestaciones", "PRIMA-2026-12", date(2026, 12, 18), 75 * M, "Nómina"),
+                 ("800197268", "DIAN", "IVA-2026-06", date(2026, 11, 19), 60 * M, "Impuestos"),
+                 ("800197268", "DIAN", "IVA-2027-01", date(2027, 1, 21), 65 * M, "Impuestos")]
+
+
+def cuentas_proveedor(i, nombre, mensual, plazo, corte):
+    """Facturas abiertas al corte: compras de cada semana que aún no vencen o que vencen pronto."""
+    r = random.Random(1300 + i)
+    filas, dia, n = [], C1 - timedelta(days=75), 0
+    while dia <= corte:
+        n += 1
+        valor = round(mensual * M / 4.33 * r.uniform(0.8, 1.2), -3)
+        vence = dia + timedelta(days=plazo)
+        if vence > corte - (timedelta(days=3) if r.random() < 0.1 else timedelta(0)):
+            filas.append((f"FP-{i:02d}{n:03d}", dia, vence, valor))
+        dia += timedelta(days=7)
+    return filas
+
+
+def pagos():
+    for corte, archivo in ((C1, "prueba_pagos_2026-10-31.csv"), (C2, "prueba_pagos_2026-11-14.csv")):
+        filas = []
+        for i, (nombre, mensual, plazo) in enumerate(PROVEEDORES):
+            nit = f"8{random.Random(70 + i).randint(10_000_000, 99_999_999)}"
+            for num, emision, vence, valor in cuentas_proveedor(i, nombre, mensual, plazo, corte):
+                filas.append({"NIT proveedor": nit, "Proveedor": nombre, "Documento": num,
+                              "Fecha": emision.strftime("%d/%m/%Y"), "Vence": vence.strftime("%d/%m/%Y"),
+                              "Saldo": pesos(valor), "Concepto": "Compras"})
+            if nombre in TEMPORADA:
+                emision, vence, valor = TEMPORADA[nombre]
+                if corte == C2 and nombre in APLAZA:
+                    vence += timedelta(days=30)                        # negociado tras la alerta de caja
+                filas.append({"NIT proveedor": nit, "Proveedor": nombre, "Documento": f"FP-{i:02d}TEMP",
+                              "Fecha": emision.strftime("%d/%m/%Y"), "Vence": vence.strftime("%d/%m/%Y"),
+                              "Saldo": pesos(valor), "Concepto": "Compras de temporada"})
+        for nit, nombre, doc, vence, valor, cat in OBLIGACIONES:
+            if vence > corte:
+                filas.append({"NIT proveedor": nit, "Proveedor": nombre, "Documento": doc, "Fecha": "",
+                              "Vence": vence.strftime("%d/%m/%Y"), "Saldo": pesos(valor), "Concepto": cat})
+        escribir(archivo, filas)
+
+
+
 if __name__ == "__main__":
     cartera()
     ventas()
     lineas()
     recaudos()
+    pagos()

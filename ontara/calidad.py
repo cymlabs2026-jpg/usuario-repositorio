@@ -191,3 +191,38 @@ def evaluar_recaudos(datos: pd.DataFrame, mapeo: dict[str, str],
     validas = datos.loc[~excluir].copy()
     semaforo = max((x.nivel for x in v), key=ORDEN.get, default="verde")
     return Informe(semaforo, len(datos), len(validas), len(validas) > 0, [], v), validas
+
+
+def evaluar_pagos(datos: pd.DataFrame, mapeo: dict[str, str],
+                  plantilla: Plantilla | None = None) -> tuple[Informe, pd.DataFrame]:
+    """Semáforo para el reporte de cuentas por pagar (proveedores y obligaciones programadas)."""
+    plantilla = plantilla or cargar_plantilla(objeto="CuentaPorPagar")
+    faltan = [c for c in plantilla.requeridos if c not in mapeo]
+    if faltan or datos.empty:
+        return Informe("rojo", len(datos), 0, False, faltan, []), datos.iloc[0:0]
+    v: list[Validacion] = []
+    sin_nit = datos["nit"].isna()
+    v.append(_validacion("NIT válido", "Filas sin NIT o cédula del proveedor", sin_nit, datos, True))
+    sin_fecha = datos["fecha_vencimiento"].isna()
+    v.append(_validacion("Vencimiento legible", "Fecha de vencimiento vacía o ilegible: no se sabe cuándo pagar",
+                         sin_fecha, datos, True))
+    sin_saldo = datos["saldo"].isna()
+    v.append(_validacion("Saldo numérico", "Saldo vacío o que no es un número", sin_saldo, datos, True))
+    no_positivo = datos["saldo"].fillna(1) <= 0
+    v.append(_validacion("Saldo positivo", "Saldos en cero o negativos (anticipos o notas sin cruzar)",
+                         no_positivo, datos, True))
+    dup = datos.duplicated(subset=["nit", "numero"], keep="first") & datos["nit"].notna()
+    v.append(_validacion("Documentos únicos", "Documento repetido para el mismo proveedor (se deja el primero)",
+                         dup, datos, True))
+    fe = pd.to_datetime(datos["fecha_emision"], errors="coerce")
+    fv = pd.to_datetime(datos["fecha_vencimiento"], errors="coerce")
+    v.append(_validacion("Vencimiento coherente", "Vence antes de haber sido emitida",
+                         (fv < fe).fillna(False), datos, False, "amarillo"))
+    nombres = datos.dropna(subset=["nit"]).groupby("nit")["proveedor"].nunique()
+    varios = datos["nit"].isin(nombres[nombres > 1].index)
+    v.append(_validacion("Un nombre por NIT", "El mismo NIT aparece con nombres distintos",
+                         varios, datos, False, "amarillo"))
+    excluir = sin_nit | sin_fecha | sin_saldo | no_positivo | dup
+    validas = datos.loc[~excluir].copy()
+    semaforo = max((x.nivel for x in v), key=ORDEN.get, default="verde")
+    return Informe(semaforo, len(datos), len(validas), len(validas) > 0, [], v), validas

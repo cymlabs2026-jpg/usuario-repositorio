@@ -1,0 +1,33 @@
+# Reglas del paquete de decisión "Caja a 13 semanas". Versión base;
+# cada cliente ajusta los parámetros desde la app y se guarda una versión nueva.
+paquete: caja
+version: 1
+parametros:
+  caja_minima: 100000000          # saldo mínimo en bancos que la empresa quiere tener cada semana (COP)
+  excedente_minimo_cop: 300000000 # excedente sobre la caja mínima, en la peor semana, para sugerir usarlo
+  aprobacion_lider_max_cop: 20000000 # monto que puede decidir el líder; por encima, el gerente
+  atraso_por_defecto_dias: 5      # días que se asume que paga tarde un cliente sin historia de pagos
+  dias_mora_alta: 90              # facturas con más mora se proyectan al pct_recaudo_mora_alta
+  pct_recaudo_mora_alta: 50       # % de la cartera de mora alta que se espera recaudar (en la semana 6)
+  dias_incobrable: 180            # facturas con más mora no se proyectan como cobro
+  crecimiento_ventas_pct: 0       # escenario: ventas de las próximas 13 semanas frente al último trimestre (%)
+  compras_pct_ventas: 0           # compras a proveedores como % de las ventas (0 = 100 - margen de Margen, o 75)
+  dias_aplazamiento: 30          # días que se propone correr un pago a proveedor
+  plazo_proveedores_dias: 30      # plazo de pago de las compras nuevas si el reporte no trae fecha de emisión
+  gastos_fijos_mensuales: 0       # nómina, arriendo y servicios que NO vienen en el reporte de cuentas por pagar
+  categorias_criticas: [nomina, impuestos, credito, arriendo, servicios]  # pagos que nunca se sugiere aplazar
+  proveedores_criticos: []        # NIT de proveedores que nunca se sugiere aplazar
+
+descripciones:
+  caja_minima: Caja mínima en bancos cada semana (COP)
+  excedente_minimo_cop: Excedente mínimo para sugerir usarlo (COP)
+  aprobacion_lider_max_cop: El líder decide hasta este monto (COP)
+  atraso_por_defecto_dias: Días de atraso para clientes sin historia de pagos
+  dias_mora_alta: Mora alta a partir de (días)
+  pct_recaudo_mora_alta: Recaudo esperado de la cartera de mora alta (%)
+  dias_incobrable: Mora a partir de la cual no se proyecta el cobro (días)
+  crecimiento_ventas_pct: Escenario de ventas frente al último trimestre (%)
+  compras_pct_ventas: Compras como % de las ventas (0 = automático)
+  dias_aplazamiento: Días que se propone correr un pago a proveedor
+  plazo_proveedores_dias: Plazo de pago a proveedores para compras nuevas (días)
+  gastos_fijos_mensuales: Gastos fijos del mes que no están en cuentas por pagar (COP)

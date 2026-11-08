@@ -1,0 +1,80 @@
+NIT proveedor;Proveedor;Documento;Fecha;Vence;Saldo;Concepto
+825895881;Ingenio Providencia Comercial;FP-00010;19/10/2026;18/11/2026;$ 22.639.000;Compras
+825895881;Ingenio Providencia Comercial;FP-00011;26/10/2026;25/11/2026;$ 25.625.000;Compras
+825895881;Ingenio Providencia Comercial;FP-00012;02/11/2026;02/12/2026;$ 26.299.000;Compras
+825895881;Ingenio Providencia Comercial;FP-00013;09/11/2026;09/12/2026;$ 22.882.000;Compras
+825895881;Ingenio Providencia Comercial;FP-00TEMP;22/10/2026;21/01/2027;$ 100.000.000;Compras de temporada
+853453438;Aceites del Pacífico;FP-01010;19/10/2026;18/11/2026;$ 25.709.000;Compras
+853453438;Aceites del Pacífico;FP-01011;26/10/2026;25/11/2026;$ 19.204.000;Compras
+853453438;Aceites del Pacífico;FP-01012;02/11/2026;02/12/2026;$ 19.599.000;Compras
+853453438;Aceites del Pacífico;FP-01013;09/11/2026;09/12/2026;$ 17.922.000;Compras
+853453438;Aceites del Pacífico;FP-01TEMP;15/10/2026;15/12/2026;$ 150.000.000;Compras de temporada
+819855158;Molinos Harineros del Valle;FP-02008;05/10/2026;19/11/2026;$ 18.866.000;Compras
+819855158;Molinos Harineros del Valle;FP-02009;12/10/2026;26/11/2026;$ 15.889.000;Compras
+819855158;Molinos Harineros del Valle;FP-02010;19/10/2026;03/12/2026;$ 16.625.000;Compras
+819855158;Molinos Harineros del Valle;FP-02011;26/10/2026;10/12/2026;$ 17.438.000;Compras
+819855158;Molinos Harineros del Valle;FP-02012;02/11/2026;17/12/2026;$ 17.367.000;Compras
+819855158;Molinos Harineros del Valle;FP-02013;09/11/2026;24/12/2026;$ 21.845.000;Compras
+847556197;Lácteos Colanta Distribución;FP-03010;19/10/2026;18/11/2026;$ 11.137.000;Compras
+847556197;Lácteos Colanta Distribución;FP-03011;26/10/2026;25/11/2026;$ 12.459.000;Compras
+847556197;Lácteos Colanta Distribución;FP-03012;02/11/2026;02/12/2026;$ 13.345.000;Compras
+847556197;Lácteos Colanta Distribución;FP-03013;09/11/2026;09/12/2026;$ 11.416.000;Compras
+891956660;Granos y Cereales Andinos;FP-04008;05/10/2026;19/11/2026;$ 13.280.000;Compras
+891956660;Granos y Cereales Andinos;FP-04009;12/10/2026;26/11/2026;$ 11.135.000;Compras
+891956660;Granos y Cereales Andinos;FP-04010;19/10/2026;03/12/2026;$ 11.341.000;Compras
+891956660;Granos y Cereales Andinos;FP-04011;26/10/2026;10/12/2026;$ 14.718.000;Compras
+891956660;Granos y Cereales Andinos;FP-04012;02/11/2026;17/12/2026;$ 14.026.000;Compras
+891956660;Granos y Cereales Andinos;FP-04013;09/11/2026;24/12/2026;$ 12.345.000;Compras
+870511409;Empaques Plásticos Yumbo;FP-05006;21/09/2026;20/11/2026;$ 4.932.000;Compras
+870511409;Empaques Plásticos Yumbo;FP-05007;28/09/2026;27/11/2026;$ 6.324.000;Compras
+870511409;Empaques Plásticos Yumbo;FP-05008;05/10/2026;04/12/2026;$ 6.033.000;Compras
+870511409;Empaques Plásticos Yumbo;FP-05009;12/10/2026;11/12/2026;$ 4.664.000;Compras
+870511409;Empaques Plásticos Yumbo;FP-05010;19/10/2026;18/12/2026;$ 5.659.000;Compras
+870511409;Empaques Plásticos Yumbo;FP-05011;26/10/2026;25/12/2026;$ 6.345.000;Compras
+870511409;Empaques Plásticos Yumbo;FP-05012;02/11/2026;01/01/2027;$ 5.260.000;Compras
+870511409;Empaques Plásticos Yumbo;FP-05013;09/11/2026;08/01/2027;$ 5.529.000;Compras
+859735270;Café Tostadores del Cauca;FP-06010;19/10/2026;18/11/2026;$ 9.344.000;Compras
+859735270;Café Tostadores del Cauca;FP-06011;26/10/2026;25/11/2026;$ 9.239.000;Compras
+859735270;Café Tostadores del Cauca;FP-06012;02/11/2026;02/12/2026;$ 7.950.000;Compras
+859735270;Café Tostadores del Cauca;FP-06013;09/11/2026;09/12/2026;$ 9.532.000;Compras
+843920640;Arrocera La Esperanza;FP-07010;19/10/2026;18/11/2026;$ 14.795.000;Compras
+843920640;Arrocera La Esperanza;FP-07011;26/10/2026;25/11/2026;$ 14.994.000;Compras
+843920640;Arrocera La Esperanza;FP-07012;02/11/2026;02/12/2026;$ 18.930.000;Compras
+843920640;Arrocera La Esperanza;FP-07013;09/11/2026;09/12/2026;$ 14.499.000;Compras
+835187118;Distribuidora de Sal Marina;FP-08010;19/10/2026;18/11/2026;$ 4.572.000;Compras
+835187118;Distribuidora de Sal Marina;FP-08011;26/10/2026;25/11/2026;$ 3.497.000;Compras
+835187118;Distribuidora de Sal Marina;FP-08012;02/11/2026;02/12/2026;$ 3.468.000;Compras
+835187118;Distribuidora de Sal Marina;FP-08013;09/11/2026;09/12/2026;$ 4.512.000;Compras
+829506689;Transportes Logísticos Cali;FP-09012;02/11/2026;17/11/2026;$ 4.605.000;Compras
+829506689;Transportes Logísticos Cali;FP-09013;09/11/2026;24/11/2026;$ 5.853.000;Compras
+846438920;Enlatados del Sur;FP-10008;05/10/2026;19/11/2026;$ 7.565.000;Compras
+846438920;Enlatados del Sur;FP-10009;12/10/2026;26/11/2026;$ 6.704.000;Compras
+846438920;Enlatados del Sur;FP-10010;19/10/2026;03/12/2026;$ 7.009.000;Compras
+846438920;Enlatados del Sur;FP-10011;26/10/2026;10/12/2026;$ 9.031.000;Compras
+846438920;Enlatados del Sur;FP-10012;02/11/2026;17/12/2026;$ 8.643.000;Compras
+846438920;Enlatados del Sur;FP-10013;09/11/2026;24/12/2026;$ 7.243.000;Compras
+877906172;Bebidas Andinas;FP-11010;19/10/2026;18/11/2026;$ 7.539.000;Compras
+877906172;Bebidas Andinas;FP-11011;26/10/2026;25/11/2026;$ 7.036.000;Compras
+877906172;Bebidas Andinas;FP-11012;02/11/2026;02/12/2026;$ 6.860.000;Compras
+877906172;Bebidas Andinas;FP-11013;09/11/2026;09/12/2026;$ 6.430.000;Compras
+860000001;Nómina y prestaciones;NOM-202611-1;;15/11/2026;$ 40.000.000;Nómina
+860000001;Nómina y prestaciones;NOM-202611-2;;30/11/2026;$ 40.000.000;Nómina
+800197268;DIAN;RTE-202611;;20/11/2026;$ 10.000.000;Impuestos
+860000001;Nómina y prestaciones;NOM-202612-1;;15/12/2026;$ 40.000.000;Nómina
+860000001;Nómina y prestaciones;NOM-202612-2;;30/12/2026;$ 40.000.000;Nómina
+800197268;DIAN;RTE-202612;;20/12/2026;$ 10.000.000;Impuestos
+890903938;Bancolombia cuota crédito;CR-202612;;10/12/2026;$ 20.000.000;Crédito
+900555444;Inmobiliaria Bodega Palmira;ARR-202612;;05/12/2026;$ 12.000.000;Arriendo
+860000001;Nómina y prestaciones;NOM-202701-1;;15/01/2027;$ 40.000.000;Nómina
+860000001;Nómina y prestaciones;NOM-202701-2;;30/01/2027;$ 40.000.000;Nómina
+800197268;DIAN;RTE-202701;;20/01/2027;$ 10.000.000;Impuestos
+890903938;Bancolombia cuota crédito;CR-202701;;10/01/2027;$ 20.000.000;Crédito
+900555444;Inmobiliaria Bodega Palmira;ARR-202701;;05/01/2027;$ 12.000.000;Arriendo
+860000001;Nómina y prestaciones;NOM-202702-1;;15/02/2027;$ 40.000.000;Nómina
+860000001;Nómina y prestaciones;NOM-202702-2;;28/02/2027;$ 40.000.000;Nómina
+800197268;DIAN;RTE-202702;;20/02/2027;$ 10.000.000;Impuestos
+890903938;Bancolombia cuota crédito;CR-202702;;10/02/2027;$ 20.000.000;Crédito
+900555444;Inmobiliaria Bodega Palmira;ARR-202702;;05/02/2027;$ 12.000.000;Arriendo
+860000001;Nómina y prestaciones;PRIMA-2026-12;;18/12/2026;$ 75.000.000;Nómina
+800197268;DIAN;IVA-2026-06;;19/11/2026;$ 60.000.000;Impuestos
+800197268;DIAN;IVA-2027-01;;21/01/2027;$ 65.000.000;Impuestos
