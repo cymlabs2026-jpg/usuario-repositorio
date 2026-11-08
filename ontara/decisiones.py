@@ -21,6 +21,7 @@ from sqlalchemy.engine import Engine
 from . import comercial, impacto, paquetes, reglas
 from .calidad import Informe
 from .db import (acciones, ahora, cargas, clientes, cuentas_por_pagar, decisiones, existencias, facturas,
+                 pedidos,
                  linea_base, lineas_venta, recaudos, resultados, saldos_caja, ventas)
 
 ABIERTAS = ("pendiente", "aprobada", "ajustada", "ejecutada")
@@ -63,12 +64,12 @@ CANALES = {"llamada": "Llamada", "whatsapp": "WhatsApp", "correo": "Correo", "vi
 def registrar_carga(motor: Engine, validas: pd.DataFrame, informe: Informe, mapeo: dict,
                     fecha_corte: date, archivo: str, usuario: str, tipo: str = "cartera",
                     saldo_bancos: float | None = None) -> dict:
-    """Guarda un reporte (cartera, ventas, líneas, cuentas por pagar, existencias o recaudos), actualiza clientes, fija la
+    """Guarda un reporte (cartera, ventas, líneas, cuentas por pagar, existencias, pedidos o recaudos), actualiza clientes, fija la
     línea base de cartera (si es la primera) y recalcula los paquetes que usan ese reporte.
     El reporte de cuentas por pagar exige el saldo en bancos a la fecha de corte."""
     if not informe.puede_cargar:
         raise ValueError("El semáforo de calidad no permite cargar este archivo.")
-    if tipo not in ("cartera", "ventas", "lineas", "pagos", "inventario", "recaudos"):
+    if tipo not in ("cartera", "ventas", "lineas", "pagos", "inventario", "pedidos", "recaudos"):
         raise ValueError(f"Tipo de reporte desconocido: {tipo}")
     if tipo == "pagos" and saldo_bancos is None:
         raise ValueError("Para proyectar la caja falta el saldo en bancos a la fecha de corte.")
@@ -109,6 +110,18 @@ def registrar_carga(motor: Engine, validas: pd.DataFrame, informe: Informe, mape
             } for r in validas.itertuples(index=False)]
             if filas:
                 cx.execute(insert(existencias), filas)
+        elif tipo == "pedidos":
+            def opc(x):
+                return None if x is None or (not isinstance(x, str) and pd.isna(x)) else x
+            filas = [{
+                "carga_id": carga_id, "nit": r.nit, "pedido": str(r.pedido),
+                "producto": str(r.producto).strip() if isinstance(r.producto, str) else None,
+                "cantidad": None if opc(r.cantidad) is None else float(r.cantidad), "valor": float(r.valor),
+                "fecha_pedido": r.fecha_pedido, "fecha_compromiso": r.fecha_compromiso,
+                "fecha_despacho": opc(r.fecha_despacho), "ciudad": r.ciudad if isinstance(r.ciudad, str) else None,
+            } for r in validas.itertuples(index=False)]
+            if filas:
+                cx.execute(insert(pedidos), filas)
         elif tipo == "pagos":
             filas = [{
                 "carga_id": carga_id, "nit": r.nit, "proveedor": str(r.proveedor or r.nit), "numero": str(r.numero),
@@ -163,6 +176,11 @@ def registrar_carga(motor: Engine, validas: pd.DataFrame, informe: Informe, mape
         # Inventario usa la demanda de las ventas por producto y cruza con Margen y Caja.
         ult = ultima_carga(motor, "inventario")
         if ult and any(p.clave == "inventario" for p in paquetes.activos()):
+            recalcular(motor, ult)
+    if tipo in ("cartera", "ventas", "inventario"):
+        # Despacho cruza con el crédito, el cupo, el valor del cliente y las existencias.
+        ult = ultima_carga(motor, "pedidos")
+        if ult and any(p.clave == "despacho" for p in paquetes.activos()):
             recalcular(motor, ult)
     if tipo != "pagos":
         # La caja proyecta con la última cartera, las ventas, el margen y los recaudos: se recalcula con cada

@@ -15,7 +15,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from ontara import acceso, aprendizaje, asistente, caja, calidad, comercial, inventario, margen, paquetes, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
+from ontara import acceso, aprendizaje, asistente, caja, calidad, comercial, despacho, inventario, margen, paquetes, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
 from ontara.db import cargas, crear_motor  # noqa: E402
 from sqlalchemy import select  # noqa: E402
 
@@ -37,7 +37,10 @@ ETIQUETAS = {"fecha": "Fecha de la factura", "producto": "Producto", "costo": "C
              "fecha_vencimiento": "Fecha de vencimiento", "saldo": "Saldo", "valor": "Valor", "vendedor": "Vendedor",
              "cupo": "Cupo de crédito", "factura": "Factura que se paga", "fecha_pago": "Fecha de pago",
              "recibo": "Recibo de caja", "proveedor": "Proveedor", "categoria": "Concepto o categoría",
-             "bodega": "Bodega", "costo_unitario": "Costo unitario (promedio)", "costo_total": "Costo total"}
+             "bodega": "Bodega", "costo_unitario": "Costo unitario (promedio)", "costo_total": "Costo total",
+             "pedido": "Número de pedido", "fecha_pedido": "Fecha del pedido",
+             "fecha_compromiso": "Fecha de entrega prometida", "fecha_despacho": "Fecha de despacho (vacía = pendiente)",
+             "ciudad": "Ciudad o ruta"}
 ESTADO = {"pendiente": "Pendiente", "aprobada": "Aprobada", "ajustada": "Ajustada",
           "ejecutada": "Ejecutada", "descartada": "Descartada", "cerrada": "Cerrada"}
 
@@ -149,6 +152,8 @@ def pagina_cargar():
                         "factura, con venta neta y costo)",
               "inventario": "Sube el reporte de existencias por producto (y bodega) con su costo unitario o total, a la "
                             "fecha de corte",
+              "pedidos": "Sube el reporte de pedidos de los últimos 3 meses (una fila por producto de cada pedido, con "
+                         "la fecha prometida al cliente y la fecha de despacho; vacía si todavía no sale)",
               "pagos": "Sube el reporte de cuentas por pagar (facturas de proveedores pendientes) con las obligaciones "
                        "programadas que quieras incluir: nómina, impuestos, cuotas de crédito y arriendo, con su fecha "
                        "de pago",
@@ -183,7 +188,8 @@ def pagina_cargar():
 
     datos = ingesta.convertir(crudo, mapeo, plantilla)
     evaluar = {"cartera": calidad.evaluar, "ventas": calidad.evaluar_ventas, "lineas": calidad.evaluar_lineas,
-               "pagos": calidad.evaluar_pagos, "inventario": calidad.evaluar_inventario, "recaudos": calidad.evaluar_recaudos}[tipo]
+               "pagos": calidad.evaluar_pagos, "inventario": calidad.evaluar_inventario, "pedidos": calidad.evaluar_pedidos,
+               "recaudos": calidad.evaluar_recaudos}[tipo]
     informe, validas = evaluar(datos, mapeo, plantilla)
     st.subheader(f"2. Semáforo de calidad: {COLOR[informe.semaforo]} {informe.semaforo.capitalize()}")
     if informe.faltan_campos:
@@ -245,10 +251,12 @@ def pagina_bandeja():
     riesgo = sum(d["saldo_vencido_inicial"] for d in lista if d["tipo"] == "recuperar_cliente")
     utilidad = sum(d["saldo_vencido_inicial"] for d in lista if d["paquete"] == "margen")
     deficit = max((d["saldo_vencido_inicial"] for d in lista if d["tipo"] == "caja_bajo_minimo"), default=0)
+    en_riesgo = sum(d["saldo_vencido_inicial"] for d in lista if d["tipo"] == "despachar_pedidos")
     st.caption(f"{len(lista)} decisiones · {pesos(total)} vencidos en las de cobro · "
                f"{pesos(cupo)} de cupo adicional sugerido · {pesos(riesgo)} de ventas trimestrales en riesgo "
                f"en clientes que se están enfriando · {pesos(utilidad)} de utilidad en juego en margen"
-               + (f" · {pesos(deficit)} de caja por cubrir en la peor semana" if deficit else ""))
+               + (f" · {pesos(deficit)} de caja por cubrir en la peor semana" if deficit else "")
+               + (f" · {pesos(en_riesgo)} en pedidos que no han salido a tiempo" if en_riesgo else ""))
     for d in lista:
         ev = d["evidencia"]
         icono = "🟢" if d["tipo"] in ("ampliar_cupo", "crecer_cliente", "excedente_de_caja") else "🔴" if d["prioridad"] >= 70 else \
@@ -273,6 +281,13 @@ def pagina_bandeja():
         elif d["tipo"] == "liberar_inventario":
             detalle_tipo = ("sin movimiento" if ev["sin_movimiento"] else f"{ev['cobertura_dias']:.0f} días de inventario") + \
                 f" · {pesos(ev['capital_liberable'])} por liberar"
+        elif d["tipo"] == "despachar_pedidos":
+            detalle_tipo = (f"{len(ev['pedidos'])} pedido(s) · {pesos(ev['valor_pendiente'])}"
+                            + (f" · {ev['dias_atraso_max']} días tarde" if ev["dias_atraso_max"] > 0 else " · vence ya")
+                            + {"credito": " · crédito frenado", "cupo": " · pasa el cupo",
+                               "inventario": " · falta inventario"}.get(ev.get("bloqueo"), ""))
+        elif d["tipo"] == "recuperar_cumplimiento":
+            detalle_tipo = f"{ev['cumplimiento_pct']:.0f}% a tiempo · {ev['a_tiempo']} de {ev['pedidos_despachados']} pedidos"
         elif d["tipo"] == "excedente_de_caja":
             detalle_tipo = f"{pesos(ev['excedente'])} sin uso en 13 semanas"
         elif d["paquete"] == "margen":
@@ -299,6 +314,8 @@ def tarjeta(d: dict):
         tarjeta_inventario(d, ev)
     elif d["paquete"] == "caja":
         tarjeta_caja(d, ev)
+    elif d["paquete"] == "despacho":
+        tarjeta_despacho(d, ev)
     else:
         tarjeta_cartera(d, ev)
     acciones_y_historial(d)
@@ -367,6 +384,47 @@ def tarjeta_inventario(d: dict, ev: dict):
     st.caption(f"Costo unitario {pesos(ev['costo_unitario'])} · margen {ev['margen_pct']}% · última venta "
                f"{ev.get('ultima_venta') or 'sin registro'} · pedido tarda {ev['dias_reposicion']:.0f} días · objetivo "
                f"{ev['dias_objetivo']:.0f} días · Regla inventario v{ev.get('regla_version')} · reporte {ev['fecha_corte']}")
+
+
+def tarjeta_despacho(d: dict, ev: dict):
+    if d["tipo"] == "despachar_pedidos":
+        a, b, c, e = st.columns(4)
+        a.metric("Pedidos en riesgo", len(ev["pedidos"]))
+        b.metric("Valor pendiente", pesos(ev["valor_pendiente"]))
+        c.metric("Días después de lo prometido", max(ev["dias_atraso_max"], 0))
+        e.metric("Qué lo frena", {"credito": "Crédito frenado", "cupo": "Cupo", "inventario": "Inventario"}
+                 .get(ev.get("bloqueo"), "Nada: despachar"))
+        for cruce in ev.get("cruces", []):
+            st.info("Cruce: " + cruce)
+        tabla = pd.DataFrame(ev["pedidos"])
+        tabla["valor"] = tabla["valor"].map(pesos)
+        st.dataframe(tabla.rename(columns={"pedido": "Pedido", "fecha_pedido": "Pedido el", "fecha_compromiso": "Prometido",
+                                           "dias_atraso": "Días tarde", "valor": "Valor pendiente", "ciudad": "Ciudad",
+                                           "productos": "Productos"}), hide_index=True, use_container_width=True)
+        if ev.get("faltantes"):
+            st.caption("Sin inventario suficiente: " + "; ".join(
+                f"{f['producto']} (pedido {f['cantidad']:.0f}, hay {f['disponible']:.0f} y hay "
+                f"{f['comprometido']:.0f} comprometidas)" for f in ev["faltantes"]))
+        if ev.get("cupo"):
+            st.caption(f"Saldo en cartera {pesos(ev['saldo_cartera'])} · cupo {pesos(ev['cupo'])}")
+    else:
+        a, b, c, e = st.columns(4)
+        a.metric("Pedidos a tiempo", f"{ev['cumplimiento_pct']:.0f}%",
+                 delta=f"{ev['cumplimiento_pct'] - ev['cumplimiento_minimo_pct']:+.0f} pts vs. mínimo")
+        b.metric("Despachados", f"{ev['a_tiempo']} a tiempo de {ev['pedidos_despachados']}")
+        c.metric("Atraso promedio", f"{ev['dias_atraso_prom']:.1f} días")
+        e.metric("Compras al año", pesos(ev["ventas_12m"]))
+        for cruce in ev.get("cruces", []):
+            st.info("Cruce: " + cruce)
+        if ev.get("tarde"):
+            tabla = pd.DataFrame(ev["tarde"])
+            tabla["valor"] = tabla["valor"].map(pesos)
+            st.markdown("**Pedidos entregados tarde**")
+            st.dataframe(tabla.rename(columns={"pedido": "Pedido", "fecha_compromiso": "Prometido",
+                                               "fecha_despacho": "Despachado", "dias_atraso": "Días tarde",
+                                               "valor": "Valor"}), hide_index=True, use_container_width=True)
+    st.caption(f"NIT {d['nit']}" + (" · ⭐ cliente clave" if ev.get("cliente_clave") else "")
+               + f" · Regla despacho v{ev.get('regla_version')} · reporte {ev['fecha_corte']}")
 
 
 def grafico_caja(proy: pd.DataFrame, minimo: float, alto: int = 320):
@@ -548,7 +606,34 @@ def pagina_impacto():
     for tab, paq in zip(pestanas, ACTIVOS):
         with tab:
             {"cartera": impacto_cartera, "comercial": impacto_comercial, "margen": impacto_margen,
-             "caja": impacto_caja, "inventario": impacto_inventario}[paq.clave]()
+             "caja": impacto_caja, "inventario": impacto_inventario, "despacho": impacto_despacho}[paq.clave]()
+
+
+def impacto_despacho():
+    r = despacho.resumen(M)
+    if not r["ultimo_reporte"]:
+        st.info("Carga el reporte de pedidos para activar Despacho.")
+        return
+    base, hoy = r["base"], r["hoy"]
+    st.caption(f"Último reporte: {r['ultimo_reporte']:%d/%m/%Y}, frente al primero ({base['fecha']:%d/%m/%Y}). "
+               "Pedidos a tiempo: despachados en los últimos 30 días hasta la fecha prometida.")
+    a, b, c, e = st.columns(4)
+    if hoy["pct_a_tiempo"] is not None:
+        a.metric("Pedidos a tiempo", f"{hoy['pct_a_tiempo']:.0f}%",
+                 delta=(f"{hoy['pct_a_tiempo'] - base['pct_a_tiempo']:+.1f} pts" if base["pct_a_tiempo"] is not None
+                        else None))
+    b.metric("Pedidos atrasados sin despachar", hoy["atrasados"], delta=f"{hoy['atrasados'] - base['atrasados']:+d}",
+             delta_color="inverse")
+    c.metric("Valor atrasado", pesos(hoy["valor_atrasado"]), delta=pesos(hoy["valor_atrasado"] - base["valor_atrasado"]),
+             delta_color="inverse")
+    if hoy["dias_entrega"] is not None:
+        e.metric("Días de pedido a despacho", f"{hoy['dias_entrega']:.1f}",
+                 delta=(f"{hoy['dias_entrega'] - base['dias_entrega']:+.1f}" if base["dias_entrega"] else None),
+                 delta_color="inverse")
+    x, y = st.columns(2)
+    x.metric("Valor despachado en decisiones atendidas", pesos(r["valor_despachado_atendidas"]),
+             help=f"{r['pedidos_despachados']} de {r['pedidos_medidos']} pedidos en riesgo ya salieron")
+    y.metric("Clientes que mejoraron su cumplimiento", f"{r['clientes_mejoraron']} de {r['clientes_medidos']}")
 
 
 def impacto_inventario():

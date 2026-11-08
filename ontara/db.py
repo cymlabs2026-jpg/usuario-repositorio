@@ -117,6 +117,21 @@ existencias = Table(
     Column("costo_total", Float, nullable=False),            # cantidad × costo unitario
 )
 
+pedidos = Table(
+    "pedidos", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("carga_id", Integer, ForeignKey("cargas.id"), nullable=False, index=True),
+    Column("nit", String(40), nullable=False, index=True),
+    Column("pedido", String(80), nullable=False),
+    Column("producto", String(255)),
+    Column("cantidad", Float),
+    Column("valor", Float, nullable=False),
+    Column("fecha_pedido", Date, nullable=False),
+    Column("fecha_compromiso", Date, nullable=False),         # fecha prometida al cliente
+    Column("fecha_despacho", Date),                           # vacía = pendiente
+    Column("ciudad", String(120)),
+)
+
 reglas_version = Table(
     "reglas_version", metadata,
     Column("id", Integer, primary_key=True),
@@ -268,6 +283,22 @@ resultados_inventario = Table(
     Column("liberado", Float, nullable=False),
     Column("quiebre", Boolean, nullable=False),             # el producto se agotó (cantidad en cero)
     Column("cobertura_dias", Float),
+    Column("atendida", Boolean, nullable=False),
+    Column("medido_en", DateTime, default=ahora),
+)
+
+resultados_despacho = Table(
+    "resultados_despacho", metadata,
+    Column("id", Integer, primary_key=True),
+    Column("decision_id", Integer, ForeignKey("decisiones.id"), nullable=False, index=True),
+    Column("carga_id", Integer, ForeignKey("cargas.id"), nullable=False),
+    Column("pedidos", Integer, nullable=False),               # pedidos en alerta (o despachados después de la decisión)
+    Column("despachados", Integer, nullable=False),           # despachados (o, en recuperar cumplimiento, a tiempo)
+    Column("valor_antes", Float, nullable=False),
+    Column("valor_despachado", Float, nullable=False),
+    Column("dias_atraso", Float),                             # promedio de días después de la fecha prometida
+    Column("cumplimiento_antes", Float),                      # % a tiempo al detectarla (recuperar cumplimiento)
+    Column("cumplimiento_despues", Float),
     Column("atendida", Boolean, nullable=False),
     Column("medido_en", DateTime, default=ahora),
 )

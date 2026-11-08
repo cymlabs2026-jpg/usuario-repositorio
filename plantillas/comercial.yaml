@@ -65,6 +65,20 @@ objetos:
       cantidad:       {tipo: numero, requerido: true,  sinonimos: [cantidad, existencia, existencias, saldo_unidades, unidades, stock, disponible]}
       costo_unitario: {tipo: dinero, requerido: false, sinonimos: [costo_unitario, costo_promedio, costo_unidad, costo_prom, valor_unitario]}
       costo_total:    {tipo: dinero, requerido: false, sinonimos: [costo_total, valor_inventario, valor_total, costo, total]}
+  Pedido:
+    descripcion: Línea de un pedido de cliente con la fecha prometida y, si ya salió, la fecha de despacho. Alimenta Despacho
+    campos:
+      nit:              {tipo: nit,    requerido: true,  sinonimos: [nit, identificacion, nit_cliente, id_cliente, cedula_nit, nit_tercero]}
+      cliente:          {tipo: texto,  requerido: true,  sinonimos: [cliente, razon_social, nombre_cliente, nombre_del_tercero, tercero, nombre]}
+      pedido:           {tipo: texto,  requerido: true,  sinonimos: [pedido, numero_pedido, no_pedido, orden, orden_de_pedido, documento, numero]}
+      fecha_pedido:     {tipo: fecha,  requerido: true,  sinonimos: [fecha_pedido, fecha, fecha_orden, fecha_documento, fecha_elaboracion]}
+      fecha_compromiso: {tipo: fecha,  requerido: true,  sinonimos: [fecha_compromiso, fecha_entrega, fecha_prometida, entrega_prometida, compromiso, fecha_requerida]}
+      fecha_despacho:   {tipo: fecha,  requerido: false, sinonimos: [fecha_despacho, despacho, fecha_remision, fecha_entrega_real, entregado, fecha_salida]}
+      producto:         {tipo: texto,  requerido: false, sinonimos: [producto, referencia, descripcion, item, articulo, nombre_producto, sku]}
+      cantidad:         {tipo: numero, requerido: false, sinonimos: [cantidad, unidades, cant]}
+      valor:            {tipo: dinero, requerido: true,  sinonimos: [valor, total, valor_total, valor_pedido, subtotal, valor_neto]}
+      ciudad:           {tipo: texto,  requerido: false, sinonimos: [ciudad, municipio, ruta, zona, destino]}
+      vendedor:         {tipo: texto,  requerido: false, sinonimos: [vendedor, asesor, comercial, ejecutivo]}
   Cliente:
     descripcion: Se deriva de las facturas y las ventas, agrupando por NIT
     relaciones:

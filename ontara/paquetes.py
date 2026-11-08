@@ -5,7 +5,7 @@ que detecta decisiones + una función que mide su resultado. La bandeja, la memo
 la matriz de delegación, el grupo de control y el asistente son comunes a todos.
 
 Para agregar un paquete nuevo: escribir su YAML de reglas, su módulo con `detectar` y `medir`,
-y registrarlo aquí. Se activan por cliente con ONTARA_PAQUETES (por ejemplo "cartera,comercial,margen,caja,inventario").
+y registrarlo aquí. Se activan por cliente con ONTARA_PAQUETES (por ejemplo "cartera,comercial,margen,caja,inventario,despacho").
 """
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ from typing import Callable
 
 from sqlalchemy.engine import Engine
 
-from . import caja, comercial, inventario, margen, reglas
+from . import caja, comercial, despacho, inventario, margen, reglas
 
 # Reportes que el cliente puede cargar y el objeto de la ontología que describe sus columnas.
 REPORTES = {
@@ -25,6 +25,7 @@ REPORTES = {
     "pagos": {"nombre": "Cuentas por pagar: proveedores y obligaciones, con el saldo en bancos",
               "objeto": "CuentaPorPagar"},
     "inventario": {"nombre": "Inventario: existencias por producto con su costo", "objeto": "Existencia"},
+    "pedidos": {"nombre": "Pedidos: pedidos de clientes con fecha prometida y de despacho", "objeto": "Pedido"},
     # No alimenta un paquete: da la fecha real de pago para que Ontara aprenda (ver aprendizaje.py).
     "recaudos": {"nombre": "Recaudos: pagos recibidos de clientes (recibos de caja)", "objeto": "Recaudo"},
 }
@@ -62,11 +63,13 @@ REGISTRO: dict[str, Paquete] = {
     "caja": Paquete("caja", "Caja a 13 semanas", "pagos", caja.TIPOS, frozenset(), caja.detectar, caja.medir),
     "inventario": Paquete("inventario", "Inventario", "inventario", inventario.TIPOS, frozenset(),
                           inventario.detectar, inventario.medir),
+    "despacho": Paquete("despacho", "Despacho", "pedidos", despacho.TIPOS, frozenset(),
+                        despacho.detectar, despacho.medir),
 }
 
 
 def activos() -> list[Paquete]:
-    claves = os.environ.get("ONTARA_PAQUETES", "cartera,comercial,margen,caja,inventario")
+    claves = os.environ.get("ONTARA_PAQUETES", "cartera,comercial,margen,caja,inventario,despacho")
     return [REGISTRO[c.strip()] for c in claves.split(",") if c.strip() in REGISTRO]
 
 
