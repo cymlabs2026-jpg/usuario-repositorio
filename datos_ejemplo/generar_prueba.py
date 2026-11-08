@@ -1,6 +1,6 @@
 """Datos de prueba de una distribuidora inventada de Palmira y Cali (40 clientes) que activan todas las
 decisiones de Ontara: dos cortes de cartera, dos reportes de ventas y dos de ventas por producto
-(31/10/2026 y 14/11/2026).
+(31/10/2026 y 14/11/2026), más un reporte de recaudos con los pagos recibidos entre los dos cortes.
 Nombres y NIT son inventados. Uso:  python datos_ejemplo/generar_prueba.py
 """
 import csv
@@ -229,7 +229,27 @@ def lineas():
     escribir("prueba_lineas_2026-11-14.csv", l2)
 
 
+# --- Recaudos: pagos recibidos entre los dos cortes, cruzados con la factura que pagan ---------------
+def recaudos():
+    filas = []
+    for i, (nombre, perfil, cupo_m) in enumerate(CLIENTES):
+        nit, r = nit_de(i), random.Random(1300 + i)
+        for num, emision, valor, s1, s2 in facturas_cliente(i, nombre, perfil, cupo_m):
+            if not s1:
+                continue
+            pagado = round(s1, -3) - round(s2 or 0, -3)
+            if pagado <= 0:
+                continue
+            dia = C1 + timedelta(days=r.randint(1, (C2 - C1).days))
+            filas.append({"NIT": nit, "Cliente": nombre, "Recibo de caja": f"RC-{len(filas) + 1:05d}",
+                          "Fecha de pago": dia.strftime("%d/%m/%Y"), "Documento cruce": num,
+                          "Valor pagado": pesos(pagado)})
+    filas.sort(key=lambda f: (f["Fecha de pago"][6:], f["Fecha de pago"][3:5], f["Fecha de pago"][:2]))
+    escribir("prueba_recaudos_2026-11-14.csv", filas)
+
+
 if __name__ == "__main__":
     cartera()
     ventas()
     lineas()
+    recaudos()

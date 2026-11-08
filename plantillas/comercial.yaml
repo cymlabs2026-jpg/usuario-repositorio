@@ -38,6 +38,15 @@ objetos:
       descuento: {tipo: dinero, requerido: false, sinonimos: [descuento, valor_descuento, dcto, descuento_valor]}
       cantidad:  {tipo: numero, requerido: false, sinonimos: [cantidad, unidades, cant]}
       vendedor:  {tipo: texto,  requerido: false, sinonimos: [vendedor, asesor, comercial, ejecutivo]}
+  Recaudo:
+    descripcion: Pago recibido de un cliente (recibo de caja), cruzado con la factura que paga. Da la fecha real de pago
+    campos:
+      nit:        {tipo: nit,    requerido: true,  sinonimos: [nit, identificacion, nit_cliente, id_cliente, cedula_nit, nit_tercero]}
+      cliente:    {tipo: texto,  requerido: false, sinonimos: [cliente, razon_social, nombre_cliente, nombre_del_tercero, tercero, nombre]}
+      factura:    {tipo: texto,  requerido: true,  sinonimos: [factura, factura_cruce, documento_cruce, doc_cruce, numero_factura, no_factura, num_factura, cruce]}
+      fecha_pago: {tipo: fecha,  requerido: true,  sinonimos: [fecha_pago, fecha_recaudo, fecha_recibo, fecha_consignacion, fecha_abono, fecha]}
+      valor:      {tipo: dinero, requerido: true,  sinonimos: [valor_pagado, valor_recaudo, valor_abono, abono, pago, valor, total]}
+      recibo:     {tipo: texto,  requerido: false, sinonimos: [recibo, recibo_caja, numero_recibo, no_recibo, comprobante, rc]}
   Cliente:
     descripcion: Se deriva de las facturas y las ventas, agrupando por NIT
     relaciones:

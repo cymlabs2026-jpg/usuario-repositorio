@@ -161,3 +161,33 @@ def evaluar_lineas(datos: pd.DataFrame, mapeo: dict[str, str],
     validas = datos.loc[~excluir].copy()
     semaforo = max((x.nivel for x in v), key=ORDEN.get, default="verde")
     return Informe(semaforo, len(datos), len(validas), len(validas) > 0, [], v), validas
+
+
+def evaluar_recaudos(datos: pd.DataFrame, mapeo: dict[str, str],
+                     plantilla: Plantilla | None = None) -> tuple[Informe, pd.DataFrame]:
+    """Semáforo para el reporte de recaudos (recibos de caja cruzados con la factura que pagan)."""
+    plantilla = plantilla or cargar_plantilla(objeto="Recaudo")
+    faltan = [c for c in plantilla.requeridos if c not in mapeo]
+    if faltan or datos.empty:
+        return Informe("rojo", len(datos), 0, False, faltan, []), datos.iloc[0:0]
+    v: list[Validacion] = []
+    sin_nit = datos["nit"].isna()
+    v.append(_validacion("NIT válido", "Filas sin NIT o cédula reconocible", sin_nit, datos, True))
+    sin_factura = datos["factura"].isna()
+    v.append(_validacion("Factura cruzada", "Pago sin la factura que paga (anticipo o pago sin cruzar)",
+                         sin_factura, datos, True, "amarillo"))
+    sin_fecha = datos["fecha_pago"].isna()
+    v.append(_validacion("Fecha legible", "Fecha de pago vacía o ilegible", sin_fecha, datos, True))
+    sin_valor = datos["valor"].isna()
+    v.append(_validacion("Valor numérico", "Valor vacío o que no es un número", sin_valor, datos, True))
+    no_positivo = datos["valor"].fillna(1) <= 0
+    v.append(_validacion("Valor positivo", "Valores en cero o negativos (reversiones): no se usan",
+                         no_positivo, datos, True, "amarillo"))
+    claves = ["nit", "factura", "fecha_pago", "valor"] + (["recibo"] if datos["recibo"].notna().any() else [])
+    dup = datos.duplicated(subset=claves, keep="first") & datos["nit"].notna()
+    v.append(_validacion("Pagos únicos", "El mismo pago aparece repetido (se deja el primero)", dup, datos, True,
+                         "amarillo"))
+    excluir = sin_nit | sin_factura | sin_fecha | sin_valor | no_positivo | dup
+    validas = datos.loc[~excluir].copy()
+    semaforo = max((x.nivel for x in v), key=ORDEN.get, default="verde")
+    return Informe(semaforo, len(datos), len(validas), len(validas) > 0, [], v), validas

@@ -30,7 +30,8 @@ consulta resultados ya calculados, los explica y redacta mensajes.
 | 2. Foco comercial | `ontara/comercial.py` + `reglas/comercial.yaml` | Ritmo de compra por cliente, alertas de clientes que se enfrían o caen, visitas de crecimiento y cruce con Cartera |
 | 3. Aplicación | `ontara/acceso.py` | Login con Google o Microsoft (o clave PBKDF2), roles y bitácora de accesos |
 | 3. Aplicación | `ontara/asistente.py` | Claude con 4 herramientas de solo lectura; nombres y NIT anonimizados antes de salir (Ley 1581) |
-| 3. Aplicación | `app/streamlit_app.py` | Bandeja de decisiones, carga de datos, impacto, asistente y reglas |
+| 3. Aplicación | `ontara/aprendizaje.py` | Etapa 0 del aprendizaje: dataset de entrenamiento (variables, acciones y resultados a 30/60/90 días), fecha real de pago desde los recaudos, preparación y descartes por motivo |
+| 3. Aplicación | `app/streamlit_app.py` | Bandeja de decisiones, carga de datos, impacto, asistente, reglas y aprendizaje |
 
 ## Probarlo en local
 
@@ -51,6 +52,7 @@ una distribuidora inventada con 40 clientes. En **Cargar datos**, en este orden:
 | Ventas | `prueba_ventas_2026-11-14.csv` | 14/11/2026 |
 | Ventas por producto | `prueba_lineas_2026-10-31.csv` | 31/10/2026 |
 | Ventas por producto | `prueba_lineas_2026-11-14.csv` | 14/11/2026 |
+| Recaudos | `prueba_recaudos_2026-11-14.csv` | 14/11/2026 |
 
 (Los dos reportes de ventas por producto pueden cargarse en cualquier momento después de la primera cartera.)
 
@@ -108,6 +110,29 @@ comercial. El impacto se mide de dos formas: el margen de cada cliente o product
 tenía, y el margen bruto de los últimos 90 días frente al del primer reporte cargado. `productos_excepcion` sirve
 para productos gancho que se venden con margen bajo a propósito.
 
+## Aprendizaje (etapa 0: instrumentar)
+
+Ontara todavía no cambia reglas ni entrena modelos por su cuenta: primero guarda lo que hará falta para
+aprender, porque la historia no se puede reconstruir después. Diseño completo en el documento
+"Ontara: diseño de aprendizaje autónomo".
+
+| Qué se guarda | Dónde | Para qué |
+| --- | --- | --- |
+| Foto de variables al detectar la decisión (montos, mora, uso de cupo, valor del cliente, componentes de prioridad) | `decisiones.variables` | Calibrar umbrales y entrenar modelos con lo que se sabía al decidir |
+| Motivo estructurado al descartar o ajustar | `acciones.motivo` (lista en `decisiones.MOTIVOS`) | Ver qué reglas generan ruido |
+| Canal de la gestión y lo que prometió el cliente | `acciones.canal`, `fecha_compromiso`, `monto_compromiso` | Modelo de efecto del cobro |
+| Pagos con fecha real | Reporte "Recaudos" → tabla `recaudos` | Modelo de pago a 30 días; días hasta el primer pago |
+| Borrador de Claude y texto que se envió | `textos_aprobados` | Aprender el tono de la empresa |
+
+El reporte de recaudos (recibos de caja con la factura que cruzan) no alimenta un paquete: se carga en
+"Cargar datos". La primera vez conviene traer 12 a 24 meses de historia. `aprendizaje.recaudos_por_factura`
+lo expone para otros paquetes (por ejemplo Caja).
+
+La página **Aprendizaje** muestra cuánto falta contra los mínimos orientativos del diseño, qué decisiones
+descarta el equipo y por qué, y el dataset de entrenamiento: una fila por decisión con variables (`v_*`), acciones
+y resultados a 30, 60 y 90 días. El gerente puede descargarlo en CSV; los clientes van con código, sin NIT ni
+nombre (configura `ONTARA_SAL_ANALITICA` para que el código no se pueda recalcular).
+
 ## Las tres decisiones de Cartera
 
 | Decisión | Cuándo aparece | Quién la aprueba |
@@ -140,6 +165,7 @@ mensuales de contabilidad (`ventas_mensuales_cop`) se usan esas; si no, se estim
 | `ONTARA_MODELO` | Modelo de Claude | `claude-opus-5-5` |
 | `ONTARA_ESFUERZO` | Esfuerzo del modelo (`low`, `medium`, `high`) | `medium` |
 | `ONTARA_ANONIMIZAR_IA` | `0` para enviar nombres reales a la API (no recomendado) | `1` |
+| `ONTARA_SAL_ANALITICA` | Clave secreta para el código de cliente del dataset de aprendizaje | Derivada del nombre de la empresa (solo demo) |
 
 ### Login
 

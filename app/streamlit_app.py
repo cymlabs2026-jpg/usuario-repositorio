@@ -15,7 +15,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from ontara import acceso, asistente, calidad, comercial, margen, paquetes, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
+from ontara import acceso, aprendizaje, asistente, calidad, comercial, margen, paquetes, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
 from ontara.db import cargas, crear_motor  # noqa: E402
 from sqlalchemy import select  # noqa: E402
 
@@ -35,7 +35,8 @@ NIVEL = {"lider": "Líder", "gerente": "Gerente"}
 ETIQUETAS = {"fecha": "Fecha de la factura", "producto": "Producto", "costo": "Costo total de la línea",
              "descuento": "Descuento (pesos)", "cantidad": "Cantidad", "nit": "NIT", "cliente": "Cliente", "numero": "Número de factura", "fecha_emision": "Fecha de emisión",
              "fecha_vencimiento": "Fecha de vencimiento", "saldo": "Saldo", "valor": "Valor", "vendedor": "Vendedor",
-             "cupo": "Cupo de crédito"}
+             "cupo": "Cupo de crédito", "factura": "Factura que se paga", "fecha_pago": "Fecha de pago",
+             "recibo": "Recibo de caja"}
 ESTADO = {"pendiente": "Pendiente", "aprobada": "Aprobada", "ajustada": "Ajustada",
           "ejecutada": "Ejecutada", "descartada": "Descartada", "cerrada": "Cerrada"}
 
@@ -122,7 +123,7 @@ USUARIO, ROL = login()
 
 with st.sidebar:
     st.markdown(f"### ◆ Ontara\n**{config.nombre_empresa()}**")
-    paginas = ["Bandeja de decisiones", "Cargar datos", "Impacto", "Asistente", "Reglas"]
+    paginas = ["Bandeja de decisiones", "Cargar datos", "Impacto", "Asistente", "Reglas", "Aprendizaje"]
     if ROL == "gerente":
         paginas.append("Accesos")
     pagina = st.radio("Ir a", paginas, label_visibility="collapsed")
@@ -136,14 +137,16 @@ with st.sidebar:
 # --- Cargar datos ---------------------------------------------------------------------
 def pagina_cargar():
     st.header("Cargar datos")
-    reportes = list(dict.fromkeys(p.reporte for p in ACTIVOS))
+    reportes = list(dict.fromkeys([p.reporte for p in ACTIVOS] + ["recaudos"]))
     tipo = st.radio("¿Qué reporte vas a cargar?", reportes, format_func=lambda t: paquetes.REPORTES[t]["nombre"],
                     horizontal=True)
-    usa = ", ".join(p.nombre for p in paquetes.de_reporte(tipo))
+    usa = ", ".join(p.nombre for p in paquetes.de_reporte(tipo)) or "el aprendizaje de Ontara (fecha real de pago)"
     st.write({"cartera": "Sube el reporte de cartera por edades o de facturas pendientes",
               "ventas": "Sube el reporte de ventas de los últimos 12 meses (todas las facturas, incluidas las pagadas)",
               "lineas": "Sube el reporte de ventas por producto de los últimos 6 meses (una fila por producto de cada "
-                        "factura, con venta neta y costo)"}[tipo]
+                        "factura, con venta neta y costo)",
+              "recaudos": "Sube el reporte de recaudos o recibos de caja (cada pago con la factura que cruza). La "
+                          "primera vez, trae 12 a 24 meses de historia; después, el periodo desde el último corte"}[tipo]
              + " que exportas de tu ERP (Siigo, World Office, SAP) o tu Excel. Ontara reconoce las columnas y "
              f"revisa la calidad antes de guardar nada. Lo usa: {usa}.")
     corte = st.date_input("Fecha de corte del reporte", value=date.today(), format="DD/MM/YYYY")
@@ -168,7 +171,8 @@ def pagina_cargar():
             mapeo[campo.nombre] = sel
 
     datos = ingesta.convertir(crudo, mapeo, plantilla)
-    evaluar = {"cartera": calidad.evaluar, "ventas": calidad.evaluar_ventas, "lineas": calidad.evaluar_lineas}[tipo]
+    evaluar = {"cartera": calidad.evaluar, "ventas": calidad.evaluar_ventas, "lineas": calidad.evaluar_lineas,
+               "recaudos": calidad.evaluar_recaudos}[tipo]
     informe, validas = evaluar(datos, mapeo, plantilla)
     st.subheader(f"2. Semáforo de calidad: {COLOR[informe.semaforo]} {informe.semaforo.capitalize()}")
     if informe.faltan_campos:
@@ -344,6 +348,21 @@ def acciones_y_historial(d: dict):
     if d["estado"] in decisiones.ABIERTAS:
         clave = f"txt_{d['id']}"
         texto = st.text_input("Comentario (qué hiciste, el ajuste o el motivo)", key=clave)
+        # Datos estructurados para que Ontara aprenda: por qué se descarta o ajusta, y cómo se gestionó.
+        m1, m2, m3, m4 = st.columns(4)
+        motivos = {"": "(elige)"} | decisiones.MOTIVOS["descartar"] | {
+            f"aj:{k}": f"Ajuste: {v}" for k, v in decisiones.MOTIVOS["ajustar"].items()}
+        motivo_sel = m1.selectbox("Motivo si descartas o ajustas", list(motivos), format_func=motivos.get,
+                                  key=f"mot_{d['id']}")
+        canales = {"": "(elige)"} | decisiones.CANALES
+        canal = m2.selectbox("Canal si la marcas ejecutada", list(canales), format_func=canales.get,
+                             key=f"can_{d['id']}") or None
+        fecha_comp = monto_comp = None
+        if d["paquete"] == "cartera":
+            fecha_comp = m3.date_input("Fecha prometida de pago", value=None, format="DD/MM/YYYY",
+                                       key=f"fco_{d['id']}")
+            monto_comp = m4.number_input("Monto prometido (COP)", min_value=0, value=None, step=100_000,
+                                         key=f"mco_{d['id']}")
         b1, b2, b3, b4 = st.columns(4)
         acciones_ui = [(b1, "Aprobar", "aprobar"), (b2, "Ajustar", "ajustar"),
                        (b3, "Marcar ejecutada", "ejecutar"), (b4, "Descartar", "descartar")]
@@ -352,8 +371,16 @@ def acciones_y_historial(d: dict):
             acciones_ui = [(b1, "Dejar nota", "nota"), (b3, "Marcar ejecutada", "ejecutar")]
         for col, etiqueta, accion in acciones_ui:
             if d["estado"] in decisiones.TRANSICIONES[accion][0] and col.button(etiqueta, key=f"{accion}_{d['id']}"):
+                extra = {}
+                if accion == "descartar" and motivo_sel and not motivo_sel.startswith("aj:"):
+                    extra["motivo"] = motivo_sel
+                elif accion == "ajustar" and motivo_sel.startswith("aj:"):
+                    extra["motivo"] = motivo_sel[3:]
+                elif accion == "ejecutar":
+                    extra = {"canal": canal, "fecha_compromiso": fecha_comp,
+                             "monto_compromiso": float(monto_comp) if monto_comp is not None else None}
                 try:
-                    decisiones.registrar_accion(M, d["id"], accion, USUARIO, texto, rol=ROL)
+                    decisiones.registrar_accion(M, d["id"], accion, USUARIO, texto, rol=ROL, **extra)
                     st.rerun()
                 except ValueError as e:
                     st.error(str(e))
@@ -362,13 +389,30 @@ def acciones_y_historial(d: dict):
         if x1.button("Explicar con Claude", key=f"exp_{d['id']}"):
             with st.spinner("Consultando la evidencia..."):
                 st.info(asistente.explicar_decision(M, d["id"], USUARIO)["respuesta"])
+        clave_borr = f"borr_{d['id']}"
         if d["tipo"] == "cobrar" and x2.button("Redactar mensaje de cobro", key=f"red_{d['id']}"):
             with st.spinner("Redactando..."):
-                st.text_area("Borrador", asistente.redactar_cobro(M, d["id"], USUARIO)["respuesta"], height=260)
+                st.session_state[clave_borr] = asistente.redactar_cobro(M, d["id"], USUARIO)["respuesta"]
+        if clave_borr in st.session_state:
+            final = st.text_area("Borrador (edítalo antes de enviarlo)", st.session_state[clave_borr], height=260,
+                                 key=f"fin_{d['id']}")
+            if st.button("Guardar el texto que envié", key=f"gtx_{d['id']}"):
+                try:
+                    aprendizaje.guardar_texto(M, d["id"], "mensaje_cobro", st.session_state[clave_borr], final, USUARIO)
+                    st.session_state.pop(clave_borr)
+                    st.success("Guardado. Ontara usará tus correcciones para aprender el tono de la empresa.")
+                except ValueError as e:
+                    st.error(str(e))
     if det["acciones"] or det["resultados"]:
         st.markdown("**Historial**")
         for a in det["acciones"]:
-            st.write(f"- {a['fecha']:%d/%m/%Y %H:%M} · {a['usuario']} · {a['tipo']}: {a['detalle'] or ''}")
+            extra = [decisiones.MOTIVOS.get(a["tipo"], {}).get(a.get("motivo") or "", ""),
+                     decisiones.CANALES.get(a.get("canal") or "", ""),
+                     f"promete {pesos(a['monto_compromiso'])}" if a.get("monto_compromiso") else "",
+                     f"para el {a['fecha_compromiso']:%d/%m/%Y}" if a.get("fecha_compromiso") else ""]
+            extra = " · ".join(x for x in extra if x)
+            st.write(f"- {a['fecha']:%d/%m/%Y %H:%M} · {a['usuario']} · {a['tipo']}: {a['detalle'] or ''}"
+                     + (f" ({extra})" if extra else ""))
         for r in det["resultados"]:
             st.write(f"- Resultado medido: saldo vencido pasó de {pesos(r['saldo_vencido_antes'])} a "
                      f"{pesos(r['saldo_vencido_despues'])} ({pesos(r['pesos_recuperados'])} recuperados).")
@@ -627,6 +671,45 @@ def reglas_cartera():
             _guardar_y_recalcular(n, nota, paquetes.obtener("cartera"))
 
 
+# --- Aprendizaje -----------------------------------------------------------------------------------
+def pagina_aprendizaje():
+    st.header("Aprendizaje")
+    st.write("Ontara guarda en cada decisión las variables con que se detectó, lo que hizo el equipo y lo que "
+             "pasó después. Con eso podrá proponer mejores umbrales (etapa 1) y entrenar modelos de pago y "
+             "abandono (etapa 2). Todavía no cambia nada por su cuenta: aquí se ve cuánto falta.")
+    st.subheader("¿Hay datos suficientes para aprender?")
+    prep = pd.DataFrame(aprendizaje.preparacion(M))
+    prep.insert(0, "", prep.pop("listo").map({True: "🟢", False: "⚪"}))
+    st.dataframe(prep.rename(columns={"indicador": "Indicador", "valor": "Hoy", "meta": "Meta orientativa",
+                                      "para": "Sirve para"}), hide_index=True, use_container_width=True)
+    st.caption("Las metas son puntos de partida del diseño, no medidas de esta empresa; se ajustan en el piloto. "
+               "Lo que más acelera: cargar el reporte de recaudos con 12 a 24 meses de historia.")
+
+    st.subheader("Qué recomendaciones descarta el equipo")
+    desc = aprendizaje.descartes_por_tipo(M)
+    if desc.empty:
+        st.info("Todavía no hay decisiones.")
+    else:
+        desc["tipo"] = desc["tipo"].map(lambda t: TIPO.get(t, t))
+        st.dataframe(desc.drop(columns="paquete").rename(columns={
+            "tipo": "Decisión", "mostradas": "Mostradas", "descartadas": "Descartadas",
+            "tasa_descarte_pct": "% descartadas", "motivo_principal": "Motivo más común"}),
+            hide_index=True, use_container_width=True)
+        st.caption("Una tasa alta de descarte con un mismo motivo indica que la regla genera ruido para ese caso.")
+
+    st.subheader("Datos de entrenamiento")
+    ds = aprendizaje.dataset(M)
+    if ds.empty:
+        st.info("Se llenará a medida que se carguen cortes y se gestionen decisiones.")
+        return
+    st.write(f"{len(ds)} decisiones · {sum(c.startswith('v_') for c in ds.columns)} variables · resultados a 30, "
+             "60 y 90 días cuando ya pasó el plazo. Los clientes van con código, sin NIT ni nombre.")
+    st.dataframe(ds.head(50), hide_index=True, use_container_width=True)
+    if ROL == "gerente":
+        st.download_button("Descargar CSV", ds.to_csv(index=False).encode("utf-8"),
+                           file_name=f"ontara_aprendizaje_{date.today():%Y%m%d}.csv", mime="text/csv")
+
+
 # --- Accesos (solo gerente) ---------------------------------------------------------------------
 def pagina_accesos():
     st.header("Bitácora de accesos")
@@ -640,5 +723,5 @@ def pagina_accesos():
         hide_index=True, use_container_width=True)
 
 
-{"Cargar datos": pagina_cargar, "Accesos": pagina_accesos, "Bandeja de decisiones": pagina_bandeja, "Impacto": pagina_impacto,
+{"Aprendizaje": pagina_aprendizaje, "Cargar datos": pagina_cargar, "Accesos": pagina_accesos, "Bandeja de decisiones": pagina_bandeja, "Impacto": pagina_impacto,
  "Asistente": pagina_asistente, "Reglas": pagina_reglas}[pagina]()

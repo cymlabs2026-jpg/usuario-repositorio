@@ -22,6 +22,8 @@ REPORTES = {
     "cartera": {"nombre": "Cartera: facturas con saldo pendiente", "objeto": "Factura"},
     "ventas": {"nombre": "Ventas: todas las facturas emitidas, incluidas las pagadas", "objeto": "Venta"},
     "lineas": {"nombre": "Ventas por producto: líneas de factura con costo", "objeto": "LineaVenta"},
+    # No alimenta un paquete: da la fecha real de pago para que Ontara aprenda (ver aprendizaje.py).
+    "recaudos": {"nombre": "Recaudos: pagos recibidos de clientes (recibos de caja)", "objeto": "Recaudo"},
 }
 
 
