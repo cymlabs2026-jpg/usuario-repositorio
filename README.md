@@ -256,6 +256,20 @@ mensuales de contabilidad (`ventas_mensuales_cop`) se usan esas; si no, se estim
   simples de la versión anterior ya no se aceptan.
 - Cada ingreso, intento fallido, cuenta no autorizada y salida queda en la bitácora (página **Accesos**, solo gerente).
 
+## Versión de prueba en la web (Streamlit Community Cloud)
+
+`streamlit_app.py` (en la raíz) abre la app en **modo demostración**: sin login y con los 13 archivos de
+`datos_ejemplo/prueba/` ya cargados (`ontara/demo.py`, variable `ONTARA_DEMO=1`). Los datos son inventados; el
+asistente de IA queda apagado mientras no haya `ANTHROPIC_API_KEY`.
+
+1. Entra a https://share.streamlit.io con la cuenta de GitHub dueña de este repositorio.
+2. **Create app** → *Deploy a public app from GitHub* → repositorio `usuario-repositorio`, rama `main`, archivo
+   `streamlit_app.py`. En *Advanced settings* elige Python 3.12.
+3. **Deploy**. En 3 a 5 minutos queda en una dirección `https://<nombre>.streamlit.app`.
+
+Como el repositorio es privado, la app solo la ven las personas que invites (botón **Share** de la app). La base
+es SQLite temporal: si la app se reinicia, vuelve a los datos de prueba. Nunca subas datos reales a esta versión.
+
 ## Desplegar en Google Cloud (un cliente = un servicio)
 
 ```bash

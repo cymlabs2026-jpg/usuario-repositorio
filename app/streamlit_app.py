@@ -15,7 +15,7 @@ import streamlit as st
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from ontara import acceso, aprendizaje, asistente, caja, calidad, comercial, despacho, inventario, margen, paquetes, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
+from ontara import acceso, demo, aprendizaje, asistente, caja, calidad, comercial, despacho, inventario, margen, paquetes, config, decisiones, impacto, ingesta, ontologia, reglas  # noqa: E402
 from ontara.db import cargas, crear_motor  # noqa: E402
 from sqlalchemy import select  # noqa: E402
 
@@ -24,7 +24,10 @@ st.set_page_config(page_title="Ontara · Cartera", page_icon="◆", layout="wide
 
 @st.cache_resource
 def motor():
-    return crear_motor()
+    m = crear_motor()
+    if demo.activo():
+        demo.precargar(m)
+    return m
 
 
 M = motor()
