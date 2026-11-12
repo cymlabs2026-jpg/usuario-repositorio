@@ -72,9 +72,15 @@ def login() -> tuple[str, str]:
     if "usuario" in st.session_state:
         return st.session_state.usuario, st.session_state.rol
     lista = acceso.usuarios()
-    if not lista:
+    modo = acceso.modo_acceso(lista)
+    if modo == "demo":
         st.session_state.usuario, st.session_state.rol, st.session_state.metodo = "demo", "gerente", "demo"
         return "demo", "gerente"
+    if modo == "bloqueado":
+        st.title("Ontara · Cartera")
+        st.error("Ontara no tiene usuarios configurados, así que nadie puede entrar. Agrega los usuarios en "
+                 "ONTARA_USUARIOS o, solo para una demostración con datos inventados, ONTARA_MODO_DEMO=1.")
+        st.stop()
     oidc = proveedores_oidc()
     # Volvió del proveedor de identidad: solo entra si su correo está autorizado.
     if oidc and getattr(st.user, "is_logged_in", False):
@@ -103,6 +109,11 @@ def login() -> tuple[str, str]:
             u = st.text_input("Usuario")
             c = st.text_input("Clave", type="password")
             if st.form_submit_button("Entrar"):
+                if acceso.bloqueado(M, u):
+                    acceso.registrar(M, u, "bloqueado", "clave",
+                                     f"{acceso.MAX_FALLIDOS} o más intentos fallidos en {acceso.VENTANA_MINUTOS} min")
+                    st.error(f"Demasiados intentos fallidos. Espera {acceso.VENTANA_MINUTOS} minutos e intenta de nuevo.")
+                    st.stop()
                 rol = acceso.autenticar_con_clave(u, c, lista)
                 if rol:
                     _entrar(u.strip().lower(), rol, "clave")
@@ -134,7 +145,8 @@ with st.sidebar:
     pagina = st.radio("Ir a", paginas, label_visibility="collapsed")
     st.caption(f"Sesión: {USUARIO} · {ROL}")
     if not acceso.usuarios():
-        st.warning("Modo demostración: sin login. Configura ONTARA_USUARIOS antes de usar datos reales.")
+        st.warning("Modo demostración (ONTARA_MODO_DEMO=1): sin login. Solo para datos inventados; "
+                   "configura ONTARA_USUARIOS y quita el modo demo antes de usar datos reales.")
     elif st.button("Salir"):
         salir()
 
@@ -738,9 +750,21 @@ def impacto_comercial():
     x.metric("Volvieron a comprar con la bandeja", f"{r['pct_volvio_tratamiento']}%", help=f"{r['n_tratamiento']} alertas")
     y.metric("Volvieron sin gestión (control)", f"{r['pct_volvio_control']}%", help=f"{r['n_control']} alertas")
     z.metric("Ventas adicionales atribuibles", pesos(r["efecto_estimado"]))
-    if not r["muestra_suficiente"]:
-        st.caption("Todavía hay pocos casos (menos de 10 por grupo): la diferencia puede ser azar.")
+    lectura_control(r)
 
+
+
+def lectura_control(r: dict):
+    """Qué tan fuerte se puede afirmar el efecto frente al grupo de control."""
+    rango = r.get("efecto_rango")
+    texto_rango = f" Rango probable (90 %): {pesos(rango[0])} a {pesos(rango[1])}." if rango else ""
+    if not r["muestra_suficiente"]:
+        st.caption(f"Todavía hay pocos casos (menos de {r['muestra_minima']} por grupo): la diferencia puede "
+                   f"ser azar y no conviene presentarla como resultado.{texto_rango}")
+    elif r["efecto_concluyente"]:
+        st.caption(f"Resultado concluyente: el rango probable no cruza el cero.{texto_rango}")
+    else:
+        st.caption(f"Todavía no es concluyente: el rango probable incluye cero.{texto_rango}")
 
 def impacto_cartera():
     r = impacto.resumen(M)
@@ -784,8 +808,7 @@ def impacto_cartera():
         y.metric("Recuperación del grupo de control", f"{ctl['tasa_control_pct']}%",
                  help=f"{ctl['n_control']} decisiones que no se mostraron")
         z.metric("Recuperación adicional atribuible", pesos(ctl["efecto_estimado"]))
-        if not ctl["muestra_suficiente"]:
-            st.caption("Todavía hay pocos casos (menos de 10 por grupo): la diferencia puede ser azar.")
+        lectura_control(ctl)
     hist = impacto.historial(M)
     if len(hist) > 1:
         fig = px.line(hist, x="fecha_corte", y="cartera_vencida", markers=True,

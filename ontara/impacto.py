@@ -11,7 +11,7 @@ import pandas as pd
 from sqlalchemy import func, select
 from sqlalchemy.engine import Engine
 
-from . import reglas
+from . import estadistica, reglas
 from .db import acciones, cargas, decisiones, facturas, linea_base, resultados
 
 
@@ -160,20 +160,28 @@ def comparar_control(motor: Engine) -> dict:
             .join(sub, resultados.c.id == sub.c.rid)
             .join(decisiones, decisiones.c.id == resultados.c.decision_id)
             .where(decisiones.c.grupo.in_(("control", "tratamiento")))).all()
-    g = {k: {"n": 0, "inicial": 0.0, "recuperado": 0.0} for k in ("control", "tratamiento")}
+    casos = {"control": [], "tratamiento": []}
     for grupo, antes, rec in filas:
-        g[grupo]["n"] += 1
-        g[grupo]["inicial"] += antes
-        g[grupo]["recuperado"] += rec
-    tasa = {k: (v["recuperado"] / v["inicial"] if v["inicial"] else None) for k, v in g.items()}
-    efecto = None
-    if tasa["control"] is not None and tasa["tratamiento"] is not None:
-        efecto = round((tasa["tratamiento"] - tasa["control"]) * g["tratamiento"]["inicial"], 0)
+        casos[grupo].append((float(antes or 0), float(rec or 0)))
+    inicial_t = sum(a for a, _ in casos["tratamiento"])
+
+    def tasa(lista):
+        inicial = sum(a for a, _ in lista)
+        return sum(r for _, r in lista) / inicial if inicial else None
+
+    def efecto(t, c):
+        # Recuperación adicional en pesos: diferencia de tasas aplicada a la cartera tratada real.
+        tt, tc = tasa(t), tasa(c)
+        return None if tt is None or tc is None else (tt - tc) * inicial_t
+
+    tasas = {k: tasa(v) for k, v in casos.items()}
+    estimado = efecto(casos["tratamiento"], casos["control"])
+    n_t, n_c = len(casos["tratamiento"]), len(casos["control"])
     return {
-        "n_control": g["control"]["n"], "n_tratamiento": g["tratamiento"]["n"],
-        "tasa_control_pct": None if tasa["control"] is None else round(100 * tasa["control"], 1),
-        "tasa_tratamiento_pct": None if tasa["tratamiento"] is None else round(100 * tasa["tratamiento"], 1),
-        "efecto_estimado": efecto,
-        # Con pocos casos la diferencia puede ser azar; se avisa en la app.
-        "muestra_suficiente": g["control"]["n"] >= 10 and g["tratamiento"]["n"] >= 10,
+        "n_control": n_c, "n_tratamiento": n_t,
+        "tasa_control_pct": None if tasas["control"] is None else round(100 * tasas["control"], 1),
+        "tasa_tratamiento_pct": None if tasas["tratamiento"] is None else round(100 * tasas["tratamiento"], 1),
+        "efecto_estimado": None if estimado is None else round(estimado, 0),
+        # Rango del 90 % y si la muestra alcanza para afirmar el resultado; la app lo muestra.
+        **estadistica.lectura(n_t, n_c, estadistica.rango_efecto(casos["tratamiento"], casos["control"], efecto)),
     }

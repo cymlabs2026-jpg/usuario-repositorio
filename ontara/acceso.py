@@ -20,11 +20,13 @@ import json
 import os
 import secrets
 import sys
+from datetime import datetime, timedelta
 
-from sqlalchemy import insert, select
+from sqlalchemy import func, insert, select
 from sqlalchemy.engine import Engine
 
-from .db import accesos
+from . import config
+from .db import accesos, ahora
 
 ITERACIONES = 600_000
 ROLES_VALIDOS = ("lider", "gerente")
@@ -79,10 +81,37 @@ def autenticar_con_clave(usuario: str, clave: str, lista: dict[str, dict] | None
     return rol_de(usuario, lista)
 
 
+def modo_acceso(lista: dict[str, dict] | None = None, demo: bool | None = None) -> str:
+    """"login" si hay usuarios configurados, "demo" solo si se activó ONTARA_MODO_DEMO, y
+    "bloqueado" en cualquier otro caso. Nunca se entra sin clave por accidente."""
+    lista = usuarios() if lista is None else lista
+    if lista:
+        return "login"
+    demo = config.modo_demo() if demo is None else demo
+    return "demo" if demo else "bloqueado"
+
+
+# --- Intentos fallidos ---------------------------------------------------------------
+MAX_FALLIDOS = 5            # intentos fallidos permitidos por usuario...
+VENTANA_MINUTOS = 15        # ...dentro de esta ventana; después se bloquea hasta que pase
+
+
+def bloqueado(motor: Engine, usuario: str, max_fallidos: int = MAX_FALLIDOS,
+              ventana_minutos: int = VENTANA_MINUTOS, ahora_: datetime | None = None) -> bool:
+    """True si el usuario acumula `max_fallidos` intentos fallidos en los últimos `ventana_minutos`.
+    Mientras está bloqueado no se verifica la clave (tampoco se gasta CPU en el PBKDF2)."""
+    desde = (ahora_ or ahora()) - timedelta(minutes=ventana_minutos)
+    with motor.connect() as cx:
+        n = cx.execute(select(func.count()).select_from(accesos).where(
+            accesos.c.usuario == (usuario or "(vacío)").strip().lower()[:255],
+            accesos.c.evento == "fallido", accesos.c.fecha >= desde)).scalar_one()
+    return n >= max_fallidos
+
+
 def registrar(motor: Engine, usuario: str, evento: str, metodo: str, detalle: str | None = None) -> None:
     """Bitácora de accesos: ingreso, fallido, denegado o salida."""
     with motor.begin() as cx:
-        cx.execute(insert(accesos).values(usuario=(usuario or "(vacío)")[:255], evento=evento,
+        cx.execute(insert(accesos).values(usuario=(usuario or "(vacío)").strip().lower()[:255], evento=evento,
                                           metodo=metodo, detalle=detalle))
 
 

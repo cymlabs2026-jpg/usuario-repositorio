@@ -26,6 +26,13 @@ def plantilla_sector() -> str:
     return os.environ.get("ONTARA_PLANTILLA", "comercial")
 
 
+def modo_demo() -> bool:
+    """Entrar sin usuario (como gerente de demostración) solo si se pide de forma explícita con
+    ONTARA_MODO_DEMO=1. Sin eso, una instalación sin usuarios configurados no deja entrar a nadie:
+    un error de configuración nunca debe dejar los datos de un cliente abiertos."""
+    return os.environ.get("ONTARA_MODO_DEMO", "").strip().lower() in ("1", "true", "si", "sí", "yes")
+
+
 # --- Asistente de IA -------------------------------------------------------
 def modelo_ia() -> str:
     return os.environ.get("ONTARA_MODELO", "claude-opus-5-5")

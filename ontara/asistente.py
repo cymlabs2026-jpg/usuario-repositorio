@@ -11,8 +11,12 @@ en la respuesta que ve el usuario.
 from __future__ import annotations
 
 import hashlib
+import hmac
 import json
+import os
 import re
+import secrets
+import unicodedata
 from datetime import date, datetime
 from typing import Any, Callable
 
@@ -20,7 +24,7 @@ from sqlalchemy import insert, select
 from sqlalchemy.engine import Engine
 
 from . import caja, comercial, config, decisiones, despacho, impacto, inventario, margen
-from .db import clientes, consultas_ia
+from .db import clientes, consultas_ia, cuentas_por_pagar, facturas, ventas
 
 SISTEMA = """Eres el asistente de Ontara, una herramienta de decisiones de cartera para pymes colombianas.
 Hablas con el líder de cartera o el gerente de la empresa, en español claro y directo.
@@ -40,7 +44,8 @@ Reglas que no puedes romper:
   reponer_producto y liberar_inventario; en ellas el campo "cliente" es el producto. El paquete Despacho agrega
   despachar_pedidos (pedidos pendientes que pasan o están por pasar la fecha prometida, con lo que los frena:
   crédito, cupo o inventario) y recuperar_cumplimiento (clientes a los que se les entrega tarde).
-- Los clientes pueden aparecer con un alias como "Cliente-a1b2c3". Úsalo tal cual; el sistema lo traduce.
+- Clientes, proveedores, vendedores y correos pueden aparecer con un alias como "Cliente-a1b2c3d4e5" o
+  "Proveedor-…". Úsalo tal cual; el sistema lo traduce.
 - Escribe pesos como $12.345.678. Sé breve: respuestas de pocas líneas, viñetas solo si hay varios ítems.
 - Si te piden redactar un mensaje de cobro, que sea cordial, firme y con los datos exactos de la evidencia."""
 
@@ -95,42 +100,154 @@ HERRAMIENTAS = [
 
 
 # --- Seudonimización ------------------------------------------------------------
+# Ley 1581: antes de salir hacia la API se reemplazan por alias los nombres y NIT de clientes y proveedores,
+# los nombres de los vendedores y los correos. Los alias se calculan con una clave secreta (HMAC), así que no
+# se pueden revertir probando NIT. La clave sale de ONTARA_SECRETO_ALIAS o, si no existe, se genera al
+# arrancar: los alias solo tienen que ser estables mientras dura una conversación.
+_SECRETO = (os.environ.get("ONTARA_SECRETO_ALIAS") or "").encode() or secrets.token_bytes(32)
+_LARGO_ALIAS = 10                                   # 40 bits: sin choques prácticos aun con miles de NIT
+_PATRON_ALIAS = re.compile(r"\b(?:Cliente|Proveedor|Vendedor|Correo)-[0-9a-f]{%d,}\b" % _LARGO_ALIAS)
+_CORREO = re.compile(r"(?<![\w.+-])[\w.+-]+@[\w-]+(?:\.[\w-]+)+")
+_TELEFONO = re.compile(r"(?<!\d)(?:\+?57[\s-]?)?3\d{2}[\s.-]?\d{3}[\s.-]?\d{4}(?!\d)")
+_EQUIVALENTES = {"a": "aáàäâ", "e": "eéèëê", "i": "iíìïî", "o": "oóòöô", "u": "uúùüû", "n": "nñ", "c": "cç"}
+# Sufijos societarios que suelen escribirse o no ("Ferretería Central" = "Ferretería Central S.A.S.").
+_SUFIJO = re.compile(r"(?:^|\s)(?:s a s|sas|s a|sa|ltda|limitada|e u|eu|s en c|y cia|cia|bic)$")
+
+
+def _plano(texto: str) -> str:
+    """Minúsculas, sin tildes y solo letras y números separados por un espacio."""
+    t = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode().lower()
+    return re.sub(r"[^a-z0-9]+", " ", t).strip()
+
+
+def _patron_nombre(nombre: str) -> str | None:
+    """Patrón que reconoce el nombre con o sin tildes, mayúsculas, puntos o espacios extra."""
+    fichas = _plano(nombre).split()
+    if not fichas:
+        return None
+    partes = ["".join(f"[{_EQUIVALENTES[ch]}]" if ch in _EQUIVALENTES else re.escape(ch) for ch in f)
+              for f in fichas]
+    return r"(?<!\w)" + r"[\s.,&'-]*".join(partes) + r"\.?(?!\w)"
+
+
+def _variantes_nombre(nombre: str) -> list[str]:
+    """El nombre completo y, si es distintivo, el nombre sin el sufijo societario."""
+    plano = _plano(nombre or "")
+    if len(plano) < 3:
+        return []
+    salida = [nombre]
+    base = plano
+    while True:
+        corto = _SUFIJO.sub("", base).strip()
+        if corto == base:
+            break
+        base = corto
+    if base != plano and (len(base.split()) >= 2 or len(base) >= 8):
+        salida.append(base)
+    return salida
+
+
+def _patron_nit(nit: str) -> str | None:
+    """El NIT con o sin puntos o espacios entre dígitos y con o sin dígito de verificación.
+    No toca montos en pesos (precedidos de $ o con decimales, como en el JSON de las herramientas)."""
+    digitos = re.sub(r"\D", "", nit or "")
+    if len(digitos) < 5:
+        return None
+    return (r"(?<![\d$])(?<!\$\s)" + r"[.\s]?".join(digitos) + r"(?:\s*-\s*\d)?(?!\d)(?![.,]\d)")
+
+
+def _alias(tipo: str, clave: str, usados: dict[str, str]) -> str:
+    """Alias estable por clave; si dos claves distintas chocaran, se alarga hasta separarlas."""
+    digest = hmac.new(_SECRETO, f"{tipo}|{clave}".encode(), hashlib.sha256).hexdigest()
+    largo = _LARGO_ALIAS
+    while True:
+        alias = f"{tipo}-{digest[:largo]}"
+        if usados.get(alias, clave) == clave:
+            usados[alias] = clave
+            return alias
+        largo += 2
+
+
 class Seudonimizador:
-    def __init__(self, directorio: dict[str, str], activo: bool = True):
-        """directorio: nit -> nombre del cliente."""
+    def __init__(self, directorio: dict[str, str], activo: bool = True,
+                 proveedores: dict[str, str] | None = None, vendedores: list[str] | None = None):
+        """directorio: nit -> nombre del cliente; proveedores: nit -> nombre; vendedores: nombres."""
         self.activo = activo
-        self.alias_de: dict[str, str] = {}          # texto real -> alias
         self.real_de: dict[str, str] = {}           # alias -> "Nombre (NIT ...)"
         self.nit_de: dict[str, str] = {}            # alias -> nit
+        self.alias_de: dict[str, str] = {}          # nit o nombre -> alias (compatibilidad)
+        self._usados: dict[str, str] = {}
+        reglas_: list[tuple[str, str]] = []         # (patrón, alias)
+
+        def agregar(tipo: str, nit: str | None, nombre: str | None):
+            clave = nit or _plano(nombre or "")
+            if not clave:
+                return
+            alias = _alias(tipo, clave, self._usados)
+            if nit:
+                self.alias_de[nit] = alias
+                self.nit_de[alias] = nit
+                if (pn := _patron_nit(nit)):
+                    reglas_.append((pn, alias))
+            for variante in _variantes_nombre(nombre or ""):
+                self.alias_de.setdefault(variante, alias)
+                if (pt := _patron_nombre(variante)):
+                    reglas_.append((pt, alias))
+            self.real_de[alias] = (f"{nombre} (NIT {nit})" if nombre and nit else nombre or f"NIT {nit}")
+
         for nit, nombre in directorio.items():
-            alias = "Cliente-" + hashlib.sha256(nit.encode()).hexdigest()[:6]
-            self.alias_de[nit] = alias
-            if nombre and len(nombre) >= 3:
-                self.alias_de[nombre] = alias
-            self.real_de[alias] = f"{nombre} (NIT {nit})" if nombre else f"NIT {nit}"
-            self.nit_de[alias] = nit
-        claves = sorted(self.alias_de, key=len, reverse=True)
-        self._patron = re.compile("|".join(rf"(?<!\w){re.escape(k)}(?!\w)" for k in claves),
-                                  re.IGNORECASE) if claves else None
-        self._minus = {k.lower(): v for k, v in self.alias_de.items()}
+            agregar("Cliente", str(nit), nombre)
+        for nit, nombre in (proveedores or {}).items():
+            agregar("Proveedor", str(nit), nombre)
+        for nombre in vendedores or []:
+            agregar("Vendedor", None, nombre)
+        # Primero los patrones más largos, para que "El Samán S.A.S." gane sobre "El Samán".
+        reglas_.sort(key=lambda r: len(r[0]), reverse=True)
+        self._grupos = {f"g{i}": alias for i, (_, alias) in enumerate(reglas_)}
+        self._patron = (re.compile("|".join(f"(?P<g{i}>{pat})" for i, (pat, _) in enumerate(reglas_)),
+                                   re.IGNORECASE) if reglas_ else None)
 
     def ocultar(self, texto: str) -> str:
-        if not self.activo or not self._patron:
+        if not self.activo or not texto:
             return texto
-        return self._patron.sub(lambda m: self._minus[m.group(0).lower()], texto)
+        if self._patron:
+            texto = self._patron.sub(lambda m: self._grupos[m.lastgroup], texto)
+        return _CORREO.sub(self._alias_correo, texto)
+
+    def _alias_correo(self, m: re.Match) -> str:
+        correo = m.group(0)
+        alias = _alias("Correo", correo.lower(), self._usados)
+        self.real_de[alias] = correo
+        return alias
 
     def mostrar(self, texto: str) -> str:
         if not self.activo:
             return texto
-        return re.sub(r"Cliente-[0-9a-f]{6}", lambda m: self.real_de.get(m.group(0), m.group(0)), texto)
+        return _PATRON_ALIAS.sub(lambda m: self.real_de.get(m.group(0), m.group(0)), texto)
 
     def nit_real(self, texto: str) -> str:
         return self.nit_de.get(texto.strip(), texto)
 
 
+def texto_libre(texto: str | None) -> str | None:
+    """Notas escritas a mano: se quitan los teléfonos celulares antes de enviarlas a la IA."""
+    return _TELEFONO.sub("[teléfono]", texto) if texto else texto
+
+
 def _directorio(motor: Engine) -> dict[str, str]:
     with motor.connect() as cx:
         return {r.nit: r.nombre for r in cx.execute(select(clientes.c.nit, clientes.c.nombre))}
+
+
+def _seudonimizador(motor: Engine) -> Seudonimizador:
+    """Clientes, proveedores de cuentas por pagar y vendedores de los reportes de ventas y cartera."""
+    with motor.connect() as cx:
+        proveedores = {r.nit: r.proveedor for r in cx.execute(
+            select(cuentas_por_pagar.c.nit, cuentas_por_pagar.c.proveedor).distinct()) if r.nit}
+        vendedores = set()
+        for tabla in (ventas, facturas):
+            vendedores |= {r[0] for r in cx.execute(select(tabla.c.vendedor).distinct()) if r[0]}
+    return Seudonimizador(_directorio(motor), config.anonimizar_ia(), proveedores, sorted(vendedores))
 
 
 def _json(obj: Any) -> str:
@@ -181,7 +298,9 @@ def _detalle_decision(motor: Engine, args: dict, _: Seudonimizador) -> dict:
     if not d:
         return {"error": f"No existe la decisión #{args['decision_id']}."}
     return {**_compacta(d), "motivo": d["motivo"], "evidencia": d["evidencia"],
-            "acciones": [{k: a[k] for k in ("tipo", "usuario", "detalle", "fecha")} for a in d["acciones"]],
+            # Quién hizo cada acción no hace falta para explicar la decisión: no sale hacia la IA.
+            "acciones": [{"tipo": a["tipo"], "quien": "Ontara" if a["usuario"] == "ontara" else "equipo",
+                          "detalle": texto_libre(a["detalle"]), "fecha": a["fecha"]} for a in d["acciones"]],
             "resultados": [{k: r[k] for k in ("saldo_vencido_antes", "saldo_vencido_despues",
                                                "pesos_recuperados", "atendida", "medido_en")}
                            for r in d["resultados"]]}
@@ -230,13 +349,13 @@ def preguntar(motor: Engine, pregunta: str, usuario: str, historial: list[dict] 
     historial: turnos anteriores [{"role": "user"|"assistant", "content": str}] en texto real.
     Devuelve {"respuesta": str, "herramientas": [...]}.
     """
-    seud = Seudonimizador(_directorio(motor), config.anonimizar_ia())
+    seud = _seudonimizador(motor)
     if cliente_api is None:
         import anthropic
         cliente_api = anthropic.Anthropic()
-    mensajes: list[dict] = [{"role": t["role"], "content": seud.ocultar(t["content"])}
+    mensajes: list[dict] = [{"role": t["role"], "content": seud.ocultar(texto_libre(t["content"]))}
                             for t in (historial or [])]
-    mensajes.append({"role": "user", "content": seud.ocultar(pregunta)})
+    mensajes.append({"role": "user", "content": seud.ocultar(texto_libre(pregunta))})
     usadas: list[dict] = []
     respuesta = ""
 

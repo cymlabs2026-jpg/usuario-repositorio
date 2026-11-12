@@ -328,7 +328,7 @@ accesos = Table(
     "accesos", metadata,
     Column("id", Integer, primary_key=True),
     Column("usuario", String(255), nullable=False),
-    Column("evento", String(20), nullable=False),           # ingreso | fallido | salida | denegado
+    Column("evento", String(20), nullable=False),           # ingreso | fallido | bloqueado | salida | denegado
     Column("metodo", String(20), nullable=False),           # google | microsoft | clave | demo
     Column("detalle", Text),
     Column("fecha", DateTime, default=ahora),
