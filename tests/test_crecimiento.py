@@ -135,8 +135,15 @@ def test_grupo_de_control_oculto_reproducible_y_sin_acciones(motor, corte1, cort
         decisiones.registrar_accion(motor, control[0]["id"], "aprobar", "gerente")
     # Misma asignación con los mismos datos
     r = reglas.ResultadoRegla(control[0]["nit"], "", "cobrar", 0, "", "", 1.0)
-    assert decisiones.asignar_grupo(r, control[0]["carga_origen_id"], reglas.regla_activa(motor)["parametros"]) \
-        == "control"
+    params = reglas.regla_activa(motor)["parametros"]
+    assert decisiones.asignar_grupo(r, control[0]["carga_origen_id"], params) == "control"
+    # Fija por cliente: en cualquier corte posterior el mismo cliente sigue en control.
+    assert all(decisiones.asignar_grupo(r, c, params) == "control" for c in range(2, 30))
+    # Un experimento nuevo vuelve a sortear.
+    nuevos = {decisiones.asignar_grupo(reglas.ResultadoRegla(d["nit"], "", "cobrar", 0, "", "", 1.0), 1,
+                                       {**params, "experimento_control": 2}) for d in todas
+              if d["tipo"] == "cobrar" and d["grupo"] != "fuera"}
+    assert nuevos <= {"control", "tratamiento"}
     cargar(motor, CORTE_2, corte2)
     ctl = impacto.resumen(motor)["control"]
     assert ctl["n_control"] > 0 and ctl["n_tratamiento"] > 0

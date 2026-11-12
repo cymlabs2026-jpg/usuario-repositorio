@@ -339,8 +339,14 @@ def variables_de(r: reglas.ResultadoRegla) -> dict:
 def asignar_grupo(r: reglas.ResultadoRegla, carga_id: int, p: dict,
                   tipos_control: frozenset[str] | set[str] = frozenset({"cobrar"})) -> str:
     """Grupo de control: una fracción de las decisiones elegibles no se muestra en la bandeja,
-    para comparar el resultado con y sin Ontara. La asignación es reproducible (hash, no azar).
-    No son elegibles los montos por encima del tope ni, si el paquete lo pide, los clientes clave."""
+    para comparar el resultado con y sin Ontara. No son elegibles los montos por encima del tope ni,
+    si el paquete lo pide, los clientes clave.
+
+    La asignación es fija por cliente y tipo de decisión: depende del NIT, del tipo y del número de
+    experimento (`experimento_control`, 1 por defecto), no del corte. Así un cliente que cae en control
+    sigue en control en los cortes siguientes y nunca pasa a ser gestionado a mitad de la medición, lo
+    que contaminaría la comparación. Cambiar `experimento_control` vuelve a sortear a todos (un
+    experimento nuevo). `carga_id` se conserva en la firma por compatibilidad y no se usa."""
     pct = float(p.get("pct_grupo_control") or 0)
     if r.tipo not in tipos_control or pct <= 0:
         return "fuera"
@@ -348,7 +354,8 @@ def asignar_grupo(r: reglas.ResultadoRegla, carga_id: int, p: dict,
         return "fuera"
     if r.evidencia.get("cliente_clave") and r.tipo != "cobrar":
         return "fuera"
-    sorteo = int(hashlib.sha256(f"{r.nit}|{carga_id}".encode()).hexdigest()[:8], 16) % 100
+    experimento = p.get("experimento_control", 1)
+    sorteo = int(hashlib.sha256(f"{r.nit}|{r.tipo}|{experimento}".encode()).hexdigest()[:8], 16) % 100
     return "control" if sorteo < pct else "tratamiento"
 
 

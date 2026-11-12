@@ -14,7 +14,7 @@ import pandas as pd
 from sqlalchemy import func, insert, select
 from sqlalchemy.engine import Engine
 
-from . import reglas
+from . import estadistica, reglas
 from .db import acciones, cargas, clientes, decisiones, resultados_comercial, ventas
 
 PAQUETE = "comercial"
@@ -244,11 +244,14 @@ def resumen(motor: Engine) -> dict:
                             .order_by(cargas.c.fecha_corte.desc()).limit(1)).scalar()
     grupos = {k: {"n": 0, "volvieron": 0, "ventas": 0.0} for k in ("tratamiento", "control", "fuera")}
     atendidas = {"n": 0, "volvieron": 0, "ventas": 0.0}
+    montos = {"tratamiento": [], "control": []}
     for grupo, monto, volvio, atendida in filas:
         g = grupos[grupo if grupo in grupos else "fuera"]
         g["n"] += 1
         g["volvieron"] += int(volvio)
         g["ventas"] += monto
+        if grupo in montos:
+            montos[grupo].append(float(monto or 0))
         if atendida:
             atendidas["n"] += 1
             atendidas["volvieron"] += int(volvio)
@@ -257,12 +260,18 @@ def resumen(motor: Engine) -> dict:
     efecto = None
     if t["n"] and c["n"]:
         efecto = round((t["ventas"] / t["n"] - c["ventas"] / c["n"]) * t["n"], 0)
+
+    def diferencia(tm, cm):
+        # Ventas adicionales: diferencia de promedios aplicada al número real de alertas tratadas.
+        return (sum(tm) / len(tm) - sum(cm) / len(cm)) * t["n"] if tm and cm else None
+
+    lectura = estadistica.lectura(t["n"], c["n"],
+                                  estadistica.rango_efecto(montos["tratamiento"], montos["control"], diferencia))
     pct = lambda g: round(100 * g["volvieron"] / g["n"], 1) if g["n"] else None  # noqa: E731
     return {
         "ultimo_reporte": ultima, "decisiones_por_estado": estados,
         "alertas_medidas": sum(g["n"] for g in grupos.values()),
         "volvieron_atendidas": atendidas["volvieron"], "ventas_recuperadas_atendidas": atendidas["ventas"],
         "pct_volvio_tratamiento": pct(t), "pct_volvio_control": pct(c),
-        "n_tratamiento": t["n"], "n_control": c["n"], "efecto_estimado": efecto,
-        "muestra_suficiente": t["n"] >= 10 and c["n"] >= 10,
+        "n_tratamiento": t["n"], "n_control": c["n"], "efecto_estimado": efecto, **lectura,
     }

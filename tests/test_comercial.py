@@ -196,6 +196,11 @@ def test_grupo_de_control_excluye_clientes_clave(p):
     r = reglas.ResultadoRegla("1", "", "recuperar_cliente", 0, "", "", 1.0, {"cliente_clave": True})
     assert decisiones.asignar_grupo(r, 1, {**p, "pct_grupo_control": 50}, {"recuperar_cliente"}) == "fuera"
     r.evidencia["cliente_clave"] = False
-    grupos = {decisiones.asignar_grupo(r, c, {**p, "pct_grupo_control": 50}, {"recuperar_cliente"})
-              for c in range(20)}
+    q = {**p, "pct_grupo_control": 50}
+    # Distintos clientes se reparten entre los dos grupos...
+    grupos = {decisiones.asignar_grupo(
+        reglas.ResultadoRegla(str(n), "", "recuperar_cliente", 0, "", "", 1.0, {"cliente_clave": False}),
+        1, q, {"recuperar_cliente"}) for n in range(40)}
     assert grupos == {"control", "tratamiento"}
+    # ...y el mismo cliente queda en el mismo grupo en todos los cortes.
+    assert len({decisiones.asignar_grupo(r, c, q, {"recuperar_cliente"}) for c in range(20)}) == 1

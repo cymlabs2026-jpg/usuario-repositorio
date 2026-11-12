@@ -41,8 +41,11 @@ consulta resultados ya calculados, los explica y redacta mensajes.
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-streamlit run app/streamlit_app.py
+ONTARA_MODO_DEMO=1 streamlit run app/streamlit_app.py   # demo sin login, solo datos inventados
 ```
+
+Sin `ONTARA_USUARIOS` y sin `ONTARA_MODO_DEMO=1` la app no deja entrar a nadie: así un error de configuración
+en producción nunca deja abiertos los datos de un cliente.
 
 **Datos de prueba completos** (`datos_ejemplo/prueba/`, generados con `python datos_ejemplo/generar_prueba.py`):
 una distribuidora inventada con 40 clientes. Cada archivo se llama como el paquete que lo usa en la aplicación,
@@ -220,7 +223,11 @@ el dato mejora con cada carga.
 
 **Grupo de control:** el `pct_grupo_control` % de las decisiones de cobro con saldo vencido hasta
 `control_monto_maximo` no se muestra en la bandeja. Al comparar cuánto se recupera con y sin la bandeja se obtiene
-el efecto real de Ontara. La asignación es reproducible y, si la deuda supera el tope, la decisión sale del control.
+el efecto real de Ontara. La asignación es fija por cliente y tipo de decisión (no se vuelve a sortear en cada
+corte), para que un cliente en control no pase a ser gestionado a mitad de la medición; `experimento_control`
+(1 por defecto) inicia un experimento nuevo con otro sorteo. Si la deuda supera el tope, la decisión sale del
+control. La app muestra el efecto con su rango probable al 90 % (remuestreo) y solo lo da por concluyente con al
+menos 30 decisiones por grupo y un rango que no cruce el cero.
 
 **Caja liberada:** días de cartera ganados frente a la línea base × ventas diarias. Si se registran las ventas
 mensuales de contabilidad (`ventas_mensuales_cop`) se usan esas; si no, se estiman con las facturas emitidas en los
@@ -233,11 +240,13 @@ mensuales de contabilidad (`ventas_mensuales_cop`) se usan esas; si no, se estim
 | `DATABASE_URL` | Base del cliente. En producción, Cloud SQL: `postgresql+psycopg://usuario:clave@/ontara?host=/cloudsql/PROYECTO:REGION:INSTANCIA` | SQLite local `ontara.db` |
 | `ONTARA_EMPRESA` | Nombre que aparece en la app | Empresa de demostración |
 | `ONTARA_PAQUETES` | Paquetes activos para el cliente, separados por coma | `cartera,comercial,margen,caja,inventario,despacho` |
-| `ONTARA_USUARIOS` | Usuarios autorizados y su rol en JSON (ver abajo). Roles: `gerente` (aprueba montos altos y cambia reglas) y `lider` | Sin login (modo demo) |
+| `ONTARA_USUARIOS` | Usuarios autorizados y su rol en JSON (ver abajo). Roles: `gerente` (aprueba montos altos y cambia reglas) y `lider` | Nadie entra (salvo modo demo) |
+| `ONTARA_MODO_DEMO` | `1` para entrar sin login como gerente de demostración. Solo con datos inventados | Apagado |
 | `ANTHROPIC_API_KEY` | Activa el asistente | Asistente apagado |
 | `ONTARA_MODELO` | Modelo de Claude | `claude-opus-5-5` |
 | `ONTARA_ESFUERZO` | Esfuerzo del modelo (`low`, `medium`, `high`) | `medium` |
 | `ONTARA_ANONIMIZAR_IA` | `0` para enviar nombres reales a la API (no recomendado) | `1` |
+| `ONTARA_SECRETO_ALIAS` | Clave secreta para los alias que ve Claude (opcional) | Una clave al azar cada vez que arranca |
 | `ONTARA_SAL_ANALITICA` | Clave secreta para el código de cliente del dataset de aprendizaje | Derivada del nombre de la empresa (solo demo) |
 
 ### Login
@@ -254,7 +263,19 @@ mensuales de contabilidad (`ventas_mensuales_cop`) se usan esas; si no, se estim
   correos que estén en `ONTARA_USUARIOS`. En Cloud Run, monta el archivo desde Secret Manager.
 - **Con usuario y clave:** genera el hash con `python -m ontara.acceso "LaClave"` y ponlo en `clave`. Los hashes SHA-256
   simples de la versión anterior ya no se aceptan.
-- Cada ingreso, intento fallido, cuenta no autorizada y salida queda en la bitácora (página **Accesos**, solo gerente).
+- Tras 5 intentos fallidos en 15 minutos el usuario queda bloqueado hasta que pase la ventana (sin verificar la
+  clave, para no gastar CPU).
+- Cada ingreso, intento fallido, bloqueo, cuenta no autorizada y salida queda en la bitácora (página **Accesos**,
+  solo gerente).
+
+### Qué ve Claude (Ley 1581)
+
+Con `ONTARA_ANONIMIZAR_IA=1` se reemplazan por alias (`Cliente-…`, `Proveedor-…`, `Vendedor-…`, `Correo-…`) los
+nombres y NIT de clientes y proveedores, los vendedores y los correos, también cuando vienen escritos sin tildes,
+en mayúsculas, sin el sufijo societario (S.A.S., Ltda.) o con el NIT con puntos y dígito de verificación. Los
+alias se calculan con una clave secreta (HMAC), así que no se pueden revertir probando NIT. Quién hizo cada acción
+no se envía, y los celulares escritos en notas o preguntas se reemplazan por `[teléfono]`. Los montos en pesos no
+se tocan.
 
 ## Desplegar en Google Cloud (un cliente = un servicio)
 
@@ -268,6 +289,6 @@ gcloud run deploy ontara-CLIENTE --source . --region us-central1 \
 ## Pendiente antes de usar datos reales
 
 - Revisión de Ley 1581 con abogado (C&M LABS actúa como encargado del tratamiento).
-- Configurar `ONTARA_USUARIOS` y el login con Google o Microsoft; el modo demo no tiene login.
+- Configurar `ONTARA_USUARIOS` y el login con Google o Microsoft, y no activar `ONTARA_MODO_DEMO`.
 - Registrar las ventas mensuales en Reglas y acordar con el gerente el monto de delegación y el % de grupo de control.
 - Ajustar los parámetros de `reglas/cartera.yaml` con el líder de cartera del cliente piloto.
